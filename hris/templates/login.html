@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-Home Page
+Login Page
 {% endblock %}
 {% block content %}
 <div class="container index-padding">
@@ -8,43 +8,33 @@ Home Page
       <div class="col-6">
          <img src="{{ url_for('static',filename='images/logo.png') }}" class="img-fluid" alt="Company logo"
          style="width:200px; margin-left: 60px;">
-         <h1 class="text-monospace">[Company Name]</h1>
-         <h1 class="text-monospace">HRIS</h1>
+         <h1>[Company Name]</h1>
+         <h1>HRIS</h1>
          <div align="left">
-            <h3 class="text-monospace">A company’s most valuable asset is its employees.</h3>
+            <h3>A company’s most valuable asset is its employees.</h3>
          </div>
       </div>
       <!-- Login Form -->
       <div class="col-6 border rounded shadow-lg">
          <form method="POST">
-            <!-- Email input -->
+            {{ login_form.hidden_tag() }}
+            <h1 class="mt-4" align="center">Login</h1>
             <div class="form-outline mb-4 mt-4">
-               <label class="form-label font-weight-bold">Email address</label>
-               <input type="email" name="email" class="form-control" />
-            </div>
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-               <label class="form-label font-weight-bold">Password</label>
-               <input type="password" name="password" class="form-control" id="passwordInputForm"/>
+               <strong>{{ login_form.email.label() }}</strong>
+               {{ login_form.email(class="form-control") }}
             </div>
             <div class="form-outline mb-4">
-               <label class="form-label font-weight-bold">Access</label>
-               <select name="access" class="form-control">
-                  <option>Admin</option>
-                  <option>Employee</option>
-               </select>
+               <strong>{{ login_form.password.label() }}</strong>
+               {{ login_form.password(class="form-control", id="passwordInputForm") }}
             </div>
-            <!-- 2 column grid layout for inline styling -->
             <div class="row mb-4">
                <div class="col d-flex justify-content-center">
-                  <!-- Checkbox -->
                   <div class="form-check">
                      <input class="form-check-input" type="checkbox" id="showPassword" onclick="password_show()"/>
                      <label class="form-check-label" for="showPassword">Show password </label>
                   </div>
                </div>
                <div class="col">
-                  <!-- Simple link -->
                   <a href="#!">Forgot password?</a>
                </div>
             </div>

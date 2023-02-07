@@ -31,6 +31,7 @@ def create_app():
    # with app.app_context():
    #    db.create_all()
 
+   # uncomment when creating new db.
    with app.app_context():
       db.create_all()
  

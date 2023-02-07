@@ -17,7 +17,6 @@ class Users(db.Model, UserMixin):
    id = db.Column(db.Integer(), primary_key=True)  # Account_ID PK
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))  # Employee_ID FK
    email = db.Column(db.String(length=50), nullable=False, unique=True)
-
    
    #should have default values ('Admin', 'Employee')
    # access = db.Column(db.String(length=50), nullable=False, unique=True, default='employee')
@@ -57,13 +56,10 @@ class EmployeeInfo(db.Model):
    SSS = db.Column(db.String(length=50), nullable=False)
    pag_ibig = db.Column(db.String(length=50), nullable=False)
 
-   #Foreign Keys
-   employment_id = db.Column(db.Integer(), db.ForeignKey('employment_info.id'))
-   attendance_id = db.Column(db.Integer(), db.ForeignKey('attendance.id'))
-   leave_id = db.Column(db.Integer(), db.ForeignKey('leave.id'))
-   
+      
    #Relationship
    user_info = db.relationship('Users')
+   employment_info = db.relationship('EmploymentInfo')
 
 class Attendance(db.Model):
    id = db.Column(db.Integer(), primary_key=True)
@@ -72,7 +68,7 @@ class Attendance(db.Model):
    last_out= db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)
    
    #Relationship
-   employee_info = db.relationship('EmployeeInfo')
+   employee_info = db.relationship('EmploymentInfo')
 
 class Leave(db.Model):
    id = db.Column(db.Integer(), primary_key=True)
@@ -83,16 +79,19 @@ class Leave(db.Model):
    approved_by = db.Column(db.String(length=50), nullable=False)
 
    #Relationship
-   employee_info = db.relationship('EmployeeInfo')
+   employee_info = db.relationship('EmploymentInfo')
 
 class EmploymentInfo(db.Model):
    id = db.Column(db.Integer(), primary_key=True)
-   position = db.Column(db.Integer(), db.ForeignKey('position.id'))
    start_date= db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)
-   end_date= db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)
+   end_date = db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)
+   status = db.Column(db.String(length=50), nullable=False)
    
-   #Relationship
-   employee_info = db.relationship('EmployeeInfo')
+   #Foreign Keys
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+   attendance_id = db.Column(db.Integer(), db.ForeignKey('attendance.id'))
+   leave_id = db.Column(db.Integer(), db.ForeignKey('leave.id'))
+   position_id = db.Column(db.Integer(), db.ForeignKey('position.id'))
 
 class Position(db.Model):
    id = db.Column(db.Integer(), primary_key=True)
