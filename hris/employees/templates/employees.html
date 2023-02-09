@@ -9,11 +9,11 @@
          <div class="col-12">
             <h3>Employee Management</h3>
 
-            <a class="btn btn-outline-success" href="#"><i class="fa-solid fa-user-plus"></i> <u>Add Employee</u></a>
+            <a class="btn btn-outline-success" href="{{ url_for('employees_bp.add_employee') }}">
+               <i class="fa-solid fa-user-plus"></i> <u>Add Employee</u>
+            </a>
          </div>
       </div>
-
-      
 
       <div class="row">
          <!-- data table here -->
@@ -56,17 +56,16 @@
                            {{ employee.salary_package }}
                         </td>
                         <td>
-                            <div align="center">
-                                <a class="btn btn-outline-success">
-                                   <i class="fa-solid fa-eye"></i>
-                                </a>
-                                <a  class="btn btn-outline-warning">
-                                   <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <a class="btn btn-outline-danger">
-                                   <i class="fa-solid fa-trash"></i>
-                                </a>
-                             </div>
+                           {% include 'modals/delete_employee_modal.html' %}
+                           <div align="center">
+                              <a href="{{ url_for('employees_bp.manage_employee', employee_name=employee.first_name, employee_id=employee.id) }}" class="btn btn-outline-success">
+                                 <i class="fa-solid fa-eye"></i>
+                              </a>
+                              <a href="#"class="btn btn-outline-danger" data-toggle="modal" data-target="#delete_user_{{ employee.id }}">
+                                 <i class="fa-solid fa-trash"></i>
+                              </a>
+                              
+                           </div>
                         </td>
                     </tr>
                     {% endfor %}
