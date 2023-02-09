@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% set active_page = "departments" %}
+
+
+{% block nav_contents %}   
+   <div class="container">
+      <!-- add employee button and other infos-->
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <h3>Department Management</h3>
+
+            <a class="btn btn-outline-success" href="#"><i class="fa-solid fa-house-medical"></i> <u>Add Department</u></a>
+         </div>
+      </div>
+
+      <div class="row">
+         <!-- data table here -->
+         <div class="col-12">
+            <table id="employees" class="table table-striped table-bordered" style="width:100%" >
+               <thead>
+                  <tr> 
+                     <th>Department Name</th>
+                     <th>Supervisor</th>
+                     <th>Description</th>
+                     <th>Date Created</th>
+                     <th>Actions</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for department in departments %}
+                  <tr>
+                        <td>
+                           {{ department.department_name }}
+                        </td>
+                        <td>
+                           {{ department.supervisor }}
+                        </td>
+                        <td>
+                           {{ department.description }}
+                        </td>
+                        <td>
+                           {{ department.date_created }}
+                        </td>
+                        <td>
+                           <div align="center">
+                              <a class="btn btn-outline-success">
+                                 <i class="fa-solid fa-eye"></i>
+                              </a>
+                              <a  class="btn btn-outline-warning">
+                                 <i class="fa-solid fa-pen-to-square"></i>
+                              </a>
+                              <a class="btn btn-outline-danger">
+                                 <i class="fa-solid fa-trash"></i>
+                              </a>
+                           </div>
+                        </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+   {% endblock %}
+
+   {% block javascripts_local %}
+   {{ super() }}
+   <script>
+   $(document).ready(function () {
+      $('#employees').DataTable(
+         {
+            lengthMenu: [
+               [10, 25, 50, -1],
+               [10, 25, 50, 'All'],
+            ],
+      }
+      );
+   });
+      
+   </script>
+{% endblock %}

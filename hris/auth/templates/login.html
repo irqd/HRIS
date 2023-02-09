@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}
+Login Page
+{% endblock %}
+{% block content %}
+<div class="container index-padding">
+   <div class="row">
+      <div class="col-6">
+         <img src="{{ url_for('static',filename='images/logo.png') }}" class="img-fluid" alt="Company logo"
+         style="width:200px; margin-left: 60px;">
+         <h1>[Company Name]</h1>
+         <h1>HRIS</h1>
+         <div align="left">
+            <h3>A company’s most valuable asset is its employees.</h3>
+         </div>
+      </div>
+      <!-- Login Form -->
+      <div class="col-6 border rounded shadow-lg">
+         <form method="POST">
+            {{ login_form.hidden_tag() }}
+            <h1 class="mt-4" align="center">Login</h1>
+            <div class="form-outline mb-4 mt-4">
+               <strong>{{ login_form.company_email.label() }}</strong>
+               {{ login_form.company_email(class="form-control") }}
+            </div>
+            <div class="form-outline mb-4">
+               <strong>{{ login_form.password.label() }}</strong>
+               {{ login_form.password(class="form-control", id="passwordInputForm") }}
+            </div>
+            <div class="row mb-4">
+               <div class="col d-flex justify-content-center">
+                  <div class="form-check">
+                     <input class="form-check-input" type="checkbox" id="showPassword" onclick="password_show()"/>
+                     <label class="form-check-label" for="showPassword">Show password </label>
+                  </div>
+               </div>
+               <div class="col">
+                  <a href="#!">Forgot password?</a>
+               </div>
+            </div>
+            <!-- Submit button -->
+            <div align="center">
+               <button type="submit" class="btn btn-outline-primary mb-4" >Sign in</button>
+            </div>  
+         </form>      
+      </div>
+      
+   </div>
+</div>
+</div>
+{% endblock %}
+
+{% block javascripts_local %}
+  {{ super() }} {# to load the parent assets #}
+  <script>
+    function password_show() {
+        var passInput = document.getElementById("passwordInputForm");
+        passInput.type = passInput.type === "password" ? "text" : "password";
+      }
+  </script>
+{% endblock %}
