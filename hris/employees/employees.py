@@ -28,7 +28,7 @@ def manage_employee(employee_name, employee_id):
 
    return render_template('manage_employee.html', employee_name=employee_name, employee_id=employee_id)
 
-@employees_bp.route('/employees/<string:employee_name>-<int:employee_id>', method=['GET', 'POST'])
+@employees_bp.route('/employees/<string:employee_name>-<int:employee_id>', methods=['GET', 'POST'])
 def delete_employee(employee_name, employee_id):
 
    return render_template('employee.html')
