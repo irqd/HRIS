@@ -60,7 +60,7 @@
                         <td>
                            {% include 'modals/delete_employee_modal.html' %}
                            <div align="center">
-                              <a href="{{ url_for('employees_bp.manage_employee', employee_name=employee.first_name, employee_id=employee.id) }}" class="btn btn-outline-success">
+                              <a href="{{ url_for('employees_bp.manage_employee', employee_id=employee.id) }}" class="btn btn-outline-success">
                                  <i class="fa-solid fa-eye"></i>
                               </a>
                               <a href="#"class="btn btn-outline-danger" data-toggle="modal" data-target="#delete_user_{{ employee.id }}">
