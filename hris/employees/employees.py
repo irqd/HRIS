@@ -19,7 +19,7 @@ def employees():
 
 @employees_bp.route('/employees/add_employee', methods=['GET', 'POST'])
 def add_employee():
-
+   
    return render_template('add_employee.html')
 
 
