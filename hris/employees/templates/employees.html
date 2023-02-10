@@ -7,9 +7,11 @@
       <!-- add employee button and other infos-->
       <div class="row mt-3 mb-3">
          <div class="col-12">
-            <h3>Employee Management</h3>
+            <h4 class="shadow border p-3 rounded">
+               <a href="{{ url_for('employees_bp.employees') }}" class="text-dark">Employees</a>
+            </h4>
 
-            <a class="btn btn-outline-success" href="{{ url_for('employees_bp.add_employee') }}">
+            <a class="btn btn-outline-success mt-3" href="{{ url_for('employees_bp.add_employee') }}">
                <i class="fa-solid fa-user-plus"></i> <u>Add Employee</u>
             </a>
          </div>
