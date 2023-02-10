@@ -3,6 +3,8 @@ from flask_login import UserMixin
 from flask import url_for, current_app
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.associationproxy import AssociationProxy
 import enum
 
 class USER_TYPES(enum.Enum):
@@ -100,6 +102,8 @@ class EmployeeInfo(db.Model):
    attendance_info = db.relationship('Attendance', backref='employee_info')
    leave_info = db.relationship('Leave', backref='employee_info')
 
+   
+
 class EmploymentInfo(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -165,6 +169,9 @@ class Positions(db.Model):
    #Foreign Key
    department_id = db.Column(db.Integer(), db.ForeignKey('departments.id'))
 
+   #Association Proxy
+   dept_assigned = association_proxy('departments', 'department_name')
+
 class Departments(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -176,3 +183,5 @@ class Departments(db.Model):
 
    #Relationship
    positions_info = db.relationship('Positions', backref='departments_info')
+
+  

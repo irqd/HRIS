@@ -17,28 +17,49 @@ def employees():
       .join(Positions, Positions.id == EmployeeInfo.position_id)\
       .join(Departments, Departments.id == Positions.department_id).all()
 
-   return render_template('employees.html', employees=employees, delete_modal = delete_modal)
+   return render_template('employees.html', employees=employees, delete_modal=delete_modal)
+
 
 @employees_bp.route('/employees/add_employee', methods=['GET', 'POST'])
 def add_employee():
-   
-   return render_template('add_employee.html')
+   departments = db.session.query(Departments).all()   
+   positions = db.session.query(Positions).all()
+
+   department_list = [(i.id, i.department_name) for i in departments]
+   position_list = [(i.id, i.position_name) for i in positions]
+
+   add_employee = AddEmployeeForm()
+   add_employee.department.choices = department_list
+   add_employee.positions.choices = position_list
+
+   if request.method == 'POST':
+      flash('Employee record submitted!', category='success')
+      return redirect(url_for('employees_bp.employees'))
+
+   return render_template('add_employee.html', add_employee=add_employee)
 
 
-@employees_bp.route('/employees/<string:employee_name>_<int:employee_id>', methods=['GET', 'POST'])
+@employees_bp.route('/employees/<int:employee_id>-<string:employee_name>', methods=['GET', 'POST'])
 def manage_employee(employee_name, employee_id):
+   # employee = db.session.query()\
+   #        .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
+   #        .join(Positions, Positions.id == EmployeeInfo.position_id)\
+   #        .join(Departments, Departments.id == Positions.department_id)\
+   #        .filter(EmployeeInfo.id == employee_id).first()
+   #_employee_name = employee["EmployeeInfo"].full_name
 
    return render_template('manage_employee.html', employee_name=employee_name, employee_id=employee_id)
 
 @employees_bp.route('/employees/delete/<int:employee_id>', methods=['GET', 'POST'])
 def delete_employee(employee_id):
+   if request.method == 'POST':
+      # employees = db.session.query()\
+      #    .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
+      #    .join(Positions, Positions.id == EmployeeInfo.position_id)\
+      #    .join(Departments, Departments.id == Positions.department_id)\
+      #    .filter(EmployeeInfo.id == employee_id).delete()
+      # db.session.commit()
+      flash('User deleted!', category='danger')
+      return redirect(url_for('employees_bp.employees'))
 
-   employees = db.session.query()\
-      .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
-      .join(Positions, Positions.id == EmployeeInfo.position_id)\
-      .join(Departments, Departments.id == Positions.department_id)\
-      .filter(EmployeeInfo.id == employee_id).delete()
-   db.session.commit()
-
-   return redirect(url_for('employees_bp.employees'))
-   #return render_template('employees.html')
+   return render_template('employees.html')

@@ -1,7 +1,8 @@
 <!-- Modal -->
 <div class="modal fade" id="delete_user_{{ employee.id }}" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog shadow-lg">
-      <form action="{{ url_for('employees_bp.delete_employee', employee_id=employee.id) }}">
+      <form action="{{ url_for('employees_bp.delete_employee', employee_id=employee.id) }}" method="post">
+         {{ delete_modal.hidden_tag() }}
          <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title">Delete Employee</h5>
@@ -11,10 +12,11 @@
             </div>
             <div class="modal-body">
                <h5>Are you sure you want to delete <strong>{{ employee.first_name}} {{ employee.last_name }}</strong>?</h5>
+               <input type="hidden" name="employee_id" value="{{ employee.id }}">
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-            {{ delete_modal.delete(class="btn btn-outline-danger") }}
+            {{ delete_modal.delete(class='btn btn-outline-danger')}}
             <!--a href="#" class="btn btn-outline-danger">Delete</a-->
             </div>
          </div>
