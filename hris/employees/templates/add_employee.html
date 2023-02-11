@@ -15,7 +15,7 @@
 
    <div class="row mt-3 mb3">
       <div class="col-12">
-         <form action="" method="post">
+         <form action="" method="post" autocomplete="off">
             {{ add_employee.hidden_tag() }}
             <div class="shadow rounded p-4">
                <h4 class="mt-2">Employee Account</h4><hr>
@@ -137,17 +137,21 @@
                </div>
             </div>
             </div><br>
-
+   
             <div class="shadow rounded p-4">
                <h4 class="mt-2">Employment Profile</h4><hr>
+
                <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ add_employee.department.label() }}</strong>
+                     {{ add_employee.department(class="form-control", id="mySelect") }}
+                  </div>
+                  <p id="demo">
+
+                  </p>
                   <div class="form-outline mb-1 mt-1 col">
                      <strong>{{ add_employee.positions.label() }}</strong>
                      {{ add_employee.positions(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.department.label() }}</strong>
-                     {{ add_employee.department(class="form-control") }}
                   </div>
                </div>
 
@@ -178,11 +182,11 @@
                </div>
             </div>
             <div class="pb-5">
-               <button class="btn btn-outline-success btn-lg mt-3" type="submit">
+               <button class="btn btn-outline-success mt-3" type="submit">
                   <i class="fa-solid fa-check"></i> <u>Submit</u>
                </button>
    
-               <a class="btn btn-outline-danger btn-lg mt-3" href="{{ url_for('employees_bp.employees') }}">
+               <a class="btn btn-outline-danger mt-3" href="{{ url_for('employees_bp.employees') }}">
                   <i class="fa-solid fa-ban"></i> <u>Cancel</u>
                </a>
             </div>
@@ -218,7 +222,22 @@
       }
    }
 
-      
+   
+   function changeOptions() {
+      var x = document.getElementById("mySelect").value;
+
+      positions = {{ positions_list | tojson }};
+      departments = {{ departments_list | tojson }};
+   
+      position_options = []
+      for(let y in positions) {
+         if(positions[y].department_id == x) {
+            console.log(positions[y].position_name, positions[y].id)
+         }
+      }
+
+      //document.getElementById("demo").innerHTML = "You selected: " + x;
+   }
 </script>
 
 {% endblock %}

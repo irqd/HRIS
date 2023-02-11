@@ -172,6 +172,13 @@ class Positions(db.Model):
    #Association Proxy
    dept_assigned = association_proxy('departments', 'department_name')
 
+   def obj_to_dict(self):
+      return {
+         'id': self.id,
+         'position_name': self.position_name,
+         'department_id': self.department_id
+      }
+
 class Departments(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -184,4 +191,8 @@ class Departments(db.Model):
    #Relationship
    positions_info = db.relationship('Positions', backref='departments_info')
 
-  
+   def obj_to_dict(self):
+      return {
+         'id': self.id,
+         'department_name': self.department_name,
+      }

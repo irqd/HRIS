@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 import re
 from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
-                     EmailField, DateField, validators, FormField, TimeField, TextAreaField)
+                     EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
 from wtforms.validators import (DataRequired, Email, EqualTo,
                               Length, ValidationError, InputRequired, Regexp)
 
-class DeleteModal(FlaskForm):
+class DeleteEmployeeModal(FlaskForm):
    delete = SubmitField(label='Delete')
 
 
@@ -43,8 +43,8 @@ class AddEmployeeForm(FlaskForm):
    pag_ibig = StringField(label='Pag-Ibig', validators=[DataRequired(), Length(min=12, max=12)])
 
    #Employment Info
-   department = SelectField(label='Department' , coerce=int, validators=[DataRequired()])
-   positions = SelectField(label='Position', coerce=int,  validators=[DataRequired()])
+   department = SelectField(label='Department' , coerce=int, validators=[DataRequired()], render_kw={'onchange': "changeOptions()"})
+   positions = SelectField(label='Position', coerce=int, validators=[DataRequired()])
    description = TextAreaField(label='Description')
    salary_package = StringField(label='Salary Package', validators=[DataRequired()])
    start_date = StringField(label='Start Date', validators=[DataRequired()])

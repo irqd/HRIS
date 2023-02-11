@@ -1,0 +1,79 @@
+<div class="row" style="height:100vh;">
+   <div class="col-2 mt-1 shadow">
+      <div align="center">
+         <img src="{{ url_for('static', filename='{}'.format(current_user.image_path))}}" alt="Employee profile picture">
+         <h6><span id="time">&nbsp</span></h6>
+         <!-- changed to db values later -->
+         <h6 align="center"><strong><u>{{ current_user.name }}</u></strong></h6>
+         <h6><strong>Type: {{ current_user.access.value }}</strong></h6>
+      </div>
+
+      <div>
+         <div class="">   
+            <ul class="nav mb-3 flex-column">
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'home'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link focus" href="{{ url_for('home_bp.home') }}" role="tab" >
+                     <i class="fa-solid fa-house"></i> <u>Home</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'personal'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('profile_bp.profile') }}" role="tab">
+                     <i class="fa-solid fa-address-card"></i></i> <u>Personal Data</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'attendance'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('attendance_bp.attendance') }}" role="tab">
+                     <i class="fa-regular fa-calendar-days pr-1"></i> <u>Attendance</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'payroll'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('payroll_bp.payroll') }}" role="tab">
+                     <i class="fa-solid fa-money-bill"></i> <u>Payroll</u>
+                  </a>
+               </li>
+
+               {% if current_user.access.value == 'Admin' %}
+               <h6 align="center"><u>Admin Panel</u></h6>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'employees'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('employees_bp.employees') }}" role="tab">
+                     <i class="fa-solid fa-people-group"></i> <u>Employees</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'departments'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('departments_bp.departments') }}" role="tab">
+                     <i class="fa-solid fa-people-roof"></i> <u>Departments</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'schedules'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('schedules_bp.schedules') }}" role="tab">
+                     <i class="fa-regular fa-calendar pr-1"></i> <u>Schedules</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'salaries'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('salaries_bp.salaries') }}" role="tab">
+                     <i class="fa-solid fa-sack-dollar"></i> <u>Salaries</u>
+                  </a>
+               </li>
+               <li class="nav-item border-bottom {{ 'border-right shadow' if active_page == 'announcements'  else ' ' }} border-primary rounded mb-2 shadow-sm">
+                  <a class="nav-link" href="{{ url_for('announcement_bp.announcements') }}" role="tab">
+                     <i class="fa-solid fa-bullhorn"></i> <u>Announcements</u>
+                  </a>
+               </li>
+               {% endif %}
+
+               <li class="nav-item border border-danger rounded mb-2">
+                  <button type="button" class="btn btn-block text-danger" data-toggle="modal" data-target="#logout_user_{{ current_user.id }}">
+                     <i class="fa-solid fa-right-from-bracket"></i> <u>Logout</u>
+                  </button>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+
+   <div class="col-10 border-left">
+      {% block nav_contents %}
+
+      {% endblock %}
+   </div>
+</div>
