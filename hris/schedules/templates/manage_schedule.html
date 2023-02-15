@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% set active_page = "schedules" %}
+
+
+{% block nav_contents %}
+   <div class="container">
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <h4 class="shadow border p-3 rounded">
+               <a href="{{ url_for('schedules_bp.schedules') }}" class="text-dark">Schedules</a> >
+               <a href="#" class="text-dark">Employee Name</a> >
+               <a href="#" class="text-dark">Manage Schedule</a>
+            </h4>
+         </div>
+      </div>
+
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <div class="shadow p-4 rounded">
+               <h1>Test</h1>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}
+
+{% block javascripts_local %}
+
+{% endblock %}

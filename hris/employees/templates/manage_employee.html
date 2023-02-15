@@ -8,19 +8,317 @@
          <div class="col-12">
             <h4 class="shadow border p-3 rounded">
                <a href="{{ url_for('employees_bp.employees') }}" class="text-dark">Employee</a> >
+               <a href="#" class="text-dark">{{ employee_info.fullname}}</a> >
                <a href="#" class="text-dark">Manage Employee</a>
             </h4>
 
-            <a class="btn btn-outline-success mt-3" href="{{ url_for('employees_bp.employees') }}">
-               <i class="fa-solid fa-user-plus"></i> <u>Go Back</u>
-            </a>
+            <div>
+               <label class="switch mt-2 ml-2">
+                  <input type="checkbox" id="switch" class="primary">
+                  <span class="slider round"></span>
+               </label>
+            </div>
          </div>
       </div>
+      
+      
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            
+            <form action="" method="post">
+               <fieldset disabled="disabled">
+                  {{ manage_employee.hidden_tag() }}
+                  <div class="shadow rounded p-4">
+                     <h4 class="mt-2">Employee Account</h4>
+                     <hr>
 
-      <div>
-         <h1>
-            {#{ full_name }#}
-         </h1>
+                     <div class="row">
+                        <div class="col-4">
+                           <div align="center" class="pb-4 pt-4">
+                              <img class="" src="{{ url_for('static', filename='images/profile.svg')}}" alt="Preview Image" id="imagePath" width="120" height="120">
+                           </div>
+                           <div class="custom-file">
+                              {{ manage_employee.image_path(class="custom-file-input", id="imageFile", type="file")}}
+                              <label class="custom-file-label" for="#imageFile">Upload File</label>
+                           </div>
+                        </div>
+                        <div class="col-8">
+                           <div class="form-row">
+                              <div class="form-outline mb-1 mt-1 col">
+                                 <strong>{{ manage_employee.company_email.label() }}</strong>
+                                 {{ manage_employee.company_email(class="form-control") }}
+                              </div>
+                              <div class="form-outline mb-1 mt-1 col">
+                                 <strong>{{ manage_employee.access.label() }}</strong>
+                              
+                                 <select id="access" name="access" class="form-control">
+                                    <option value="Admin" {% if manage_employee.access.data == 'Admin' %} selected {% endif %}>Admin</option>
+                                    <option value="Employee" {% if manage_employee.access.data == 'Employee' %} selected {% endif %}>Employee</option>
+                                 </select>
+                              </div>
+                              
+                           </div>
+                           <div class="form-row">
+                              <div class="form-outline mb-1 mt-1 col">
+                                 <strong>{{ manage_employee.password1.label() }}</strong>
+                                 {{ manage_employee.password1(class="form-control", id="password") }}
+                              </div>
+                              <div class="form-outline mb-1 mt-1 col">
+                                 <strong>{{ manage_employee.password2.label() }}</strong>
+                                 {{ manage_employee.password2(class="form-control", id="confirmpassword") }}
+                              </div>
+                              
+                           </div>
+                           
+                           <div id="password-validation" class="error">
+                              
+                           </div>
+                        </div>
+                     </div>
+                  </div><br>
+
+                  <div class="shadow rounded p-4">
+                     <h4 class="mt-2">Personal Profile</h4><hr>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.last_name.label() }}</strong>
+                        {{ manage_employee.last_name(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.first_name.label() }}</strong>
+                        {{ manage_employee.first_name(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.middle_name.label() }}</strong>
+                        {{ manage_employee.middle_name(class="form-control") }}
+                     </div>
+                  </div>
+   
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.gender.label() }}</strong>
+                        {#{ manage_employee.gender(class="form-control") }#}
+                            <select name="gender" id="gender" class="form-control">
+                              {% for status in manage_employee.gender.choices %}
+                                 <option value="{{ status[0]}}" {% if status[1] == manage_employee.gender.data %} selected {% endif %}>{{status[1]}}</option>
+                              {% endfor %}
+                           </select>
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.birth_date.label() }}</strong>
+                        {{ manage_employee.birth_date(class="form-control", id="datepicker") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.civil_status.label() }}</strong>
+
+                        <select name="civil_status" id="civil_status" class="form-control">
+                           {% for status in manage_employee.civil_status.choices %}
+                              <option value="{{ status[0]}}" {% if status[1] == manage_employee.civil_status.data %} selected {% endif %}>{{status[1]}}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div> 
+   
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.mobile.label() }}</strong>
+                        {{ manage_employee.mobile(class="form-control", id="datepicker") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.email.label() }}</strong>
+                        {{ manage_employee.email(class="form-control") }}
+                     </div>
+                  </div>
+   
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.address.label() }}</strong>
+                        {{ manage_employee.address(class="form-control") }}
+                     </div>
+                  </div>
+         
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.tin.label() }}</strong>
+                        {{ manage_employee.tin(class="form-control", id="datepicker") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.sss.label() }}</strong>
+                        {{ manage_employee.sss(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.phil_health.label() }}</strong>
+                        {{ manage_employee.phil_health(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.pag_ibig.label() }}</strong>
+                        {{ manage_employee.pag_ibig(class="form-control") }}
+                     </div>
+                  </div>
+   
+                  <strong>In case of emergency, contact:</strong>
+                  <div class="form-row"> 
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.emergency_name.label() }}</strong>
+                        {{ manage_employee.emergency_name(class="form-control", id="datepicker") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.emergency_contact.label() }}</strong>
+                        {{ manage_employee.emergency_contact(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_employee.emergency_relationship.label() }}</strong>
+                        {{ manage_employee.emergency_relationship(class="form-control") }}
+                     </div>
+                  </div>
+                  </div><br>
+         
+                  <div class="shadow rounded p-4">
+                     <h4 class="mt-2">Employment Profile</h4><hr>
+   
+                     <div class="form-row">
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong><label>Department</label></strong>
+                           <select id="department" name="department" class="form-control">
+                              <option value="">Select Department</option>
+                              {% for department in departments %}
+                                 <option value="{{ department.id }}" {% if department_id == department.id %} selected {% endif %}>{{ department.department_name}}</option>
+                              {% endfor %}
+                           </select>
+                        </div>
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.positions.label() }}</strong>
+                           <select id="position" name="position" class="form-control">
+                              <option value="">Select Position</option>
+                              {% for position in positions %}
+                                 <option value="{{ position.id }}">{{ position.position_name }}</option>
+                              {% endfor %}
+                           </select>
+                        </div>
+                     </div>
+   
+                     <div class="form-row">
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.description.label() }}</strong>
+                           {{ manage_employee.description(class="form-control") }}
+                        </div>
+                     </div>
+                     
+                     <div class="form-row">
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.salary_package.label() }}</strong>
+                           {{ manage_employee.salary_package(class="form-control") }}
+                        </div>
+                        
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.status.label() }}</strong>
+                           
+                           <select name="status" id="status" class="form-control">
+                              {% for status in manage_employee.status.choices %}
+                                 <option value="{{ status[0]}}" {% if status[1] == manage_employee.status.data %} selected {% endif %}>{{status[1]}}</option>
+                              {% endfor %}
+                           </select>
+                        </div>
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.start_date.label() }}</strong>
+                           {{ manage_employee.start_date(class="form-control", id="datepicker2") }}
+                        </div>
+                        <div class="form-outline mb-1 mt-1 col">
+                           <strong>{{ manage_employee.end_date.label() }}</strong>
+                           {{ manage_employee.end_date(class="form-control", id="datepicker3") }}
+                        </div>
+                     </div>
+                  </div>
+                  <div class="pb-5">
+                     <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                        <i class="fa-solid fa-pen-to-square"></i> <u>Edit</u>
+                     </button>
+         
+                     <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('employees_bp.employees') }}">
+                        <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                     </a>
+                  </div>
+               </fieldset>
+            </form>
+         </div>
       </div>
    </div>
+
+  
+{% endblock %}
+
+{% block javascripts_local %}
+{{ super() }}
+
+<script>
+   
+   $('#datepicker').datepicker({ 
+      uiLibrary: 'bootstrap4',
+      format: 'yyyy-dd-mm'
+   });
+
+   $('#datepicker2').datepicker({ 
+      uiLibrary: 'bootstrap4',
+      format: 'yyyy-dd-mm'
+   });
+
+   $('#datepicker3').datepicker({ 
+      uiLibrary: 'bootstrap4',
+      format: 'yyyy-dd-mm',
+   });
+   
+</script>
+
+
+<script>
+   const form = document.querySelector('form');
+   const switchButton = document.getElementById('switch');
+
+   switchButton.addEventListener('change', function(event) {
+      if (switchButton.checked) {
+         form.firstElementChild.removeAttribute('disabled');
+      } else {
+         form.firstElementChild.setAttribute('disabled', true);
+      }
+   });
+</script>
+
+<script >
+   const departmentSelect = document.querySelector('#department');
+   const positionSelect = document.querySelector('#position');
+   console.log(departmentSelect)
+   positionSelect.innerHTML = '<option value="">Select Department First</option>';
+
+   window.addEventListener('load', function() {
+      const departmentId = departmentSelect.value;
+      fetch(`/employees/get_positions?department_id=${departmentId}`)
+         .then(response => response.json())
+         .then(positions => {
+               positionSelect.innerHTML = '<option value="">Select Position</option>';
+               positions.forEach(position => {
+                  const option = document.createElement('option');
+                  option.value = position.id;
+                  option.text = position.name;
+                  option.selected = {{ employee_info.position_id }};
+                  positionSelect.appendChild(option);
+               });
+         });
+   });
+
+   departmentSelect.addEventListener('change', function() {
+      const departmentId = this.value;
+      fetch(`/employees/get_positions?department_id=${departmentId}`)
+         .then(response => response.json())
+         .then(positions => {
+               positionSelect.innerHTML = '<option value="">Select Position</option>';
+               positions.forEach(position => {
+                  const option = document.createElement('option');
+                  option.value = position.id;
+                  option.text = position.name;
+                  
+                  positionSelect.appendChild(option);
+               });
+         });
+   });
+</script>
 {% endblock %}

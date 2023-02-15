@@ -9,7 +9,7 @@ class DeleteEmployeeModal(FlaskForm):
    delete = SubmitField(label='Delete')
 
 
-class AddEmployeeForm(FlaskForm):
+class EmployeeForm(FlaskForm):
    def validate_image(form, field):
       if field.data:
          field.data = re.sub(r'[^a-z0-9_.-]', '_', field.data)
@@ -43,7 +43,6 @@ class AddEmployeeForm(FlaskForm):
    pag_ibig = StringField(label='Pag-Ibig', validators=[DataRequired(), Length(min=12, max=12)])
 
    #Employment Info
-   department = SelectField(label='Department' , coerce=int, validators=[DataRequired()], render_kw={'onchange': "changeOptions()"})
    positions = SelectField(label='Position', coerce=int, validators=[DataRequired()])
    description = TextAreaField(label='Description')
    salary_package = StringField(label='Salary Package', validators=[DataRequired()])

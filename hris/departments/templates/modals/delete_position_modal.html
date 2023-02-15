@@ -1,22 +1,22 @@
 <!-- Modal -->
-<div class="modal fade" id="delete_employee_{{ employee.id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="delete_position_{{ position.id }}" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog shadow-lg">
-      <form action="{{ url_for('employees_bp.delete_employee', employee_id=employee.id) }}" method="post">
-         {{ delete_employee_modal.hidden_tag() }}
+      <form action="{{ url_for('departments_bp.delete_position', position_id=position.id, department_id=selected_department.id) }}" method="post">
+         {{ delete_position_modal.hidden_tag() }}
          <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Delete Employee</h5>
+            <h5 class="modal-title">Delete Position</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body">
-               <h5>Are you sure you want to delete <strong>{{ employee.first_name}} {{ employee.last_name }}</strong>?</h5>
-               <input type="hidden" name="employee_id" value="{{ employee.id }}">
+               <h5>Are you sure you want to delete <strong>{{ position.position_name }}</strong>?</h5>
+               <input type="hidden" name="employee_id" value="{{ position.id }}">
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-            {{ delete_employee_modal.delete(class='btn btn-outline-danger')}}
+            {{ delete_position_modal.delete(class='btn btn-outline-danger')}}
             <!--a href="#" class="btn btn-outline-danger">Delete</a-->
             </div>
          </div>

@@ -1,6 +1,5 @@
 from . import db, bcrypt, login_manager
 from flask_login import UserMixin
-from flask import url_for, current_app
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -102,6 +101,17 @@ class EmployeeInfo(db.Model):
    attendance_info = db.relationship('Attendance', backref='employee_info')
    leave_info = db.relationship('Leave', backref='employee_info')
 
+   @hybrid_property
+   def fullname(self):
+      return self.first_name + ' ' + self.middle_name + ' ' + self.last_name
+   
+   @hybrid_property
+   def getEmployment(self):
+      if self.employment_info:
+         return self.employment_info
+      else:
+         return None
+   
    
 
 class EmploymentInfo(db.Model):
@@ -139,6 +149,10 @@ class Attendance(db.Model):
 
    #Foreign Keys  
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+
+   @hybrid_property
+   def total_hours(self):
+      return (self.end_shift - self.start_shift).total_seconds() / 3600
       
 
 class Leave(db.Model):
@@ -196,3 +210,11 @@ class Departments(db.Model):
          'id': self.id,
          'department_name': self.department_name,
       }
+      
+   @hybrid_property
+   def getPositions(self):
+      if self.positions_info:
+         return self.positions_info
+      else:
+         return None
+   

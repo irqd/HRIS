@@ -1,0 +1,37 @@
+ .fc-daygrid-day-number {
+	color: #2C3E50;
+ }
+
+ .fc-daygrid-day-number:hover {
+	color: #2C3E50;
+ }
+ 
+ .fc-col-header-cell-cushion {
+	color: #2C3E50;
+ }
+
+ .fc-col-header-cell-cushion:hover {
+	color: #2C3E50;
+ }
+
+ .fc-scrollgrid-sync-inner {
+	padding: 10px;
+ }
+
+ .fc-toolbar {
+	border: 1px solid #e5e5e5;
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.06);
+	padding: 1rem;
+	border-radius: 10px;
+ }
+
+ .fc-button {
+	color: #2C3E50;
+	border-color: #2C3E50;
+ }
+ 
+ .fc-col-header {
+	background-color: #f0f0f0;
+	color: #2C3E50;
+ }
+ 
