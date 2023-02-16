@@ -156,11 +156,4 @@ html {
  .slider.round:before {
    border-radius: 50%;
  }
-
-
- /* calendar */
- 
-.fc-daygrid-day-top {
-  color: #555;
-}
  

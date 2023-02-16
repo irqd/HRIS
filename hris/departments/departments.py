@@ -66,7 +66,7 @@ def add_position(department_id):
         flash(f'{add_position.position_name.data} added successfully', category='success')
         return redirect(url_for('departments_bp.manage_department', department_id=department_id))
 
-    return render_template('add_position.html', selected_department=selected_department, add_position=add_position)
+    return render_template('/positions/add_position.html', selected_department=selected_department, add_position=add_position)
 
 @departments_bp.route('/departments/manage_department/<int:department_id>/manage_position/<int:position_id>', methods=['GET', 'POST'])
 def manage_position(department_id, position_id):
@@ -83,7 +83,7 @@ def manage_position(department_id, position_id):
         flash(f'{manage_position.position_name.data} updated successfully', category='success')
         return redirect(url_for('departments_bp.manage_department', department_id=department_id))
 
-    return render_template('manage_position.html', selected_department=selected_department, manage_position=manage_position)
+    return render_template('/positions/manage_position.html', selected_department=selected_department, manage_position=manage_position)
 
 @departments_bp.route('/departments/manage_department/<int:department_id>/delete_position/<int:position_id>', methods=['GET', 'POST'])
 def delete_position(department_id, position_id):

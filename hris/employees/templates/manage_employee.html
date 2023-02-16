@@ -1,7 +1,6 @@
 {% extends 'main.html' %}
 {% set active_page = "employees" %}
 
-
 {% block nav_contents %}
    <div class="container">
       <div class="row mt-3 mb-3">
@@ -21,10 +20,8 @@
          </div>
       </div>
       
-      
       <div class="row mt-3 mb-3">
          <div class="col-12">
-            
             <form action="" method="post">
                <fieldset disabled="disabled">
                   {{ manage_employee.hidden_tag() }}
@@ -248,27 +245,9 @@
 {% endblock %}
 
 {% block javascripts_local %}
-{{ super() }}
+{{ super()}}
 
-<script>
-   
-   $('#datepicker').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm'
-   });
-
-   $('#datepicker2').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm'
-   });
-
-   $('#datepicker3').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm',
-   });
-   
-</script>
-
+<script src="{{ url_for('employees_bp.static', filename='js/employee.js')}}"></script>
 
 <script>
    const form = document.querySelector('form');
@@ -299,7 +278,7 @@
                   const option = document.createElement('option');
                   option.value = position.id;
                   option.text = position.name;
-                  option.selected = {{ employee_info.position_id }};
+                  option.selected = position.id;
                   positionSelect.appendChild(option);
                });
          });
@@ -315,7 +294,7 @@
                   const option = document.createElement('option');
                   option.value = position.id;
                   option.text = position.name;
-                  
+            
                   positionSelect.appendChild(option);
                });
          });

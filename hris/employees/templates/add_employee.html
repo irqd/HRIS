@@ -1,295 +1,262 @@
-{% extends 'main.html' %}
-{% set active_page = "employees" %}
-
-
+{% extends 'main.html' %} 
+{% set active_page = "employees" %}  
 {% block nav_contents %}
 <div class="container">
-   <div class="row mt-3 mb-3">
-      <div class="col-12">
-         <h4 class="shadow border p-3 rounded">
-            <a href="{{ url_for('employees_bp.employees') }}" class="text-dark">Employees</a> >
-            <a href="#" class="text-dark">Add Employee</a>
-         </h4>
-      </div>
-   </div>
+  <div class="row mt-3 mb-3">
+    <div class="col-12">
+      <h4 class="shadow border p-3 rounded">
+        <a href="{{ url_for('employees_bp.employees') }}" class="text-dark"
+          >Employees</a
+        >
+        >
+        <a href="#" class="text-dark">Add Employee</a>
+      </h4>
+    </div>
+  </div>
 
-   <div class="row mt-3 mb3">
-      <div class="col-12">
-         <form action="" method="post" autocomplete="off">
-            <fieldset>
-               {{ add_employee.hidden_tag() }}
-               <div class="shadow rounded p-4">
-                  <h4 class="mt-2">Employee Account</h4><hr>
-                  <div class="row">
-                     <div class="col-4">
-                        <div align="center" class="pb-4 pt-4">
-                           <img class="" src="{{ url_for('static', filename='images/profile.svg')}}" alt="Preview Image" id="imagePath" width="120" height="120">
-                        </div>
-                        <div class="custom-file">
-                           {{ add_employee.image_path(class="custom-file-input", id="imageFile", type="file")}}
-                           <label class="custom-file-label" for="#imageFile">Upload File</label>
-                        </div>
-                     </div>
-                     <div class="col-8">
-                        <div class="form-row">
-                           <div class="form-outline mb-1 mt-1 col">
-                              <strong>{{ add_employee.company_email.label() }}</strong>
-                              {{ add_employee.company_email(class="form-control") }}
-                           </div>
-                           <div class="form-outline mb-1 mt-1 col">
-                              <strong>{{ add_employee.access.label() }}</strong>
-                              {{ add_employee.access(class="form-control") }}
-                           </div>
-                        </div>
-                        <div class="form-row">
-                           <div class="form-outline mb-1 mt-1 col">
-                              <strong>{{ add_employee.password1.label() }}</strong>
-                              {{ add_employee.password1(class="form-control", id="password") }}
-                           </div>
-                           <div class="form-outline mb-1 mt-1 col">
-                              <strong>{{ add_employee.password2.label() }}</strong>
-                              {{ add_employee.password2(class="form-control", id="confirmpassword") }}
-                           </div>
-                           
-                        </div>
-                        
-                        <div id="password-validation" class="error">
-                           
-                        </div>
-                     </div>
+  <div class="row mt-3 mb3">
+    <div class="col-12">
+      <form action="" method="post" autocomplete="off">
+        <fieldset>
+          {{ add_employee.hidden_tag() }}
+          <div class="shadow rounded p-4">
+            <h4 class="mt-2">Employee Account</h4>
+            <hr />
+            <div class="row">
+              <div class="col-4">
+                <div align="center" class="pb-4 pt-4">
+                  <img
+                    class=""
+                    src="{{ url_for('static', filename='images/profile.svg')}}"
+                    alt="Preview Image"
+                    id="imagePath"
+                    width="120"
+                    height="120"
+                  />
+                </div>
+                <div class="custom-file">
+                  {{ add_employee.image_path(class="custom-file-input",
+                  id="imageFile", type="file")}}
+                  <label class="custom-file-label" for="#imageFile"
+                    >Upload File</label
+                  >
+                </div>
+              </div>
+              <div class="col-8">
+                <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ add_employee.company_email.label() }}</strong>
+                    {{ add_employee.company_email(class="form-control") }}
                   </div>
-               </div><br>
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ add_employee.access.label() }}</strong>
+                    {{ add_employee.access(class="form-control") }}
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ add_employee.password1.label() }}</strong>
+                    {{ add_employee.password1(class="form-control",
+                    id="password") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ add_employee.password2.label() }}</strong>
+                    {{ add_employee.password2(class="form-control",
+                    id="confirmpassword") }}
+                  </div>
+                </div>
 
-               <div class="shadow rounded p-4">
-                  <h4 class="mt-2">Personal Profile</h4><hr>
-               <div class="form-row">
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.last_name.label() }}</strong>
-                     {{ add_employee.last_name(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.first_name.label() }}</strong>
-                     {{ add_employee.first_name(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.middle_name.label() }}</strong>
-                     {{ add_employee.middle_name(class="form-control") }}
-                  </div>
-               </div>
+                <div id="password-validation" class="error"></div>
+              </div>
+            </div>
+          </div>
+          <br />
 
-               <div class="form-row">
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.gender.label() }}</strong>
-                     {{ add_employee.gender(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.birth_date.label() }}</strong>
-                     {{ add_employee.birth_date(class="form-control", id="datepicker") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.civil_status.label() }}</strong>
-                     {{ add_employee.civil_status(class="form-control") }}
-                  </div>
-               </div> 
+          <div class="shadow rounded p-4">
+            <h4 class="mt-2">Personal Profile</h4>
+            <hr />
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.last_name.label() }}</strong>
+                {{ add_employee.last_name(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.first_name.label() }}</strong>
+                {{ add_employee.first_name(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.middle_name.label() }}</strong>
+                {{ add_employee.middle_name(class="form-control") }}
+              </div>
+            </div>
 
-               <div class="form-row">
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.mobile.label() }}</strong>
-                     {{ add_employee.mobile(class="form-control", id="datepicker") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.email.label() }}</strong>
-                     {{ add_employee.email(class="form-control") }}
-                  </div>
-               </div>
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.gender.label() }}</strong>
+                {{ add_employee.gender(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.birth_date.label() }}</strong>
+                {{ add_employee.birth_date(class="form-control",
+                id="datepicker") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.civil_status.label() }}</strong>
+                {{ add_employee.civil_status(class="form-control") }}
+              </div>
+            </div>
 
-               <div class="form-row">
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.address.label() }}</strong>
-                     {{ add_employee.address(class="form-control") }}
-                  </div>
-               </div>
-      
-               <div class="form-row">
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.tin.label() }}</strong>
-                     {{ add_employee.tin(class="form-control", id="datepicker") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.sss.label() }}</strong>
-                     {{ add_employee.sss(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.phil_health.label() }}</strong>
-                     {{ add_employee.phil_health(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.pag_ibig.label() }}</strong>
-                     {{ add_employee.pag_ibig(class="form-control") }}
-                  </div>
-               </div>
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.mobile.label() }}</strong>
+                {{ add_employee.mobile(class="form-control", id="datepicker") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.email.label() }}</strong>
+                {{ add_employee.email(class="form-control") }}
+              </div>
+            </div>
 
-               <strong>In case of emergency, contact:</strong>
-               <div class="form-row"> 
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.emergency_name.label() }}</strong>
-                     {{ add_employee.emergency_name(class="form-control", id="datepicker") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.emergency_contact.label() }}</strong>
-                     {{ add_employee.emergency_contact(class="form-control") }}
-                  </div>
-                  <div class="form-outline mb-1 mt-1 col">
-                     <strong>{{ add_employee.emergency_relationship.label() }}</strong>
-                     {{ add_employee.emergency_relationship(class="form-control") }}
-                  </div>
-               </div>
-               </div><br>
-      
-               <div class="shadow rounded p-4">
-                  <h4 class="mt-2">Employment Profile</h4><hr>
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.address.label() }}</strong>
+                {{ add_employee.address(class="form-control") }}
+              </div>
+            </div>
 
-                  <div class="form-row">
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong><label>Department</label></strong>
-                        <select id="department" name="department" class="form-control">
-                           <option value="">Select Department</option>
-                           {% for department in departments %}
-                              <option value="{{ department.id }}">{{ department.department_name}}</option>
-                           {% endfor %}
-                        </select>
-                     </div>
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.positions.label() }}</strong>
-                        {{ add_employee.positions(class="form-control", id="position") }}
-                     </div>
-                  </div>
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.tin.label() }}</strong>
+                {{ add_employee.tin(class="form-control", id="datepicker") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.sss.label() }}</strong>
+                {{ add_employee.sss(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.phil_health.label() }}</strong>
+                {{ add_employee.phil_health(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.pag_ibig.label() }}</strong>
+                {{ add_employee.pag_ibig(class="form-control") }}
+              </div>
+            </div>
 
-                  <div class="form-row">
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.description.label() }}</strong>
-                        {{ add_employee.description(class="form-control") }}
-                     </div>
-                  </div>
+            <strong>In case of emergency, contact:</strong>
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.emergency_name.label() }}</strong>
+                {{ add_employee.emergency_name(class="form-control",
+                id="datepicker") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.emergency_contact.label() }}</strong>
+                {{ add_employee.emergency_contact(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong
+                  >{{ add_employee.emergency_relationship.label() }}</strong
+                >
+                {{ add_employee.emergency_relationship(class="form-control") }}
+              </div>
+            </div>
+          </div>
+          <br />
 
-                  <div class="form-row">
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.salary_package.label() }}</strong>
-                        {{ add_employee.salary_package(class="form-control") }}
-                     </div>
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.status.label() }}</strong>
-                        {{ add_employee.status(class="form-control") }}
-                     </div>
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.start_date.label() }}</strong>
-                        {{ add_employee.start_date(class="form-control", id="datepicker2") }}
-                     </div>
-                     <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ add_employee.end_date.label() }}</strong>
-                        {{ add_employee.end_date(class="form-control", id="datepicker3") }}
-                     </div>
-                  </div>
-               </div>
-               <div class="pb-5">
-                  <button class="btn btn-outline-success mt-3 shadow" type="submit">
-                     <i class="fa-solid fa-check"></i> <u>Submit</u>
-                  </button>
-      
-                  <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('employees_bp.employees') }}">
-                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                  </a>
-               </div>
-            </fieldset>
-         </form>
-      </div>
-   </div>
+          <div class="shadow rounded p-4">
+            <h4 class="mt-2">Employment Profile</h4>
+            <hr />
+
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong><label>Department</label></strong>
+                <select id="department" name="department" class="form-control">
+                  <option value="">Select Department</option>
+                  {% for department in departments %}
+                  <option value="{{ department.id }}">
+                    {{ department.department_name}}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.positions.label() }}</strong>
+                {{ add_employee.positions(class="form-control", id="position")
+                }}
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.description.label() }}</strong>
+                {{ add_employee.description(class="form-control") }}
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.salary_package.label() }}</strong>
+                {{ add_employee.salary_package(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.status.label() }}</strong>
+                {{ add_employee.status(class="form-control") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.start_date.label() }}</strong>
+                {{ add_employee.start_date(class="form-control",
+                id="datepicker2") }}
+              </div>
+              <div class="form-outline mb-1 mt-1 col">
+                <strong>{{ add_employee.end_date.label() }}</strong>
+                {{ add_employee.end_date(class="form-control", id="datepicker3")
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="pb-5">
+            <button class="btn btn-outline-success mt-3 shadow" type="submit">
+              <i class="fa-solid fa-check"></i> <u>Submit</u>
+            </button>
+
+            <a
+              class="btn btn-outline-danger mt-3 shadow"
+              href="{{ url_for('employees_bp.employees') }}"
+            >
+              <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+            </a>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
 </div>
-{% endblock %}
-
-{% block javascripts_local %}
+{% endblock %} 
+{% block javascripts_local %} 
 {{ super() }}
-<script>
-   
-   $('#datepicker').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm'
-   });
-
-   $('#datepicker2').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm'
-   });
-
-   $('#datepicker3').datepicker({ 
-      uiLibrary: 'bootstrap4',
-      format: 'yyyy-dd-mm',
-   });
-   
-</script>
+<script src="{{ url_for('employees_bp.static', filename='js/employee.js')}}"></script>
 
 <script>
-   const customFileInput = document.querySelector('#imageFile');
-   const customFileLabel = document.querySelector('.custom-file-label');
+const departmentSelect = document.querySelector("#department");
+const positionSelect = document.querySelector("#position");
 
-   customFileInput.addEventListener('change', function() {
-      customFileLabel.innerHTML = this.files[0].name;
-   });
+positionSelect.innerHTML =
+  '<option value="">Select Department First</option>';
 
-   imageFile.onchange = evt => {
-      const [file] = imageFile.files
-      if (file) {
-         imagePath.src = URL.createObjectURL(file)
-      }
-   }
+departmentSelect.addEventListener("change", function () {
+  const departmentId = this.value;
+  fetch(`/employees/get_positions?department_id=${departmentId}`)
+    .then((response) => response.json())
+    .then((positions) => {
+      positionSelect.innerHTML = '<option value="">Select Position</option>';
+      positions.forEach((position) => {
+        const option = document.createElement("option");
+        option.value = position.id;
+        option.text = position.name;
+        positionSelect.appendChild(option);
+      });
+    });
+});
 </script>
-
-<script >
-   const departmentSelect = document.querySelector('#department');
-   const positionSelect = document.querySelector('#position');
-   
-   positionSelect.innerHTML = '<option value="">Select Department First</option>';
-
-   departmentSelect.addEventListener('change', function() {
-      const departmentId = this.value;
-      fetch(`/employees/get_positions?department_id=${departmentId}`)
-         .then(response => response.json())
-         .then(positions => {
-               positionSelect.innerHTML = '<option value="">Select Position</option>';
-               positions.forEach(position => {
-                  const option = document.createElement('option');
-                  option.value = position.id;
-                  option.text = position.name;
-                  positionSelect.appendChild(option);
-               });
-         });
-   });
-</script>
-
-<script>
-   const password = document.querySelector('#password');
-   const confirmPassword = document.querySelector('#confirmpassword');
-   const passwordValidation = document.querySelector('#password-validation');
-
-   confirmPassword.addEventListener('input', function() {
-      if (this.value === '') {
-         passwordValidation.innerHTML = '';
-         confirmPassword.className = 'form-control'
-      } else if (password.value !== this.value) {
-         passwordValidation.innerHTML = `
-               <small class="text-danger" style="position: absolute; right: 170px;">
-                  Passwords do not match.
-               </small>
-         `;
-         confirmPassword.className = 'form-control is-invalid'
-      } else {
-         passwordValidation.innerHTML = `
-               <small class="text-success" style="position: absolute; right: 225px;">
-                  Passwords match.
-               </small>
-         `;
-         confirmPassword.className = 'form-control is-valid'
-      }
-   });
- </script>
 {% endblock %}

@@ -4,7 +4,7 @@ from hris.models import *
 from .forms import *
 
 employees_bp = Blueprint('employees_bp', __name__,  template_folder='templates',
-    static_folder='static', static_url_path='static')
+    static_folder='static', static_url_path='employee/static')
 
 @employees_bp.route('/employees/get_positions')
 def get_positions():

@@ -13,7 +13,11 @@ def create_app():
    app = Flask(__name__)
 
    app.config['SECRET_KEY'] = 'fa282f581ec1d84bc02c6f34d4da17a2'
+
+   #for sqlite
    #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+
+   #for mysql
    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
    db.init_app(app)
@@ -30,7 +34,7 @@ def create_app():
    from .schedules.schedules import schedules_bp
    from .salaries.salaries import salaries_bp
    
-   #Register Blueprints
+   #register Blueprints
    app.register_blueprint(home_bp, url_prefix='/')
    app.register_blueprint(auth_bp, url_prefix='/')
    app.register_blueprint(departments_bp, url_prefix='/')
