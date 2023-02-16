@@ -144,8 +144,8 @@ class Attendance(db.Model):
    checked_out= db.Column(db.Time(), nullable=True)
 
    #todo pre-post ot 
-   pre_ot= db.Column(db.Time(), nullable=False)
-   post_ot= db.Column(db.Time(), nullable=True)
+   pre_ot= db.Column(db.Time())
+   post_ot= db.Column(db.Time())
 
    #Foreign Keys  
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))

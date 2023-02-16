@@ -1,27 +1,37 @@
 {% extends 'main.html' %}
 {% set active_page = "schedules" %}
+{% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('schedules_bp.static',filename='css/index.css') }}"
+/>
 
+
+{% endblock %}
 
 {% block nav_contents %}
+{% include 'modals/edit_schedule_modal.html' %}
    <div class="container">
       <div class="row mt-3 mb-3">
          <div class="col-12">
             <h4 class="shadow border p-3 rounded">
                <a href="{{ url_for('schedules_bp.schedules') }}" class="text-dark">Schedules</a> >
-               <a href="#" class="text-dark">Employee Name</a> >
+               <a href="#" class="text-dark">{{ employee_name }}</a> >
                <a href="#" class="text-dark">Manage Schedule</a>
             </h4>
-
-            <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('employees_bp.add_employee') }}">
-               <i class="fa-solid fa-user-plus"></i> <u>Add Schedule</u>
-            </a>
+         
+            {% include 'modals/add_schedule_modal.html' %}
+            {% include 'modals/edit_schedule_modal.html' %}
+            <button class="btn btn-outline-success mt-3 mb-3 shadow" data-toggle="modal" data-target="#add_schedule_{{ employee_id }}">
+               <i class="fa-solid fa-user-plus"></i><u>Add Schedule</u>
+            </button>
          </div>
       </div>
-
       <div class="row mt-3 mb-3">
          <div class="col-12">
+           
             <div class="shadow p-4 rounded">
-               <h1>Test</h1>
+               <div id="schedules" class=""></div>
             </div>
          </div>
       </div>
@@ -29,5 +39,95 @@
 {% endblock %}
 
 {% block javascripts_local %}
+{{ super() }}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const calendarEl = document.getElementById("schedules");
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      themeSystem: "bootstrap",
+      initialView: "dayGridMonth",
+      selectable: true,
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+      },
+      defaultDate: moment(),
+      navLinks: true, // can click day/week names to navigate views
+      selectable: true,
+      selectHelper: true,
+      eventLimit: true,
+      businessHours: true, // display business hours
+      events: function(info, successCallback, failureCallback) {
+         fetch('/schedules/get_attendance?employee_id={{employee_id}}')
+           .then(response => response.json())
+           .then(data => {
+             // transform the data into an array of calendar events
+               const events = data.map(item => ({
+                  id: item.id,
+                  title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")}`,
+                  start: moment(item.date, "YY/MM/DD").toDate(),
+                  
+                  end: moment(item.date, "YY/MM/DD").toDate(),
+                  start_shift : moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
+                  end_shift : moment(item.end_shift, "HH:mm:ss").format("H:mm"),
+                  allDay: true,
+                  color: item.attendance_type === 'Present' ? '#28a745' : //warning
+                        item.attendance_type === 'Absent' ? '#dc3545' : //success
+                        item.attendance_type === 'Unavailable' ? '#ffc107' : '#000000' //danger - black
+             }));
+             // call the success callback with the events array
+             successCallback(events);
+           })
+           .catch(error => {
+             // call the failure callback with the error
+             failureCallback(error);
+           });
+       },
 
+       eventClick: function (arg) {
+         $('#edit_schedule_{{ employee_id }}').modal('show');
+         document.querySelector('#edit_start_shift').value = arg.event.extendedProps.start_shift;
+         document.querySelector('#edit_end_shift').value = arg.event.extendedProps.end_shift;
+         document.getElementById('schedule_id').value = arg.event.id;
+      },
+
+   });
+    calendar.render();
+  });
+</script>
+
+
+
+<script>
+
+   $("#start_date").datepicker({
+      uiLibrary: "bootstrap4",
+      format: "yyyy-mm-dd",
+    });
+    
+    $("#end_date").datepicker({
+      uiLibrary: "bootstrap4",
+      format: "yyyy-mm-dd",
+    });
+   
+    $("#start_shift").timepicker({ header: true });
+   
+    $("#end_shift").timepicker({ header: true });
+   
+    $("#edit_start_shift").timepicker({ header: true });
+   
+    $("#edit_end_shift").timepicker({ header: true });
+   
+   $('#edit_schedule_{{ employee_id }}').on('hidden.bs.modal', function () {
+      $(this).find('form').trigger('reset');
+  });
+
+  $('#add_schedule_{{ employee_id }}').on('hidden.bs.modal', function () {
+   $(this).find('form').trigger('reset');
+   });
+
+
+   
+</script>
 {% endblock %}

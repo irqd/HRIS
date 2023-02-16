@@ -51,7 +51,7 @@
                             </td>
                            <td>
                               <div align="center">
-                                 <a href="{{ url_for('schedules_bp.manage_schedule', employee_id=employee.id) }}" class="btn btn-outline-success shadow">
+                                 <a href="{{ url_for('schedules_bp.manage_schedule', employee_id=employee.id, employee_name=employee.fullname) }}" class="btn btn-outline-success shadow">
                                     <i class="fa-solid fa-eye"></i>
                                  </a>
                               </div>

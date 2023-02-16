@@ -1,56 +1,55 @@
-{% extends 'main.html' %}
-{% set active_page = "attendance" %}
-
+{% extends 'main.html' %} 
+{% set active_page = "attendance" %} 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ url_for('attendance_bp.static',filename='css/index.css') }}">
+<link
+  rel="stylesheet"
+  href="{{ url_for('attendance_bp.static',filename='css/index.css') }}"
+/>
 {% endblock %}
 
 {% block nav_contents %}
-   <div class="container">
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <h4 class="shadow border p-3 rounded">
-               <a href="{{ url_for('attendance_bp.attendance') }}" class="text-dark">Attendance</a>
-            </h4>
-         </div>
+<div class="container">
+  <div class="row mt-3 mb-3">
+    <div class="col-12">
+      <h4 class="shadow border p-3 rounded">
+        <a href="{{ url_for('attendance_bp.attendance') }}" class="text-dark"
+          >Attendance</a
+        >
+      </h4>
+    </div>
+  </div>
+
+  <div class="row mt-3 mb-3">
+    <div class="col-12">
+      <div class="shadow rounded p-4">
+        <div id="calendar" class=""></div>
       </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 
 
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <div class="shadow rounded p-4">
-               <div id='calendar' class="">
-      
-               </div>
-            </div>
-         </div>
-      </div>  
-   </div>
-{% endblock %}
-
-{% block javascripts_local %}
+{% block javascripts_local %} 
 {{ super() }}
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-      const calendarEl = document.getElementById('calendar')
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-      themeSystem: 'bootstrap',
-      initialView: 'dayGridMonth',
+  document.addEventListener("DOMContentLoaded", function () {
+    const calendarEl = document.getElementById("calendar");
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      themeSystem: "bootstrap",
+      initialView: "dayGridMonth",
       selectable: true,
       headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-       },
-       defaultDate: moment(),
-       navLinks: true, // can click day/week names to navigate views
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+      },
+      defaultDate: moment(),
+      navLinks: true, // can click day/week names to navigate views
       selectable: true,
-      selectHelper: true
-      
-        
-      })
-      calendar.render()
-    })
-
+      selectHelper: true,
+    });
+    calendar.render();
+  });
 </script>
 
 {% endblock %}

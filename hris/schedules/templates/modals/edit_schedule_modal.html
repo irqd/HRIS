@@ -1,0 +1,36 @@
+<!-- Modal -->
+<div class="modal fade" id="edit_schedule_{{ employee_id }}" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+      <form id="edit_schedule_form" action="{{ url_for('schedules_bp.edit_schedule', employee_id=employee_id, employee_name=employee_name) }}" method="post" autocomplete="off">
+         {{ edit_schedule_modal.hidden_tag() }}
+         <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Edit Schedule</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     {{ edit_schedule_modal.start_shift.label() }}
+                     {{ edit_schedule_modal.start_shift(class="form-control", id="edit_start_shift") }}
+                  </div>
+
+                  <div class="form-outline mb-1 mt-1 col">
+                     {{ edit_schedule_modal.end_shift.label() }}
+                     {{ edit_schedule_modal.end_shift(class="form-control", id="edit_end_shift") }}
+                  </div>
+               </div>
+               {{ edit_schedule_modal.schedule_id(id="schedule_id", type="hidden")}}
+               <input type="hidden" name="employee_id" value="{{ employee_id }}">
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            {{ edit_schedule_modal.submit(class='btn btn-outline-info')}}
+            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+            </div>
+         </div>
+      </form>
+   </div>
+</div>

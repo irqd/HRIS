@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2023 at 01:38 AM
+-- Generation Time: Feb 16, 2023 at 05:26 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -36,10 +36,21 @@ CREATE TABLE `attendance` (
   `end_shift` time NOT NULL,
   `checked_in` time DEFAULT NULL,
   `checked_out` time DEFAULT NULL,
-  `pre_ot` time NOT NULL,
+  `pre_ot` time DEFAULT NULL,
   `post_ot` time DEFAULT NULL,
   `employee_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `date`, `attendance_type`, `status`, `start_shift`, `end_shift`, `checked_in`, `checked_out`, `pre_ot`, `post_ot`, `employee_id`) VALUES
+(1, '2023-02-20', 'Unavailable', 'Pending', '08:00:00', '17:00:00', NULL, NULL, '08:00:00', NULL, 1),
+(2, '2023-02-21', 'Unavailable', 'Pending', '08:00:00', '17:00:00', NULL, NULL, '08:00:00', NULL, 1),
+(3, '2023-02-22', 'Unavailable', 'Pending', '08:00:00', '17:00:00', NULL, NULL, '08:00:00', NULL, 1),
+(4, '2023-02-23', 'Unavailable', 'Pending', '08:00:00', '17:00:00', NULL, NULL, '08:00:00', NULL, 1),
+(5, '2023-02-24', 'Unavailable', 'Pending', '08:00:00', '17:00:00', NULL, NULL, '08:00:00', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -61,7 +72,8 @@ CREATE TABLE `departments` (
 
 INSERT INTO `departments` (`id`, `department_name`, `supervisor`, `description`, `date_created`) VALUES
 (1, 'IT Department', NULL, 'IT Dept.', '2023-02-09'),
-(2, 'HR Department', NULL, 'Hr Dept.', '2023-02-09');
+(2, 'HR Department', NULL, 'Hr Dept.', '2023-02-09'),
+(3, 'Sales Department', NULL, 'Sales department description', '2023-02-14');
 
 -- --------------------------------------------------------
 
@@ -162,7 +174,9 @@ CREATE TABLE `positions` (
 
 INSERT INTO `positions` (`id`, `position_name`, `description`, `position_status`, `date_created`, `department_id`) VALUES
 (1, 'Web Developer', 'Web Dev', 'Hiring', '2023-02-09', 1),
-(2, 'HR Sttaff', 'Hr Staff', 'Hiring', '2023-02-09', 2);
+(2, 'HR Sttaff', 'Hr Staff', 'Hiring', '2023-02-09', 2),
+(3, 'Recruiter', 'Recruiter in HR Dept.', 'Hiring', '2023-02-11', 2),
+(4, 'Dev Ops', 'Position for IT Dept.', 'Hiring', '2023-02-14', 1);
 
 -- --------------------------------------------------------
 
@@ -255,13 +269,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `employee_info`
@@ -285,7 +299,7 @@ ALTER TABLE `leave`
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
