@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from hris.models import *
 from .forms import *
+from flask_login import login_required
 
 departments_bp = Blueprint('departments_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')
 
 # Department
 @departments_bp.route('/departments', methods=['GET', 'POST'])
+@login_required
 def departments():
     delete_department_modal = DeleteDepartmentModal()
     departments = Departments.query.all()
@@ -16,6 +18,7 @@ def departments():
 
 
 @departments_bp.route('/departments/add_department', methods=['GET', 'POST'])
+@login_required
 def add_department():
     add_department = DepartmentForm()
 
@@ -27,6 +30,7 @@ def add_department():
     
 
 @departments_bp.route('/departments/manage_department/<int:department_id>', methods=['GET', 'POST'])
+@login_required
 def manage_department(department_id):
     selected_department = Departments.query.filter_by(id = department_id).first()
     positions = selected_department.getPositions
@@ -48,6 +52,7 @@ def manage_department(department_id):
  
 
 @departments_bp.route('/departments/delete_department/<int:department_id>', methods=['GET', 'POST'])
+@login_required
 def delete_department(department_id):
     if request.method == 'POST':
         flash('Department deleted!', category='danger')
@@ -58,6 +63,7 @@ def delete_department(department_id):
 
 # Position
 @departments_bp.route('/departments/manage_department/<int:department_id>/add_position', methods=['GET', 'POST'])
+@login_required
 def add_position(department_id):
     selected_department = Departments.query.filter_by(id = department_id).first()
     add_position = PositionForm()
@@ -69,6 +75,7 @@ def add_position(department_id):
     return render_template('/positions/add_position.html', selected_department=selected_department, add_position=add_position)
 
 @departments_bp.route('/departments/manage_department/<int:department_id>/manage_position/<int:position_id>', methods=['GET', 'POST'])
+@login_required
 def manage_position(department_id, position_id):
     selected_department = Departments.query.filter_by(id = department_id).first()
     selected_position = Positions.query.filter_by(id = position_id).first()
@@ -86,6 +93,7 @@ def manage_position(department_id, position_id):
     return render_template('/positions/manage_position.html', selected_department=selected_department, manage_position=manage_position)
 
 @departments_bp.route('/departments/manage_department/<int:department_id>/delete_position/<int:position_id>', methods=['GET', 'POST'])
+@login_required
 def delete_position(department_id, position_id):
     if request.method == 'POST':
         flash(f'Position id: {position_id} deleted!', category='danger')

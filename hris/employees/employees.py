@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
-from flask_login import current_user
+from flask_login import current_user, login_required
 from hris.models import *
 from .forms import *
+
 
 employees_bp = Blueprint('employees_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='employee/static')
 
 @employees_bp.route('/employees/get_positions')
+@login_required
 def get_positions():
     department_id = request.args.get('department_id')
     positions = Positions.query.filter_by(department_id=department_id).all()
@@ -15,6 +17,7 @@ def get_positions():
 
 
 @employees_bp.route('/employees', methods=['GET'])
+@login_required
 def employees():
    delete_employee_modal = DeleteEmployeeModal()
 
@@ -30,6 +33,7 @@ def employees():
 
 
 @employees_bp.route('/employees/add_employee', methods=['GET', 'POST'])
+@login_required
 def add_employee():
    add_employee = EmployeeForm()
    departments = db.session.query(Departments).all()   
@@ -43,6 +47,7 @@ def add_employee():
 
 
 @employees_bp.route('/employees/<int:employee_id>-<string:employee_name>', methods=['GET', 'POST'])
+@login_required
 def manage_employee(employee_name, employee_id):
    selected_employee = db.session.query(Users, EmployeeInfo, EmploymentInfo, Positions, Departments)\
       .join(EmploymentInfo).join(Users).join(Positions).join(Departments)\
@@ -101,6 +106,7 @@ def manage_employee(employee_name, employee_id):
                                                    employee_info=employee_info)
 
 @employees_bp.route('/employees/delete_employee/<int:employee_id>', methods=['GET', 'POST'])
+@login_required
 def delete_employee(employee_id):
    if request.method == 'POST':
       # employees = db.session.query()\

@@ -1,5 +1,6 @@
 from hris.models import *
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask_login import login_required
 from .forms import *
 from datetime import datetime, timedelta
 
@@ -7,6 +8,7 @@ schedules_bp = Blueprint('schedules_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='schedules/static')
 
 @schedules_bp.route('schedules/get_attendance', methods=['GET'])
+@login_required
 def get_attendance():
     employee_id = request.args.get('employee_id')
     schedules = Attendance.query.filter_by(employee_id = employee_id).all()
@@ -22,6 +24,7 @@ def get_attendance():
     return jsonify(schedules)
 
 @schedules_bp.route('/schedules', methods=['GET', 'POST'])
+@login_required
 def schedules():
     employees = db.session.query(EmployeeInfo.id, EmployeeInfo.last_name, EmployeeInfo.first_name, 
     EmployeeInfo.middle_name, EmployeeInfo.fullname, Positions.position_name, Departments.department_name,
@@ -33,6 +36,7 @@ def schedules():
     return render_template('schedules.html', employees=employees)
 
 @schedules_bp.route('/schedules/manage_schedule/<int:employee_id>/<string:employee_name>', methods=['GET', 'POST'])
+@login_required
 def manage_schedule(employee_id, employee_name):
     add_schedule_modal = AddScheduleModal()
     edit_schedule_modal = EditScheduleModal()
@@ -72,6 +76,7 @@ def manage_schedule(employee_id, employee_name):
 
 
 @schedules_bp.route('schedules/edit_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
+@login_required
 def edit_schedule(employee_id, employee_name):
     if request.method == 'POST':
         edit_schedule_modal = EditScheduleModal(request.form)
@@ -95,6 +100,7 @@ def edit_schedule(employee_id, employee_name):
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
 
 @schedules_bp.route('schedules/delete_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
+@login_required
 def delete_schedule(employee_id, employee_name):
     if request.method == 'POST':
         delete_id = request.form.get('schedule_id')

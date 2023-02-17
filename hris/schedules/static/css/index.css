@@ -1,4 +1,4 @@
- .fc-daygrid-day-number {
+.fc-daygrid-day-number {
 	color: #2C3E50;
  }
 
@@ -15,11 +15,11 @@
  }
 
  .fc-scrollgrid-sync-inner {
-	padding: 3px;
+	padding: 1px;
  }
 
- .fc-event-title-container {
-	padding: 5px;
+ .fc-event-main {
+	height: 45px;
  }
 
  .fc-toolbar {

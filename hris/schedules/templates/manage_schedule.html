@@ -72,9 +72,11 @@
                   start_shift : moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
                   end_shift : moment(item.end_shift, "HH:mm:ss").format("H:mm"),
                   allDay: true,
-                  color: item.attendance_type === 'Present' ? '#28a745' : //warning
-                        item.attendance_type === 'Absent' ? '#dc3545' : //success
-                        item.attendance_type === 'Unavailable' ? '#ffc107' : '#000000' //danger - black
+                  color: item.attendance_type === 'Present' ? '#28a745' : //success
+                        item.attendance_type === 'Absent' ? '#dc3545' : //danger
+                        item.attendance_type === 'Unavailable' ? '#d9e2ef' : //secondary
+                        item.attendance_type === 'Late' ? '#ffc107' : //warning
+                        item.attendance_type === 'On_Leave' ? '#17a2b8' : '#000000' //info
              }));
              // call the success callback with the events array
              successCallback(events);

@@ -15,7 +15,11 @@
  }
 
  .fc-scrollgrid-sync-inner {
-	padding: 10px;
+	padding: 1px;
+ }
+
+ .fc-event-main {
+	height: 45px;
  }
 
  .fc-toolbar {
@@ -35,3 +39,6 @@
 	color: #2C3E50;
  }
  
+ .fc-event:hover {
+	cursor: pointer;
+ }

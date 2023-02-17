@@ -5,6 +5,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
 import enum
+from datetime import datetime, timedelta
 
 class USER_TYPES(enum.Enum):
    Employee = "Employee"
@@ -19,11 +20,14 @@ class HIRE_TYPES(enum.Enum):
    Hired = "Hired"
    Retired = "Retired"
    Terminated = "Terminated"
+   Resigned = "Resigned"
 
 class ATTENDANCE_TYPES(enum.Enum):
    Present = "Present"
    Absent = "Absent"
+   Late = "Late"
    Unavailable = "Unavailable"
+   On_Leave = "On_Leave"
 
 class LEAVE_TYPES(enum.Enum):
    Sick_Leave = "Sick_Leave"
@@ -152,7 +156,14 @@ class Attendance(db.Model):
 
    @hybrid_property
    def total_hours(self):
-      return (self.end_shift - self.start_shift).total_seconds() / 3600
+      return (datetime.combine(self.date, self.end_shift) - datetime.combine(self.date, self.start_shift)).total_seconds() / 3600
+   
+   @hybrid_property
+   def get_progress(self):
+      
+      return (datetime.today() - self.start_shift / self.end_shift - self.start_shift)
+    
+
       
 
 class Leave(db.Model):
@@ -161,11 +172,10 @@ class Leave(db.Model):
 
    type = db.Column(db.Enum(LEAVE_TYPES), default=LEAVE_TYPES.Sick_Leave, nullable=False)
    date_requested= db.Column(db.Date(), default=func.current_date(), nullable=False)
-   start_date= db.Column(db.Date(), nullable=False)
-   end_date= db.Column(db.Date(), nullable=False)
+   leave_date= db.Column(db.Date(), nullable=False)
    status = db.Column(db.Enum(STATUS_TYPES),default=STATUS_TYPES.Pending, nullable=False)
-   approved_date =db.Column(db.Date(), nullable=False)
-   approved_by = db.Column(db.String(length=50), nullable=False)
+   approved_date =db.Column(db.Date())
+   approved_by = db.Column(db.String(length=50))
 
    #Foreign Keys  
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
