@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 import re
+from datetime import datetime, timedelta
 from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
                      EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
 from wtforms.validators import (DataRequired, Email, EqualTo,
@@ -18,7 +19,6 @@ class AddScheduleModal(FlaskForm):
 
 
 class EditScheduleModal(FlaskForm):
-
    start_shift = StringField(label='Start Shift', validators=[DataRequired()])
    end_shift = StringField(label='End Shift', validators=[DataRequired()])
    schedule_id = StringField(validators=[DataRequired()])

@@ -11,10 +11,12 @@
             </button>
             </div>
             <div class="modal-body">
+               <h3 class="text-center shadow p-3 rounded" id="date_to_edit"></h3>
                <div class="form-row">
                   <div class="form-outline mb-1 mt-1 col">
                      {{ edit_schedule_modal.start_shift.label() }}
                      {{ edit_schedule_modal.start_shift(class="form-control", id="edit_start_shift") }}
+         
                   </div>
 
                   <div class="form-outline mb-1 mt-1 col">
@@ -23,14 +25,16 @@
                   </div>
                </div>
                {{ edit_schedule_modal.schedule_id(id="schedule_id", type="hidden")}}
-               <input type="hidden" name="employee_id" value="{{ employee_id }}">
             </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-            {{ edit_schedule_modal.submit(class='btn btn-outline-info')}}
-            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+         </form>
+            <div class="d-flex pb-4 m-3">
+               <form method="post" action="{{ url_for('schedules_bp.delete_schedule', employee_id=employee_id, employee_name=employee_name)}}" id="delete_schedule">
+                  {{ edit_schedule_modal.schedule_id(id="delete_schedule_id", type="hidden")}}
+                  <button class="btn btn-outline-danger shadow" style="margin-right: 80px;">Delete</button>
+               </form>
+               <button type="button" class="btn btn-outline-secondary mr-2 shadow" data-dismiss="modal">Close</button>
+               {{ edit_schedule_modal.submit(class='btn btn-outline-info shadow')}}
             </div>
          </div>
-      </form>
    </div>
 </div>

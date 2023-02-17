@@ -86,10 +86,12 @@
        },
 
        eventClick: function (arg) {
-         $('#edit_schedule_{{ employee_id }}').modal('show');
          document.querySelector('#edit_start_shift').value = arg.event.extendedProps.start_shift;
          document.querySelector('#edit_end_shift').value = arg.event.extendedProps.end_shift;
          document.getElementById('schedule_id').value = arg.event.id;
+         document.getElementById('delete_schedule_id').value = arg.event.id;
+         document.querySelector('#date_to_edit').innerHTML = arg.event.startStr;
+         $('#edit_schedule_{{ employee_id }}').modal('show');
       },
 
    });

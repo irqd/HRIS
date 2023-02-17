@@ -6,6 +6,21 @@ from datetime import datetime, timedelta
 schedules_bp = Blueprint('schedules_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='schedules/static')
 
+@schedules_bp.route('schedules/get_attendance', methods=['GET'])
+def get_attendance():
+    employee_id = request.args.get('employee_id')
+    schedules = Attendance.query.filter_by(employee_id = employee_id).all()
+    
+    schedules = [{'id': schedule.id, 
+                  'date': schedule.date.strftime("%y/%m/%d"), 
+                  'attendance_type': schedule.attendance_type.value,
+                  'status': schedule.status.value,
+                  'start_shift': schedule.start_shift.isoformat(),
+                  'end_shift': schedule.end_shift.isoformat(),
+                  'employee_id':schedule.employee_id} for schedule in schedules]
+
+    return jsonify(schedules)
+
 @schedules_bp.route('/schedules', methods=['GET', 'POST'])
 def schedules():
     employees = db.session.query(EmployeeInfo.id, EmployeeInfo.last_name, EmployeeInfo.first_name, 
@@ -59,20 +74,32 @@ def manage_schedule(employee_id, employee_name):
 @schedules_bp.route('schedules/edit_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
 def edit_schedule(employee_id, employee_name):
     if request.method == 'POST':
-        flash('Schedule edited!', category='warning')
+        edit_schedule_modal = EditScheduleModal(request.form)
+
+        if edit_schedule_modal.validate_on_submit():
+            updated_schedule = Attendance.query.filter_by(id = edit_schedule_modal.schedule_id.data).first()
+            
+            start_shift = datetime.strptime(edit_schedule_modal.start_shift.data, "%H:%M")
+            end_shift = datetime.strptime(edit_schedule_modal.end_shift.data, "%H:%M")
+
+            if start_shift > end_shift:
+                flash('Starting shift must not exceed the ending shift!', category='danger')
+            else:
+                updated_schedule.start_shift = start_shift
+                updated_schedule.end_shift = end_shift
+                
+                db.session.commit()     
+                flash(f'Schedule for {updated_schedule.date} edited!', category='success')
+
+
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
 
-@schedules_bp.route('schedules/get_attendance', methods=['GET'])
-def get_attendance():
-    employee_id = request.args.get('employee_id')
-    schedules = Attendance.query.filter_by(employee_id = employee_id).all()
-    
-    schedules = [{'id': schedule.id, 
-                  'date': schedule.date.strftime("%y/%m/%d"), 
-                  'attendance_type': schedule.attendance_type.value,
-                  'status': schedule.status.value,
-                  'start_shift': schedule.start_shift.isoformat(),
-                  'end_shift': schedule.end_shift.isoformat(),
-                  'employee_id':schedule.employee_id} for schedule in schedules]
+@schedules_bp.route('schedules/delete_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
+def delete_schedule(employee_id, employee_name):
+    if request.method == 'POST':
+        delete_id = request.form.get('schedule_id')
+        Attendance.query.filter_by(id = delete_id).delete()
+        db.session.commit()
+        flash(f'Schedule deleted!', category='danger')
+        return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
 
-    return jsonify(schedules)
