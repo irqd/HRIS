@@ -3,10 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from os import path
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
+migrate = Migrate()
 DB_NAME = "hris"
 
 def create_app():
@@ -59,6 +61,7 @@ def create_app():
    #    db.create_all()
  
    bcrypt.init_app(app)
+   migrate.init_app(app, db)
    login_manager.login_view = 'auth_bp.login'
    login_manager.login_message_category = 'info'
    login_manager.init_app(app)

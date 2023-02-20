@@ -113,7 +113,7 @@ def request_leave(employee_id):
     if request.method == 'POST':
         leave_request = LeaveRequestForm(request.form)
         if leave_request.validate_on_submit():
-            print(leave_request)
+            
             start_date = datetime.strptime(leave_request.start_date.data, '%Y-%m-%d')
             end_date = datetime.strptime(leave_request.end_date.data, '%Y-%m-%d')
 

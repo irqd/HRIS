@@ -23,6 +23,7 @@ def get_attendance():
 
     return jsonify(schedules)
 
+
 @schedules_bp.route('/schedules', methods=['GET', 'POST'])
 @login_required
 def schedules():
@@ -108,4 +109,30 @@ def delete_schedule(employee_id, employee_name):
         db.session.commit()
         flash(f'Schedule deleted!', category='danger')
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
+
+# Leave Requests
+@schedules_bp.route('/schedules/leave_requests/<int:employee_id>/<string:employee_name>', methods=['GET', 'POST'])
+@login_required
+def get_leave_requests(employee_id, employee_name):
+    leave_requests = Leave.query.filter_by(employee_id = employee_id).all()
+    return render_template('leave_requests.html', leave_requests=leave_requests, employee_name=employee_name, employee_id=employee_id)
+
+
+@schedules_bp.route('schedules/accept_leave_request/<int:employee_id>/<string:employee_name>', methods=['POST'])
+@login_required
+def accept_leave_request(employee_id, employee_name):
+    if request.method == 'POST':
+        id = request.form.get('accept')
+        flash(f'Leave Request Accepted: {id}', category='success')
+    
+    return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name)) 
+
+@schedules_bp.route('schedules/reject_leave_request/<int:employee_id>/<string:employee_name>', methods=['POST'])
+@login_required
+def reject_leave_request(employee_id, employee_name):
+    if request.method == 'POST':
+        id = request.form.get('reject')
+        flash(f'Leave Request Rejected: {id}', category='danger')
+    return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name))
+
 

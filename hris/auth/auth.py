@@ -23,7 +23,7 @@ def login():
             attempted_password = login_form.password.data
          ):
             login_user(attempted_user_email)
-            #print(login_form.access.data)
+
             flash(f'{attempted_user_email.company_email} logged in successfully.',
                      category='success')
             return redirect(url_for('home_bp.home'))

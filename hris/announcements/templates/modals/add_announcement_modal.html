@@ -1,0 +1,37 @@
+<!-- Modal -->
+<div class="modal fade" id="add_announcement_{{ current_user.id }}" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog shadow-lg">
+      <form action="{{ url_for('announcement_bp.add_announcement') }}" method="post">
+         {{ add_announcement.hidden_tag() }}
+         <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Add Announcement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ add_announcement.title.label() }}</strong>
+                     {{ add_announcement.title(class="form-control") }}
+                   </div>
+                   
+                  {{ add_announcement.announced_by(class="form-control", value=current_user.name, type='hidden') }}
+               </div>
+
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ add_announcement.message.label() }}</strong>
+                     {{ add_announcement.message(class="form-control") }}
+                   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
+            {{ add_announcement.submit(class="btn btn-outline-success shadow") }}      
+            </div>
+         </div>
+      </form>
+   </div>
+</div>

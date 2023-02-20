@@ -1,9 +1,11 @@
 from . import db, bcrypt, login_manager
-from flask_login import UserMixin
-from sqlalchemy.sql import func
+from flask_login import UserMixin, current_user
+from sqlalchemy.sql import func, select
+from sqlalchemy.orm import column_property
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
+
 import enum
 from datetime import datetime, timedelta
 
@@ -55,11 +57,21 @@ class Users(db.Model, UserMixin):
    image_path = db.Column(db.String(length=50), server_default='images/profile.svg')
    company_email = db.Column(db.String(length=50), nullable=False, unique=True)
    password_hash = db.Column(db.String(length=60), nullable=False)
-   access = db.Column(db.Enum(USER_TYPES), nullable=False, unique=True, default=USER_TYPES.Employee)
+   access = db.Column(db.Enum(USER_TYPES), nullable=False, default=USER_TYPES.Employee)
    date_created = db.Column(db.Date(), default=func.current_date(), nullable=False)
 
    # Foreign Keys
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+
+   # Relationship
+   announcement_info = db.relationship('Announcements', backref='announcements')
+
+   @hybrid_property
+   def getAnnouncement(self):
+      if self.announcement_info:
+         return self.announcement_info
+      else:
+         return None
 
    @property
    def password(self):
@@ -73,6 +85,18 @@ class Users(db.Model, UserMixin):
    def verify_password(self, attempted_password):
       return bcrypt.check_password_hash(self.password_hash, attempted_password)
 
+
+class Announcements(db.Model):
+   # Primary Key
+   id = db.Column(db.Integer(), primary_key=True)
+
+   date_created = db.Column(db.Date(), default=func.current_date(), nullable=False)
+   announced_by = db.Column(db.String(length=500), nullable=False)
+   title = db.Column(db.String(length=500), nullable=False)
+   message = db.Column(db.String(length=500) ,nullable=False)
+
+   # Foreign Key
+   user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
 class EmployeeInfo(db.Model):
    # Primary Key
@@ -104,6 +128,7 @@ class EmployeeInfo(db.Model):
    employment_info = db.relationship('EmploymentInfo', backref='employee_info')
    attendance_info = db.relationship('Attendance', backref='employee_info')
    leave_info = db.relationship('Leave', backref='employee_info')
+  
 
    @hybrid_property
    def fullname(self):
@@ -115,6 +140,9 @@ class EmployeeInfo(db.Model):
          return self.employment_info
       else:
          return None
+      
+
+
    
    
 
@@ -162,7 +190,10 @@ class Attendance(db.Model):
    def get_progress(self):
       
       return (datetime.today() - self.start_shift / self.end_shift - self.start_shift)
-    
+
+
+
+  
 
       
 
@@ -228,3 +259,6 @@ class Departments(db.Model):
       else:
          return None
    
+
+
+  

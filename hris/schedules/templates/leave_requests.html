@@ -1,0 +1,117 @@
+{% extends 'main.html' %}
+{% set active_page = "schedules" %}
+{% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('schedules_bp.static',filename='css/index.css') }}"
+/>
+
+
+{% endblock %}
+
+{% block nav_contents %}
+   <div class="container">
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <h4 class="shadow border p-3 rounded">
+               <a href="{{ url_for('schedules_bp.schedules') }}" class="text-dark">Schedules</a> >
+               <a href="#" class="text-dark">{{ employee_name }}</a> >
+               <a href="#" class="text-dark">Leave Requests</a>
+            </h4>
+
+            <!-- <button class="btn btn-outline-success mt-3 mb-3 shadow">
+               <i class="fa-regular fa-circle-check"></i> <u> Accept</u>
+            </button>
+
+            <button class="btn btn-outline-danger mt-3 mb-3 shadow">
+               <i class="fa-regular fa-circle-xmark"></i> <u> Reject</u>
+            </button> -->
+         </div>
+      </div>
+
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <div class="shadow p-4 rounded">
+               <h4 class="mb-4">Leave Requests</h4><hr>
+               <table id="leave_requests" class="table table-striped table-bordered" style="width:100%" >
+                  <thead>
+                        <tr class="shadow">
+                           <th>Type</th>
+                           <th>Date Requested</th>
+                           <th>Leave Date</th>
+                           <th>Status</th>
+                           <th>Approved Date</th>
+                           <th>Approved By</th>
+                           <th>Actions</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        {% for leave in leave_requests %}
+                        <tr>
+                           <td>
+                                 {{ leave.type.value }}
+                           </td>
+                           <td>
+                                 {{ leave.date_requested }}
+                           </td>
+                           <td>
+                                 {{ leave.leave_date}}
+                           </td>
+                           <td>
+                              <div class="rounded text-center shadow bg-{{'warning' if leave.status.value == 'Pending' else 'success' if leave.status.value == 'Approved' else 'danger'}}">
+                                 {{ leave.status.value }}
+                              </div>     
+                           </td>
+                           <td>
+                                 {{ leave.approved_date }}
+                           </td>
+                           <td>
+                                 {{ leave.approved_by}}
+                              </td>
+                           <td>
+                              <div align="center">
+                                 <div class="form-row">
+                                    <form action="{{ url_for('schedules_bp.accept_leave_request', employee_name=employee_name, employee_id=employee_id) }}" method="post" class="ml-3 mr-1">
+                                       <input type="hidden" name="accept" value="{{ leave.id }}">
+                                       <button class="btn btn-outline-success shadow" type="submit">
+                                          <i class="fa-regular fa-circle-check"></i>
+                                       </button>
+                                    </form>
+                                 
+                                    <form action="{{ url_for('schedules_bp.reject_leave_request', employee_id=employee_id, employee_name=employee_name)  }}" method="post" class="ml-1">
+                                       <input type="hidden" name="reject" value="{{ leave.id }}">
+                                       <button class="btn btn-outline-danger shadow" type="submit">
+                                          <i class="fa-regular fa-circle-xmark"></i>
+                                       </button>
+                                    </form>            
+                                 </div>
+                              </div>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}
+
+{% block javascripts_local %}
+{{ super() }}
+<script>
+   $(document).ready(function () {
+      $('#leave_requests').DataTable(
+         {
+            select: true,
+            lengthMenu: [
+               [10, 25, 50, -1],
+               [10, 25, 50, 'All'],
+            ]
+            
+         }
+      );
+
+   }); 
+</script>
+{% endblock %}

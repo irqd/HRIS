@@ -1,7 +1,103 @@
 {% extends 'main.html' %}
 {% set active_page = "announcements" %}
+{% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('announcement_bp.static',filename='css/main.css') }}"
+/>
+
+
+{% endblock %}
 
 
 {% block nav_contents %}
-   <h1>This is the announcement page</h1>
+   <div class="container">
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <h4 class="shadow border p-3 rounded">
+               <a href="{{ url_for('announcement_bp.announcements') }}" class="text-dark">Announcements</a>
+            </h4>
+            {% include 'modals/add_announcement_modal.html' %}
+            <button class="btn btn-outline-success mt-3 mb-3 shadow" data-toggle="modal"
+               data-target="#add_announcement_{{ current_user.id }}">
+               <i class="fa-solid fa-user-plus"></i> <u> Add Announcement</u>
+            </button>
+         </div>
+      </div>
+
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <div class="shadow p-3 rounded">
+               <table id="announcements" class="align-middle mb-0 bg-white" style="width:100%" >
+                  <thead>
+                      <tr>
+                        <th>
+                           <h6>No</h6>
+                        </th>
+                        <th>
+                           <h6>Announcement List</h6>
+                        </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                     {% for announcement in announcements%}
+                     <tr>
+                        <td hidden>
+                           {{ announcement.id }}
+                        </td>
+                        <td>
+                           <div class="shadow p-3 rounded mb-4">
+                              <div  class="d-flex justify-content-between">
+                                 <h6 class="text-left">{{ announcement.title }}</h6>
+                                 <h6>{{ announcement.date_created}}</h6>
+                              </div>
+
+                              <div>
+                                 <h6>By: {{ announcement.announced_by}}</h6>
+                              </div>
+                              
+                              <div>
+                                 {{ announcement.message }}
+                              </div>
+                              
+                              <div class="d-flex pt-1 pb-1 justify-content-end">
+                                 {% include 'modals/edit_announcement_modal.html' %}
+                                 <button type="button" class="btn btn-outline-warning shadow " data-toggle="modal" data-target="#edit_announcement_{{ announcement.id }}">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                 </button>
+                                 <form method="post" class="pl-1" action="{{ url_for('announcement_bp.delete_announcement') }}" id="delete_announcement">
+                                    <input type="hidden" value="{{ announcement.id }}" name="announcement_id">
+                                    <button type="submit" class="btn btn-outline-danger shadow">
+                                       <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                 </form>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     {%endfor%}
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}
+
+{% block javascripts_local %}
+{{ super() }}
+<script>
+   $(document).ready(function () {
+      $('#announcements').DataTable({
+
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All'],
+            ],
+            "order": [[0, "desc"]]   
+        });
+   });
+   
+
+</script>
 {% endblock %}
