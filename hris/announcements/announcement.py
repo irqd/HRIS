@@ -40,13 +40,13 @@ def add_announcement():
 @announcement_bp.route('/announcements/delete_announcement', methods=['POST'])
 @login_required
 def delete_announcement(): 
-    announcement_modal = AnnouncementModal(request.form)
     if request.method == 'POST':
-        if announcement_modal.validate_on_submit():
-            announcement_id = request.form.get('announcement_id')
-            announcement = Announcements.query.filter_by(id = announcement_id).delete()
-            db.session.commit()
-            flash('Announcement Deleted!', category='danger')
+        
+        announcement_id = request.form.get('announcement_id')
+        Announcements.query.filter_by(id = announcement_id).delete()
+        db.session.commit()
+
+        flash('Announcement Deleted!', category='danger')
 
     return redirect(url_for('announcement_bp.announcements'))
 

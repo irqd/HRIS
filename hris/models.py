@@ -141,11 +141,6 @@ class EmployeeInfo(db.Model):
       else:
          return None
       
-
-
-   
-   
-
 class EmploymentInfo(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)

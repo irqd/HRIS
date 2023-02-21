@@ -6,6 +6,8 @@ OJT work
 data-backdrop="static" 
 
 
+https://flask-uploads.readthedocs.io/en/latest/
+
 #reference
 http://themes.propeller.in/bootstrap4/html/bootstrap4-admin-theme/login.html
 

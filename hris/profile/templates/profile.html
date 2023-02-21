@@ -7,9 +7,173 @@
       <div class="row mt-3 mb-3">
          <div class="col-12">
             <h4 class="shadow border p-3 rounded">
-               <a href="#" class="text-dark">Profile</a>
+               <a href="#" class="text-dark">{{ employee_info.fullname }}'s Profile</a>
             </h4>
          </div>
       </div>
+
+      <a class="btn btn-outline-primary mt-3 mb-3 shadow" href="{{ url_for('profile_bp.account_settings', employee_id=employee_info.id) }}">
+         <i class="fa-solid fa-gear"></i> <u> Account Settings</u>
+      </a>
+
+      <div class="row mt-3 mb-3">
+         <div class="col-12">
+            <form action="" method="post">
+               <div class="shadow rounded p-4">
+                  <h4 class="mt-2">Personal Profile</h4><hr>
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.last_name.label() }}</strong>
+                     {{ employee_form.last_name(class="form-control") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.first_name.label() }}</strong>
+                     {{ employee_form.first_name(class="form-control") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.middle_name.label() }}</strong>
+                     {{ employee_form.middle_name(class="form-control") }}
+                  </div>
+               </div>
+
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.gender.label() }}</strong>
+                     <select name="gender" id="gender" class="form-control">
+                     {% for status in employee_form.gender.choices %}
+                        <option value="{{ status[0]}}" {% if status[1] == employee_form.gender.data %} selected {% endif %}>{{status[1]}}</option>
+                     {% endfor %}
+                  </select>
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.birth_date.label() }}</strong>
+                     {{ employee_form.birth_date(class="form-control", id="datepicker") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.civil_status.label() }}</strong>
+
+                     <select name="civil_status" id="civil_status" class="form-control">
+                        {% for status in employee_form.civil_status.choices %}
+                           <option value="{{ status[0]}}" {% if status[1] == employee_form.civil_status.data %} selected {% endif %}>{{status[1]}}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div> 
+
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.mobile.label() }}</strong>
+                     {{ employee_form.mobile(class="form-control") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.email.label() }}</strong>
+                     {{ employee_form.email(class="form-control") }}
+                  </div>
+               </div>
+
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.address.label() }}</strong>
+                     {{ employee_form.address(class="form-control") }}
+                  </div>
+               </div>
+      
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.tin.label() }}</strong>
+                     {{ employee_form.tin(class="form-control", disabled="disabled") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.sss.label() }}</strong>
+                     {{ employee_form.sss(class="form-control", disabled="disabled") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.phil_health.label() }}</strong>
+                     {{ employee_form.phil_health(class="form-control", disabled="disabled") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.pag_ibig.label() }}</strong>
+                     {{ employee_form.pag_ibig(class="form-control", disabled="disabled") }}
+                  </div>
+               </div>
+
+               <strong>In case of emergency, contact:</strong>
+               <div class="form-row"> 
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.emergency_name.label() }}</strong>
+                     {{ employee_form.emergency_name(class="form-control") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.emergency_contact.label() }}</strong>
+                     {{ employee_form.emergency_contact(class="form-control") }}
+                  </div>
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ employee_form.emergency_relationship.label() }}</strong>
+                     {{ employee_form.emergency_relationship(class="form-control") }}
+                  </div>
+               </div>
+               </div><br>
+
+               <div class="shadow rounded p-4">
+                  <h4 class="mt-2">Employment Profile</h4><hr>
+
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong><label>Department</label></strong>
+                        <input type="text" value="{{ department.department_name }}" class="form-control" disabled>
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.positions.label() }}</strong>
+                        <input type="text" value="{{ position.position_name }}" class="form-control" disabled>
+                     </div>
+                  </div>
+
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.description.label() }}</strong>
+                        {{ employee_form.description(class="form-control", disabled="disabled") }}
+                     </div>
+                  </div>
+                  
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.salary_package.label() }}</strong>
+                        {{ employee_form.salary_package(class="form-control", disabled="disabled") }}
+                     </div>
+                     
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.status.label() }}</strong>
+                        <input type="text" value="{{ employee_form.status.data }}" class="form-control" disabled>
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.start_date.label() }}</strong>
+                        {{ employee_form.start_date(class="form-control", disabled="disabled") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ employee_form.end_date.label() }}</strong>
+                        {{ employee_form.end_date(class="form-control") }}
+                     </div>
+                  </div>
+               </div>
+
+               <div class="pb-5">
+                  <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                     <i class="fa-solid fa-pen-to-square"></i> <u>Edit</u>
+                  </button>
+      
+                  <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('home_bp.home') }}">
+                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                  </a>
+               </div>
+            </form>
+         </div>
+      </div>
    </div>
+{% endblock %}
+
+{% block javascripts_local %}
+{{ super()}}
+
+<script src="{{ url_for('profile_bp.static', filename='js/profile.js')}}"></script>
+
 {% endblock %}

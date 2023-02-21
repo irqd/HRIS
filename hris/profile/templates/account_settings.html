@@ -1,0 +1,78 @@
+{% extends 'main.html' %}
+{% set active_page = "profile" %}
+
+
+{% block nav_contents %}
+
+<div class="container">
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('profile_bp.profile')}}" class="text-dark"> {{ selected_employee.name }}</a> > 
+            <a href="#" class="text-dark">Change Account Settings</a>
+         </h4>
+      </div>
+   </div>
+
+<div class="shadow rounded p-4">
+   <h4 class="mt-2">Employee Account</h4>
+   <hr>
+   <form action="{{ url_for('profile_bp.save_account_settings', employee_id=current_user.id) }}" method="post" enctype="multipart/form-data">
+   {{ account_form.hidden_tag() }}   
+   <div class="row">
+      <div class="col-4">
+         <div align="center" class="pb-4 pt-4">
+            <img class="" src="{{url_for('static', filename=selected_employee.image_path)}}" alt="Preview Image" id="imagePath" width="120" height="120">
+         </div>
+         <div class="custom-file">
+            {{ account_form.image_path(class="custom-file-input", id="imageFile", type="file")}}
+            <label class="custom-file-label" for="#imageFile">Upload File</label>
+         </div>
+      </div>
+      <div class="col-8">
+         <div class="form-row">
+            <div class="form-outline mb-1 mt-1 col">
+               <strong><label> Company Email </label></strong>
+               <input type="text" value="{{ selected_employee.company_email }}" class="form-control" disabled>
+            </div>
+            <div class="form-outline mb-1 mt-1 col">
+               <strong><label> Access </label></strong>
+               <input type="text" value="{{ selected_employee.access.value }}" class="form-control" disabled>
+            </div>
+            
+         </div>
+         <div class="form-row">
+            <div class="form-outline mb-1 mt-1 col">
+               <strong>{{ account_form.password1.label() }}</strong>
+               {{ account_form.password1(class="form-control", id="password") }}
+               
+            </div>
+            <div class="form-outline mb-1 mt-1 col">
+               <strong>{{ account_form.password2.label() }}</strong>
+               {{ account_form.password2(class="form-control", id="confirmpassword") }}
+            </div>
+            
+         </div>
+         <div id="password-validation" class="error"></div>
+         <div class="d-flex align-items-end flex-column bd-highlight mt-3">
+            <button class="btn btn-outline-success mt-3 shadow" type="submit">
+               <i class="fa-solid fa-pen-to-square"></i> <u>Save Settings</u>
+            </button>
+         </div>
+         
+         
+      </div>
+   </div>
+   </form>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block javascripts_local %}
+{{ super()}}
+
+<script src="{{ url_for('profile_bp.static', filename='js/profile.js')}}"></script>
+
+{% endblock %}

@@ -4,18 +4,22 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from os import path
 from flask_migrate import Migrate
+import os
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 migrate = Migrate()
 DB_NAME = "hris"
+UPLOAD_FOLDER = 'static/upload'
+
 
 def create_app():
    app = Flask(__name__)
 
    app.config['SECRET_KEY'] = 'fa282f581ec1d84bc02c6f34d4da17a2'
-
+   app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'images', 'uploads')
+   
    #for sqlite
    #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
 

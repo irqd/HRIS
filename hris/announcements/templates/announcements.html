@@ -31,9 +31,7 @@
                <table id="announcements" class="align-middle mb-0 bg-white" style="width:100%" >
                   <thead>
                       <tr>
-                        <th>
-                           <h6>No</h6>
-                        </th>
+                        
                         <th>
                            <h6>Announcement List</h6>
                         </th>
@@ -42,9 +40,7 @@
                   <tbody>
                      {% for announcement in announcements%}
                      <tr>
-                        <td hidden>
-                           {{ announcement.id }}
-                        </td>
+                        
                         <td>
                            <div class="shadow p-3 rounded mb-4">
                               <div  class="d-flex justify-content-between">
@@ -65,7 +61,7 @@
                                  <button type="button" class="btn btn-outline-warning shadow " data-toggle="modal" data-target="#edit_announcement_{{ announcement.id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                  </button>
-                                 <form method="post" class="pl-1" action="{{ url_for('announcement_bp.delete_announcement') }}" id="delete_announcement">
+                                 <form method="post" class="pl-1" action="{{ url_for('announcement_bp.delete_announcement') }}">
                                     <input type="hidden" value="{{ announcement.id }}" name="announcement_id">
                                     <button type="submit" class="btn btn-outline-danger shadow">
                                        <i class="fa-solid fa-trash"></i>
