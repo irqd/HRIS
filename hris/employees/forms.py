@@ -3,22 +3,18 @@ import re
 from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
                      EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
 from wtforms.validators import (DataRequired, Email, EqualTo,
-                              Length, ValidationError, InputRequired, Regexp)
+                              Length, ValidationError, InputRequired, Regexp, Optional)
 
 class DeleteEmployeeModal(FlaskForm):
    delete = SubmitField(label='Delete')
 
 
 class EmployeeForm(FlaskForm):
-   def validate_image(form, field):
-      if field.data:
-         field.data = re.sub(r'[^a-z0-9_.-]', '_', field.data)
-
    #Employee Account
-   image_path = FileField(label='Employee Picture', render_kw={'accept': 'image/*'},validators=[validators.regexp(u'([^\\s]+(\\.(?i)(jpe?g|png))$)')])
+   image_path = FileField(label='Employee Picture', render_kw={'accept': 'image/*'},validators=[Optional(), validators.regexp(u'([^\\s]+(\\.(?i)(jpe?g|png))$)')])
    company_email = EmailField(label='Company Email', validators=[DataRequired()])
-   password1 = PasswordField(label='Password', validators=[Length(min=8), DataRequired()])
-   password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1'), DataRequired()])
+   password1 = PasswordField(label='Password', validators=[Length(min=8)])
+   password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1')])
    access = SelectField(label='Access', choices=[('admin', 'Admin'), ('employee', 'Employee')], 
    validators=[DataRequired()])
 
@@ -45,7 +41,7 @@ class EmployeeForm(FlaskForm):
    #Employment Info
    positions = SelectField(label='Position', coerce=int, validators=[DataRequired()])
    description = TextAreaField(label='Description')
-   salary_package = StringField(label='Salary Package', validators=[DataRequired()])
+   salary_rate = SelectField(label='Salary Rate', coerce=int, validators=[DataRequired()])
    start_date = StringField(label='Start Date', validators=[DataRequired()])
    end_date = StringField(label='End Date', render_kw={'disabled':True}, validators=[DataRequired()])
    status = SelectField(label='Status', choices=[('hired', 'Hired'), ('retired', 'Retired'), ('terminated', 'Terminated')])

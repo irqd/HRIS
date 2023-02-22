@@ -1,0 +1,40 @@
+<!-- Modal -->
+<div class="modal fade" id="add_salary" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog shadow-lg">
+      <form action="{{ url_for('salaries_bp.add_salary') }}" method="post">
+         {{ add_salary_modal.hidden_tag() }}
+         <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Add Salary</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-outline mb-1 mt-1 col">
+                  <strong>{{ add_salary_modal.salary_name.label() }}</strong>
+                  {{ add_salary_modal.salary_name(class="form-control") }}
+                </div>
+                <div class="form-outline mb-1 mt-1 col">
+                  <strong>{{ add_salary_modal.description.label() }}</strong>
+                  {{ add_salary_modal.description(class="form-control") }}
+                </div>
+                <div class="form-outline mb-1 mt-1 col">
+                  <strong>{{ add_salary_modal.amount.label() }}</strong>
+                  {{ add_salary_modal.amount(class="form-control") }}
+                </div>
+                <div class="form-outline mb-1 mt-1 col">
+                  <strong>{{ add_salary_modal.per_hour.label() }}</strong>
+                  {{ add_salary_modal.per_hour(class="form-control") }}
+                </div>
+            
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            {{ add_salary_modal.submit(class='btn btn-outline-success')}}
+            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+            </div>
+         </div>
+      </form>
+   </div>
+</div>

@@ -22,7 +22,7 @@
       
       <div class="row mt-3 mb-3">
          <div class="col-12">
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                <fieldset disabled="disabled">
                   {{ manage_employee.hidden_tag() }}
                   <div class="shadow rounded p-4">
@@ -32,7 +32,7 @@
                      <div class="row">
                         <div class="col-4">
                            <div align="center" class="pb-4 pt-4">
-                              <img class="" src="{{ url_for('static', filename='images/profile.svg')}}" alt="Preview Image" id="imagePath" width="120" height="120">
+                              <img class="" src="{{ url_for('static', filename=user.image_path)}}" alt="Preview Image" id="imagePath" width="120" height="120">
                            </div>
                            <div class="custom-file">
                               {{ manage_employee.image_path(class="custom-file-input", id="imageFile", type="file")}}
@@ -203,8 +203,15 @@
                      
                      <div class="form-row">
                         <div class="form-outline mb-1 mt-1 col">
-                           <strong>{{ manage_employee.salary_package.label() }}</strong>
-                           {{ manage_employee.salary_package(class="form-control") }}
+                           <strong>{{ manage_employee.salary_rate.label() }}</strong>
+                           <select id="salary_rate" name="salary_rate" class="form-control">
+                              <option value="">Select Salary</option>
+                              {% for salary in salaries %}
+                                 <option value="{{ salary.id }}" {% if manage_employee.salary_rate.data == salary.id %} selected {% endif %}>
+                                    {{ salary.amount}}
+                                 </option>
+                              {% endfor %}
+                           </select>
                         </div>
                         
                         <div class="form-outline mb-1 mt-1 col">
@@ -267,7 +274,7 @@
    positionSelect.innerHTML = '<option value="">Select Department First</option>';
 
    window.addEventListener('load', function() {
-      const departmentId = departmentSelect.value;
+      const departmentId = departmentSelect.value; 
       fetch(`/employees/get_positions?department_id=${departmentId}`)
          .then(response => response.json())
          .then(positions => {
@@ -276,9 +283,10 @@
                   const option = document.createElement('option');
                   option.value = position.id;
                   option.text = position.name;
-                  option.selected = position.id;
+                  option.selected = position.id == {{ position_id}} ? true : false;
                   positionSelect.appendChild(option);
                });
+
          });
    });
 
@@ -292,7 +300,6 @@
                   const option = document.createElement('option');
                   option.value = position.id;
                   option.text = position.name;
-            
                   positionSelect.appendChild(option);
                });
          });

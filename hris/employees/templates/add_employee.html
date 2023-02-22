@@ -16,7 +16,7 @@
 
   <div class="row mt-3 mb3">
     <div class="col-12">
-      <form action="" method="post" autocomplete="off">
+      <form action="{{ url_for('employees_bp.add_employee') }}" method="post" autocomplete="off" enctype="multipart/form-data">
         <fieldset>
           {{ add_employee.hidden_tag() }}
           <div class="shadow rounded p-4">
@@ -57,12 +57,12 @@
                   <div class="form-outline mb-1 mt-1 col">
                     <strong>{{ add_employee.password1.label() }}</strong>
                     {{ add_employee.password1(class="form-control",
-                    id="password") }}
+                    id="password", required="required") }}
                   </div>
                   <div class="form-outline mb-1 mt-1 col">
                     <strong>{{ add_employee.password2.label() }}</strong>
                     {{ add_employee.password2(class="form-control",
-                    id="confirmpassword") }}
+                    id="confirmpassword", required="required") }}
                   </div>
                 </div>
 
@@ -182,8 +182,7 @@
               </div>
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.positions.label() }}</strong>
-                {{ add_employee.positions(class="form-control", id="position")
-                }}
+                {{ add_employee.positions(class="form-control", id="position")}}
               </div>
             </div>
 
@@ -196,8 +195,16 @@
 
             <div class="form-row">
               <div class="form-outline mb-1 mt-1 col">
-                <strong>{{ add_employee.salary_package.label() }}</strong>
-                {{ add_employee.salary_package(class="form-control") }}
+                <strong>{{ add_employee.salary_rate.label() }}</strong>
+                <select id="salary_rate" name="salary_rate" class="form-control">
+                  <option value="">Select Salary</option>
+                  {% for salary in salaries %}
+                  <option value="{{ salary.id }}">
+                    {{ salary.amount}}
+                  </option>
+                {% endfor %}
+                </select>
+               
               </div>
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.status.label() }}</strong>

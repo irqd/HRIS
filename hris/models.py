@@ -7,7 +7,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.associationproxy import AssociationProxy
 
 import enum
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 class USER_TYPES(enum.Enum):
    Employee = "Employee"
@@ -61,7 +61,7 @@ class Users(db.Model, UserMixin):
    date_created = db.Column(db.Date(), default=func.current_date(), nullable=False)
 
    # Foreign Keys
-   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
 
    # Relationship
    announcement_info = db.relationship('Announcements', backref='announcements')
@@ -96,7 +96,7 @@ class Announcements(db.Model):
    message = db.Column(db.String(length=500) ,nullable=False)
 
    # Foreign Key
-   user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+   user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete="CASCADE"))
 
 class EmployeeInfo(db.Model):
    # Primary Key
@@ -122,6 +122,7 @@ class EmployeeInfo(db.Model):
 
    #Foreign Keys  
    position_id = db.Column(db.Integer(), db.ForeignKey('positions.id'))
+   
 
    #Relationship
    user_info = db.relationship('Users', backref='employee_info')
@@ -140,21 +141,62 @@ class EmployeeInfo(db.Model):
          return self.employment_info
       else:
          return None
+
+   @hybrid_property
+   def getUserInfo(self):
+      if self.user_info:
+         return self.user_info
+      else:
+         return None
+
+   @hybrid_property
+   def getAttendanceInfo(self):
+      if self.attendance_info:
+         return self.attendance_info
+      else:
+         return None
+
+   @hybrid_property
+   def getLeaveInfo(self):
+      if self.leave_info:
+         return self.leave_info
+      else:
+         return None
       
 class EmploymentInfo(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
 
-   description = db.Column(db.String(length=500))
-   salary_package = db.Column(db.String(length=50), nullable=False)
+   description = db.Column(db.String(length=500))   
+   
    start_date= db.Column(db.Date(), nullable=False)
    end_date = db.Column(db.Date(), nullable=True)
    status = db.Column(db.Enum(HIRE_TYPES), nullable=False, default=HIRE_TYPES.Hired)
 
    #Foreign Key
-   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
+   salary_id = db.Column(db.Integer(), db.ForeignKey('salaries.id'))
 
+   @hybrid_property
+   def is_active(self):
+       """Return True if the EmploymentInfo is currently active, False otherwise."""
+       return self.end_date is None or self.end_date > date.today()
 
+   
+
+class Salaries(db.Model):
+   #Primary Key
+   id = db.Column(db.Integer(), primary_key=True)
+
+   salary_name = db.Column(db.String(length=50), nullable=False)
+   description = db.Column(db.String(length=500))
+   amount = db.Column(db.Integer(), nullable=False)
+   per_hour = db.Column(db.Integer(), default=1)
+
+   #Relationship Salary can have many Employment
+   employment_info = db.relationship('EmploymentInfo', backref='salary')
+
+   
 class Attendance(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -175,7 +217,7 @@ class Attendance(db.Model):
    post_ot= db.Column(db.Time())
 
    #Foreign Keys  
-   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
 
    @hybrid_property
    def total_hours(self):
@@ -186,11 +228,6 @@ class Attendance(db.Model):
       
       return (datetime.today() - self.start_shift / self.end_shift - self.start_shift)
 
-
-
-  
-
-      
 
 class Leave(db.Model):
    #Primary Key
@@ -204,9 +241,9 @@ class Leave(db.Model):
    approved_by = db.Column(db.String(length=50))
 
    #Foreign Keys  
-   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id'))
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
 
-   
+
 class Positions(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -217,7 +254,7 @@ class Positions(db.Model):
    date_created= db.Column(db.Date(), default=func.current_date(), nullable=False)
 
    #Foreign Key
-   department_id = db.Column(db.Integer(), db.ForeignKey('departments.id'))
+   department_id = db.Column(db.Integer(), db.ForeignKey('departments.id', ondelete="CASCADE"))
 
    #Association Proxy
    dept_assigned = association_proxy('departments', 'department_name')

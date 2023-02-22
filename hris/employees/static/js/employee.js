@@ -27,17 +27,17 @@ confirmPassword.addEventListener("input", function () {
 
 $("#datepicker").datepicker({
    uiLibrary: "bootstrap4",
-   format: "yyyy-dd-mm",
+   format: "yyyy-mm-dd",
  });
 
  $("#datepicker2").datepicker({
    uiLibrary: "bootstrap4",
-   format: "yyyy-dd-mm",
+   format: "yyyy-mm-dd",
  });
 
  $("#datepicker3").datepicker({
    uiLibrary: "bootstrap4",
-   format: "yyyy-dd-mm",
+   format: "yyyy-mm-dd",
  });
 
  // ------------------------------------------------------------------------------------//

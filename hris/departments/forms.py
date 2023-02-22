@@ -13,7 +13,7 @@ class DeletePositionModal(FlaskForm):
 
 class DepartmentForm(FlaskForm):
    department_name = StringField(label='Department Name', validators=[DataRequired()])
-   supervisor = StringField(label='Supervisor', validators=[DataRequired()])
+   supervisor = StringField(label='Supervisor')
    description = TextAreaField(label='Description')
 
 class PositionForm(FlaskForm):

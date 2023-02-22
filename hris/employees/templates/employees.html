@@ -30,7 +30,8 @@
                           <th>Position</th>
                           <th>Department</th>
                           <th>Start date</th>
-                          <th>Salary</th>
+                          <th>Status</th>
+                          <th>Rate</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -54,9 +55,12 @@
                            </td>
                            <td>
                                {{ employee.start_date }}
-                            </td>
+                           </td>
                            <td>
-                              {{ employee.salary_package }}
+                              {{ employee.status.value }}
+                          </td>
+                           <td>
+                              {{ employee.amount }}
                            </td>
                            <td>
                               {% include 'modals/delete_employee_modal.html' %}

@@ -39,6 +39,7 @@
                         <div class="form-outline mb-1 mt-1 col-6">
                            <strong>{{ manage_position.position_status.label() }}</strong>
                            <select name="status" id="status" class="form-control">
+                              <option value="">Select Position</option>
                               {% for status in manage_position.position_status.choices %}
                                  <option value="{{ status[0]}}" {% if status[1] == manage_position.position_status.data %} selected {% endif %}>{{status[1]}}</option>
                               {% endfor %}

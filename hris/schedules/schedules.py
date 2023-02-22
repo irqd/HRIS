@@ -32,7 +32,8 @@ def schedules():
     EmploymentInfo.status)\
     .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
     .join(Positions, Positions.id == EmployeeInfo.position_id)\
-    .join(Departments, Departments.id == Positions.department_id).all()
+    .join(Departments, Departments.id == Positions.department_id)\
+    .filter(EmploymentInfo.status == 'Hired').all()
 
     return render_template('schedules.html', employees=employees)
 
