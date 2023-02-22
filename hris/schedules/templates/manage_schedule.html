@@ -69,12 +69,14 @@
              // transform the data into an array of calendar events
                const events = data.map(item => ({
                   id: item.id,
-                  title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")}`,
+                  title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")} ${item.attendance_type}-${item.status}`,
                   start: moment(item.date, "YY/MM/DD").toDate(),
                   
                   end: moment(item.date, "YY/MM/DD").toDate(),
                   start_shift : moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
                   end_shift : moment(item.end_shift, "HH:mm:ss").format("H:mm"),
+                  checked_in: moment(item.checked_in, "HH:mm:ss").format("H:mm"),
+                  checked_out: moment(item.checked_out, "HH:mm:ss").format("H:mm"),
                   allDay: true,
                   color: item.attendance_type === 'Present' ? '#28a745' : //success
                         item.attendance_type === 'Absent' ? '#dc3545' : //danger
@@ -94,10 +96,15 @@
        eventClick: function (arg) {
          document.querySelector('#edit_start_shift').value = arg.event.extendedProps.start_shift;
          document.querySelector('#edit_end_shift').value = arg.event.extendedProps.end_shift;
+         document.querySelector('#checked_in').value = arg.event.extendedProps.checked_in ? arg.event.extendedProps.checked_in : '';
+         document.querySelector('#checked_out').value = arg.event.extendedProps.checked_out ? arg.event.extendedProps.checked_out : '';
          document.getElementById('schedule_id').value = arg.event.id;
          document.getElementById('delete_schedule_id').value = arg.event.id;
+         document.getElementById('confirm_attendance').value = arg.event.id;
          document.querySelector('#date_to_edit').innerHTML = arg.event.startStr;
          $('#edit_schedule_{{ employee_id }}').modal('show');
+
+         console.log(arg.event)
       },
 
    });
@@ -118,6 +125,8 @@
       uiLibrary: "bootstrap4",
       format: "yyyy-mm-dd",
     });
+
+    
    
     $("#start_shift").timepicker({ header: true });
    
@@ -126,6 +135,10 @@
     $("#edit_start_shift").timepicker({ header: true });
    
     $("#edit_end_shift").timepicker({ header: true });
+
+    $("#checked_in").timepicker({ header: true });
+
+    $("#checked_out").timepicker({ header: true });
    
    $('#edit_schedule_{{ employee_id }}').on('hidden.bs.modal', function () {
       $(this).find('form').trigger('reset');

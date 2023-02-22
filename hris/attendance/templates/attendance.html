@@ -85,7 +85,7 @@
           success: function (data) {
             const events = data.map(item => ({
               id: item.id,
-              title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")}`,
+              title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")} ${item.attendance_type}-${item.status}`,
               start: moment(item.date, "YY/MM/DD").toDate(),
               end: moment(item.date, "YY/MM/DD").toDate(),
               start_shift: moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
@@ -125,9 +125,9 @@
           var today = moment().startOf('day');
           var eventStartDate = moment(arg.event.start).startOf('day');
           if (eventStartDate.isSame(today)) {
-            document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr
-            document.getElementById('check_in_id').value = arg.event.id
-            document.getElementById('check_out_id').value = arg.event.id
+            document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr;
+            document.getElementById('check_in_id').value = arg.event.id;
+            document.getElementById('check_out_id').value = arg.event.id;
             $('#update_attendance_{{ current_user.id }}').modal('show');
           } else {
             return false;

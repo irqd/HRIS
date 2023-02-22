@@ -13,14 +13,28 @@ attendance_bp = Blueprint('attendance_bp', __name__,  template_folder='templates
 def get_attendance():
     employee_id = request.args.get('employee_id')
     schedules = Attendance.query.filter_by(employee_id = employee_id).all()
-    schedules = [{'id': schedule.id, 
-                  'date': schedule.date.strftime("%y/%m/%d"), 
+    
+    # loop through all schedules for the employee
+    for schedule in schedules:
+        start_shift_datetime = datetime.combine(schedule.date, schedule.start_shift)
+        end_shift_datetime = datetime.combine(schedule.date, schedule.end_shift)
+
+        if datetime.now() > end_shift_datetime:
+            # check if the schedule has no check-in or check-out record
+            if not schedule.checked_in and not schedule.checked_out:
+                # mark attendance_type as Absent
+                schedule.attendance_type = 'Absent'
+            
+    db.session.commit()
+
+    schedules = [{'id': schedule.id,
+                  'date': schedule.date.strftime("%y/%m/%d"),
                   'attendance_type': schedule.attendance_type.value,
                   'status': schedule.status.value,
                   'start_shift': schedule.start_shift.isoformat(),
                   'end_shift': schedule.end_shift.isoformat(),
-                  'employee_id':schedule.employee_id} for schedule in schedules]
-
+                  'employee_id': schedule.employee_id} for schedule in schedules]
+        
     return jsonify(schedules)
 
 @attendance_bp.route('attendance/get_leave_requests', methods=['GET'])
@@ -83,10 +97,10 @@ def check_out(employee_id):
     if request.method == 'POST':
         schedule_id = request.form.get('schedule_id')
         attendance = Attendance.query.filter_by(id = schedule_id).first()
-        progress = Attendance.get_progress
+        # progress = attendance.get_progress
         check_out_time = datetime.strptime(request.form.get('check_out'), '%H:%M').time()        
         end_shift = attendance.end_shift
-
+        
         # Convert time objects to datetime objects with a common date
         check_out_time_converted = datetime.combine(datetime.today(), check_out_time)
         end_shift_converted = datetime.combine(datetime.today(), end_shift) 

@@ -19,10 +19,25 @@ def get_attendance():
                   'status': schedule.status.value,
                   'start_shift': schedule.start_shift.isoformat(),
                   'end_shift': schedule.end_shift.isoformat(),
+                  'checked_in': schedule.checked_in.isoformat() if schedule.checked_in is not None else None,
+                  'checked_out': schedule.checked_out.isoformat() if schedule.checked_out is not None else None,
                   'employee_id':schedule.employee_id} for schedule in schedules]
-
+    
     return jsonify(schedules)
 
+
+@schedules_bp.route('/schedules/confirm_attendance/<int:employee_id>/<string:employee_name>', methods=['POST'])
+@login_required
+def confirm_attendance(employee_id, employee_name):
+    if request.method == 'POST':
+        schedule_id = request.form.get('schedule_id')   
+        attendance = Attendance.query.filter_by(id = schedule_id).first()
+
+        attendance.status = 'Approved'
+        db.session.commit()
+
+        flash('Attendance approved!', category='success')
+        return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
 
 @schedules_bp.route('/schedules', methods=['GET', 'POST'])
 @login_required
@@ -80,9 +95,10 @@ def manage_schedule(employee_id, employee_name):
 @schedules_bp.route('schedules/edit_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
 @login_required
 def edit_schedule(employee_id, employee_name):
-    if request.method == 'POST':
-        edit_schedule_modal = EditScheduleModal(request.form)
+    edit_schedule_modal = EditScheduleModal(request.form)
 
+    if request.method == 'POST':
+    
         if edit_schedule_modal.validate_on_submit():
             updated_schedule = Attendance.query.filter_by(id = edit_schedule_modal.schedule_id.data).first()
             
@@ -101,6 +117,7 @@ def edit_schedule(employee_id, employee_name):
 
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
 
+
 @schedules_bp.route('schedules/delete_schedule/<int:employee_id>/<string:employee_name>', methods=['POST'])
 @login_required
 def delete_schedule(employee_id, employee_name):
@@ -110,6 +127,7 @@ def delete_schedule(employee_id, employee_name):
         db.session.commit()
         flash(f'Schedule deleted!', category='danger')
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
+
 
 # Leave Requests
 @schedules_bp.route('/schedules/leave_requests/<int:employee_id>/<string:employee_name>', methods=['GET', 'POST'])
@@ -127,6 +145,7 @@ def accept_leave_request(employee_id, employee_name):
         flash(f'Leave Request Accepted: {id}', category='success')
     
     return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name)) 
+
 
 @schedules_bp.route('schedules/reject_leave_request/<int:employee_id>/<string:employee_name>', methods=['POST'])
 @login_required

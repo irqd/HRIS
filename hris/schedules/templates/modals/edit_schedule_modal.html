@@ -23,17 +23,39 @@
                      {{ edit_schedule_modal.end_shift.label() }}
                      {{ edit_schedule_modal.end_shift(class="form-control", id="edit_end_shift") }}
                   </div>
+
+                  {{ edit_schedule_modal.schedule_id(id="schedule_id", type="hidden")}}
                </div>
-               {{ edit_schedule_modal.schedule_id(id="schedule_id", type="hidden")}}
+               
+               <h5 class="modal-title mt-3 mb-2">Employee Attendance</h5>
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                     {{ edit_schedule_modal.checked_in.label() }}
+                     {{ edit_schedule_modal.checked_in(class="form-control", id="checked_in") }}
+                  </div>
+
+                  <div class="form-outline mb-1 mt-1 col">
+                     {{ edit_schedule_modal.checked_out.label() }}
+                     {{ edit_schedule_modal.checked_out(class="form-control", id="checked_out") }}
+                  </div>
+               </div>
             </div>
          </form>
             <div class="d-flex pb-4 m-3">
-               <form method="post" action="{{ url_for('schedules_bp.delete_schedule', employee_id=employee_id, employee_name=employee_name)}}" id="delete_schedule">
-                  {{ edit_schedule_modal.schedule_id(id="delete_schedule_id", type="hidden")}}
-                  <button class="btn btn-outline-danger shadow" style="margin-right: 80px;">Delete</button>
+               <form class="pr-2" method="post" action="{{ url_for('schedules_bp.delete_schedule', employee_id=employee_id, employee_name=employee_name)}}" id="delete_schedule">
+                  <input type="hidden" id="delete_schedule_id" name="schedule_id">
+                  <button class="btn btn-outline-danger shadow">
+                     Delete Shift
+                  </button>
                </form>
-               <button type="button" class="btn btn-outline-secondary mr-2 shadow" data-dismiss="modal">Close</button>
-               {{ edit_schedule_modal.submit(class='btn btn-outline-info shadow')}}
+               {{ edit_schedule_modal.submit(class='btn btn-outline-info shadow', style="margin-right: 90px;")}}
+
+               <form method="post" action="{{ url_for('schedules_bp.confirm_attendance', employee_id=employee_id, employee_name=employee_name)}}" id="confirm_attendnace" >
+                  <input type="hidden" id="confirm_attendance" name="schedule_id">
+                  <button class="btn btn-outline-success shadow">
+                     Confirm Attendance
+                  </button>
+               </form>
             </div>
          </div>
    </div>

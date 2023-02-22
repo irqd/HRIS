@@ -23,4 +23,7 @@ class EditScheduleModal(FlaskForm):
    end_shift = StringField(label='End Shift', validators=[DataRequired()])
    schedule_id = StringField(validators=[DataRequired()])
 
-   submit = SubmitField(label='Edit Schedule')
+   checked_in = StringField(label='Checked In', validators=[DataRequired()])
+   checked_out = StringField(label='Checked Out', validators=[DataRequired()])
+
+   submit = SubmitField(label='Edit Shift')

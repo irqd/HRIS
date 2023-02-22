@@ -19,7 +19,7 @@
  }
 
  .fc-event-main {
-	height: 45px;
+	height: 65px;
  }
 
  .fc-toolbar {
@@ -41,4 +41,8 @@
  
  .fc-event:hover {
 	cursor: pointer;
+ }
+
+ .fc-event-title {
+	white-space: normal !important;
  }
