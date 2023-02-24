@@ -1,0 +1,146 @@
+{% extends 'main.html' %} 
+{% set active_page = "payslips" %} 
+
+{% block nav_contents %}
+<div class="container">
+  <div class="row mt-3 mb-3">
+    <div class="col-12">
+      <h4 class="shadow border p-3 rounded">
+        <a href="#" class="text-dark"
+          >Payslips</a
+        >
+      </h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-3 shadow border">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="..." alt="..." />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content. This content is a little bit
+                longer.
+              </p>
+              <p class="card-text">
+                <small class="text-muted">Last updated 3 mins ago</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-3 p-3 shadow border">
+        <div class="row no-gutters">
+          <div class="col-3">
+            <h1>
+              <span class="badge badge-secondary"></span>Example heading 1
+            </h1>
+          </div>
+          <div class="col-3">
+            <h1>
+              Example heading 2<span class="badge badge-secondary">New</span>
+            </h1>
+          </div>
+          <div class="col-3">
+            <h1>
+              Example heading 3<span class="badge badge-secondary">New</span>
+            </h1>
+          </div>
+          <div class="col-3">
+            <h1>
+              Example heading 4<span class="badge badge-secondary">New</span>
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <!-- Earnings -->
+    <div class="col-6">
+      <div class="card mb-3 h-100 shadow">
+        <h5 class="card-header">Earnings:</h5>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-6">
+              <h6 class="card-text">Basic Pay</h6>
+              <h6 class="card-text">Something Pay</h6>
+            </div>
+
+            <div class="col-6 text-right">
+              <h6 class="card-text">2,000,000.</h6>
+              <h6 class="card-text">500,000</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+         <div class="row">
+            <div class="col-6">
+               <h6 class="card-text">Total Deductions</h6>
+               <h6 class="card-text">Net Pay</h6>
+             </div>
+   
+             <div class="col-6 text-right">
+               <h6 class="card-text">50,000</h6>
+               <h6 class="card-text">1,500,000</h6>
+             </div>
+         </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Earnings -->
+
+    <!-- Deductions -->
+    <div class="col-6">
+      <div class="card mb-3 h-100 shadow border">
+        <h5 class="card-header">Deductions:</h5>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-6">
+              <h6 class="card-text">SSS TAX</h6>
+              <h6 class="card-text">BIR TAX</h6>
+              <h6 class="card-text">PAG-IBIG TAX</h6>
+              <h6 class="card-text">Something TAX</h6>
+              <h6 class="card-text">Something TAX</h6>
+            </div>
+
+            <div class="col-6 text-right">
+              <h6 class="card-text">12%</h6>
+              <h6 class="card-text">10%</h6>
+              <h6 class="card-text">5%</h6>
+              <h6 class="card-text">5%</h6>
+              <h6 class="card-text">5%</h6>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+         <div class="row">
+            <div class="col-6">
+               <h6 class="card-text">Total Deductions</h6>
+               <h6 class="card-text">Net Pay</h6>
+             </div>
+   
+             <div class="col-6 text-right">
+               <h6 class="card-text">50,000</h6>
+               <h6 class="card-text">1,500,000</h6>
+             </div>
+         </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Deductions -->
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'main.html' %} 
+{% set active_page = "payroll" %} 
+{% block nav_contents %}
+<div class="container">
+  <div class="row mt-3 mb-3">
+    <div class="col-12">
+      <h4 class="shadow border p-3 rounded">
+        <a href="{{ url_for('payroll_bp.payroll') }}" class="text-dark"
+          >Payroll</a> >
+          <a href="{{ url_for('payroll_bp.cut_off', start_cut_off=data.start_cut_off, end_cut_off=data.end_cut_off) }}" class="text-dark"
+          >Cut Off</a> >
+        <a href="#" class="text-dark">{{ data.employee_name }}</a> 
+      </h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-3 shadow border">
+        <div class="row no-gutters mx-auto">
+          <div class="col-4 p-3">
+            <img src="{{ url_for('static', filename=data.image_path) }}" class="shadow rounded" alt="profile picture" width="200">
+          </div>
+          <div class="col-8 pl-4">
+            <div class="card-body">
+              <h5 class="card-title">{{ data.employee_name }}</h5>
+              <h6 class="card-text">{{ data.company_email }} - {{ data.mobile }}</h6>
+              <!-- <h6 class="card-text"><small class="text-muted">Last updated 3 mins ago</small></h6> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <!-- Earnings -->
+    <div class="col-6">
+      <div class="card mb-3 h-100 shadow">
+        <h5 class="card-header">Earnings:</h5>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-6">
+              <h6 class="card-text">Total Regular Hours</h6>
+              <h6 class="card-text">Hourly Rate</h6><br>
+              <h6 class="card-text">Total OT Hours</h6>
+              <h6 class="card-text">OT Rate(130%)</h6><br>
+              <h6 class="card-text">Total Taxable Income</h6>
+              <h6 class="card-text">Non-taxable Allowance</h6>
+            </div>
+
+            <div class="col-6 text-right">
+              <h6 class="card-text">{{ data.total_regular_hours }}</h6>
+              <h6 class="card-text">{{ data.hourly_rate }}</h6><br>
+              <h6 class="card-text">{{ data.total_ot_hours }}</h6>
+              <h6 class="card-text">{{ data.ot_rate }}</h6><br>
+              <h6 class="card-text">{{ data.gross_pay }}</h6>
+              <h6 class="card-text">{{ data.allowance }}</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+         <div class="row">
+            <div class="col-6">
+               <h6 class="card-text">------------------------</h6>
+               <h6 class="card-text">Total Gross Income</h6>
+             </div>
+   
+             <div class="col-6 text-right">
+              <h6 class="card-text">------------------------</h6>
+              <h6 class="card-text">{{ data.gross_pay + data.allowance }}</h6>  
+             </div>
+         </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Earnings -->
+
+    <!-- Deductions -->
+    <div class="col-6">
+      <div class="card mb-3 h-100 shadow border">
+        <h5 class="card-header">Deductions:</h5>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-6">
+              <h6 class="card-text">Taxable Income</h6><br>
+              <h6 class="card-text">BIR</h6>
+              <h6 class="card-text">SSS</h6>
+              <h6 class="card-text">Phil Health</h6>
+              <h6 class="card-text">Pag-Ibig</h6><br>
+              <h6 class="card-text">Total Deductions</h6>
+            </div>
+
+            <div class="col-6 text-right">
+              <h6 class="card-text">{{ data.gross_pay }}</h6><br>
+              <h6 class="card-text">{{ data.bir_tax }}</h6>
+              <h6 class="card-text">{{ data.sss_tax }}</h6>
+              <h6 class="card-text">{{ data.phil_health_tax }}</h6>
+              <h6 class="card-text">{{ data.pag_ibig_tax }}</h6><br>
+              <h6 class="card-text">{{ data.deductions }}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+         <div class="row">
+            <div class="col-6">
+              <h6 class="card-text">------------------------</h6>
+              <h6 class="card-text">Total Net Income</h6>
+             </div>
+   
+             <div class="col-6 text-right">
+              <h6 class="card-text">------------------------</h6>
+              <h6 class="card-text">{{ data.net_pay }}</h6>
+             </div>
+         </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Deductions -->
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="text-right pb-3 pr-3">
+        <button class="btn btn-outline-success shadow">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

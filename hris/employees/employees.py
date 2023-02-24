@@ -24,7 +24,7 @@ def employees():
 
    employees = db.session.query(EmployeeInfo.id, EmployeeInfo.last_name, EmployeeInfo.first_name, 
       EmployeeInfo.middle_name, Positions.position_name, Departments.department_name, 
-      EmploymentInfo.start_date, EmploymentInfo.salary_id, EmploymentInfo.status, Salaries.amount)\
+      EmploymentInfo.start_date, EmploymentInfo.salary_id, EmploymentInfo.status, Salaries.daily_rate)\
       .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
       .join(Positions, Positions.id == EmployeeInfo.position_id)\
       .join(Departments, Departments.id == Positions.department_id)\

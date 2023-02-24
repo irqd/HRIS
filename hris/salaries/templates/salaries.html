@@ -30,9 +30,16 @@
                         <th hidden>ID</th>
                        <th>Name</th>
                        <th>Description</th>
-                       <th>Amount</th>
-                       <th>Per Hour</th>
-                       <th>Actions</th>
+                       <th>Daily Rate</th>
+                       <th>Hourly Rate</th>
+                       <th>BIR</th>
+                       <th>SSS</th>
+                       <th>Phil Health</th>
+                       <th>Pag-Ibig</th>
+                       <th>OT Rate</th>
+                       <th>Non-taxable Allowance</th>
+                       <th>Action</th>
+                       
                    </tr>
                </thead>
                <tbody>
@@ -49,24 +56,39 @@
                             {{ salary.description }}
                         </td>
                         <td>
-                            {{ salary.amount }}
+                            {{ "{:.2f}".format(salary.daily_rate) }}
                         </td>
                         <td>
-                            {{ salary.per_hour }}
+                           {{ "{:.2f}".format(salary.hourly_rate) }}
                         </td>
-                        
                         <td>
-
+                           {{ "{:.2f}".format(salary.bir_tax) }}
+                        </td>
+                        <td>
+                           {{ "{:.2f}".format(salary.sss_tax) }}
+                        </td>
+                        <td>
+                           {{ "{:.2f}".format(salary.phil_health_tax) }}
+                        </td>
+                        <td>
+                           {{ "{:.2f}".format(salary.pag_ibig_tax) }}
+                        </td>
+                        <td>
+                           {{ "{:.2f}".format(salary.ot_rate) }}
+                        </td>
+                        <td>
+                           {{ "{:.2f}".format(salary.allowance) }}
+                        </td>
+                        <td>
                            {% include 'modals/edit_salary_modal.html' %}
                            {% include 'modals/delete_salary_modal.html' %}
                            <div align="center">
-                              <button class="btn btn-outline-warning shadow" data-toggle="modal" data-target="#edit_salary_{{ salary.id }}">
+                              <button class="btn btn-outline-warning shadow mb-2" data-toggle="modal" data-target="#edit_salary_{{ salary.id }}">
                                  <i class="fa-solid fa-edit"></i>
                               </button>
                               <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_salary_{{ salary.id }}">
                                  <i class="fa-solid fa-trash"></i>
-                              </button>
-                              
+                              </button>  
                            </div>
                         </td>
                     </tr>

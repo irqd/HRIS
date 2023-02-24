@@ -200,7 +200,7 @@
                   <option value="">Select Salary</option>
                   {% for salary in salaries %}
                   <option value="{{ salary.id }}">
-                    {{ salary.amount}}
+                    {{ "{:.2f}".format(salary.daily_rate) }}
                   </option>
                 {% endfor %}
                 </select>

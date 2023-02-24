@@ -137,8 +137,15 @@
                   
                   <div class="form-row">
                      <div class="form-outline mb-1 mt-1 col">
-                        <strong>{{ employee_form.salary_package.label() }}</strong>
-                        {{ employee_form.salary_package(class="form-control", disabled="disabled") }}
+                        <strong>{{ employee_form.salary_rate.label() }}</strong>
+                        <select id="salary_rate" name="salary_rate" class="form-control" disabled>
+                           <option value="">Select Salary</option>
+                           {% for salary in salaries %}
+                              <option value="{{ salary.id }}" {% if employee_form.salary_rate.data == salary.id %} selected {% endif %}>
+                                 {{ "{:.2f}".format(salary.daily_rate) }}
+                              </option>
+                           {% endfor %}
+                        </select>
                      </div>
                      
                      <div class="form-outline mb-1 mt-1 col">

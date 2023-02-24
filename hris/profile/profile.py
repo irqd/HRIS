@@ -18,6 +18,8 @@ def profile():
         .join(EmploymentInfo).join(Users).join(Positions).join(Departments)\
         .filter(EmployeeInfo.id == current_user.id).first()
 
+    salaries = db.session.query(Salaries).all()
+
     user, employee_info, employment_info, position, department = selected_employee
 
     employee_form = EmployeeForm(
@@ -47,7 +49,7 @@ def profile():
 
         #Employment Profile
         description = employment_info.description,
-        salary_package = employment_info.salary_package,
+        salary_rate = employment_info.salary_id,
         start_date = employment_info.start_date,
         end_date = employment_info.end_date,
         status = employment_info.status.value,
@@ -59,7 +61,8 @@ def profile():
                         employment_info=employment_info,
                         position=position,
                         department=department,
-                        employee_form=employee_form)
+                        employee_form=employee_form,
+                        salaries=salaries)
 
 @profile_bp.route('/profile/<int:employee_id>/change_account/', methods=['GET', 'POST'])
 @login_required

@@ -12,7 +12,7 @@ attendance_bp = Blueprint('attendance_bp', __name__,  template_folder='templates
 @login_required
 def get_attendance():
     employee_id = request.args.get('employee_id')
-    schedules = Attendance.query.filter_by(employee_id = employee_id).all()
+    schedules = Attendance.query.filter_by(employee_id = current_user.employee_id).all()
     
     # loop through all schedules for the employee
     for schedule in schedules:
@@ -41,14 +41,14 @@ def get_attendance():
 @login_required
 def get_leave_requests():
     employee_id = request.args.get('employee_id')
-    leave_requests = Leave.query.filter_by(employee_id = employee_id).all()
+    leave_requests = Leave.query.filter_by(employee_id = current_user.employee_id).all()
     requests = [{'id': request.id, 
                   'type': request.type.value, 
                   'date_requested': request.date_requested.strftime("%y/%m/%d"),
                   'leave_date': request.leave_date.strftime("%y/%m/%d"),
                   'status': request.status.value,
-                  'approved_date': request.approved_date.strftime("%y/%m/%d") if request.approved_date else '',
-                  'approved_by' : request.approved_by,
+                  'processed_date': request.processed_date.strftime("%y/%m/%d") if request.processed_date else '',
+                  'processed_by' : request.processed_by,
                   'employee_id':request.employee_id} for request in leave_requests]
 
     return jsonify(requests)
@@ -144,9 +144,10 @@ def request_leave(employee_id):
                     leave_requests_to_insert.append({
                         'type' : leave_request.type.data,
                         'leave_date' : date,
-                        'employee_id' : employee_id
+                        'employee_id' : current_user.employee_id
                     })
- 
+
+            flash('Leave request submitted!', category='success')
             db.session.bulk_insert_mappings(Leave, leave_requests_to_insert)
             db.session.commit()
 

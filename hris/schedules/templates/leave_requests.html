@@ -15,7 +15,7 @@
          <div class="col-12">
             <h4 class="shadow border p-3 rounded">
                <a href="{{ url_for('schedules_bp.schedules') }}" class="text-dark">Schedules</a> >
-               <a href="#" class="text-dark">{{ employee_name }}</a> >
+               <a href="{{ url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name) }}" class="text-dark">{{ employee_name }}</a> >
                <a href="#" class="text-dark">Leave Requests</a>
             </h4>
          </div>
@@ -32,8 +32,8 @@
                            <th>Date Requested</th>
                            <th>Leave Date</th>
                            <th>Status</th>
-                           <th>Approved Date</th>
-                           <th>Approved By</th>
+                           <th>Processed Date</th>
+                           <th>Processed By</th>
                            <th>Actions</th>
                         </tr>
                   </thead>
@@ -55,10 +55,10 @@
                               </div>     
                            </td>
                            <td>
-                                 {{ leave.approved_date }}
+                                 {{ leave.processed_date }}
                            </td>
                            <td>
-                                 {{ leave.approved_by}}
+                                 {{ leave.processed_by }}
                               </td>
                            <td>
                               <div align="center">

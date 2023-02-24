@@ -36,6 +36,7 @@ def create_app():
    from .employees.employees import employees_bp
    from .home.home import home_bp
    from .payroll.payroll import payroll_bp
+   from .payslips.payslips import payslips_bp
    from .profile.profile import profile_bp
    from .schedules.schedules import schedules_bp
    from .salaries.salaries import salaries_bp
@@ -49,6 +50,7 @@ def create_app():
    app.register_blueprint(attendance_bp, url_prefix='/')
    app.register_blueprint(salaries_bp, url_prefix='/')
    app.register_blueprint(payroll_bp, url_prefix='/')
+   app.register_blueprint(payslips_bp, url_prefix='/')
    app.register_blueprint(profile_bp, url_prefix='/')
    app.register_blueprint(schedules_bp, url_prefix='/')
 

@@ -141,18 +141,72 @@ def get_leave_requests(employee_id, employee_name):
 @login_required
 def accept_leave_request(employee_id, employee_name):
     if request.method == 'POST':
-        id = request.form.get('accept')
-        flash(f'Leave Request Accepted: {id}', category='success')
-    
-    return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name)) 
+        leave_id = request.form.get('accept')
+
+        leave = Leave.query.filter_by(id = leave_id).first()
+
+        if leave:
+            attendance = Attendance.query.filter_by(date=leave.leave_date, 
+                                                    employee_id=employee_id).first()
+            
+            if attendance.attendance_type.value is not 'Unavailable':
+                attendance.checked_out = datetime.now().strftime('%H:%M:%S')
+                attendance.status = 'Approved'
+
+                leave.status = 'Approved'
+                leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                leave.processed_by = current_user.name
+
+                db.session.commit()
+
+                flash(f'Leave request during work hours accepted for {leave.leave_date}', category='success')
+                
+            else:   
+                leave.status = 'Approved'
+                leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                leave.processed_by = current_user.name
+
+                attendance.attendance_type = 'On_Leave'
+                attendance.status = 'Approved'
+
+                db.session.commit()
+
+                flash(f'Leave request accepted for {leave.leave_date}', category='success')
+            
+        return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name)) 
 
 
 @schedules_bp.route('schedules/reject_leave_request/<int:employee_id>/<string:employee_name>', methods=['POST'])
 @login_required
 def reject_leave_request(employee_id, employee_name):
     if request.method == 'POST':
-        id = request.form.get('reject')
-        flash(f'Leave Request Rejected: {id}', category='danger')
-    return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name))
+        leave_id = request.form.get('reject')
+        leave = Leave.query.filter_by(id = leave_id).first()
+
+        if leave:
+            attendance = Attendance.query.filter_by(date=leave.leave_date,
+                                                    employee_id=employee_id).first()
+
+            if attendance.attendance_type.value is not 'On_Leave':
+                leave.status = 'Declined'
+                leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                leave.processed_by = current_user.name
+                flash(f'Test {id}', category='danger')
+                db.session.commit()
+
+                flash(f'Leave Request Rejected: {id}', category='danger')
+            else:
+                attendance.attendance_type = 'Unavailable'
+                attendance.status = 'Pending'
+
+                leave.status = 'Declined'
+                leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                leave.processed_by = current_user.name
+                flash(f'Test {id}', category='danger')
+                db.session.commit()
+            
+                flash(f'Leave Request Rejected: {id}', category='danger')
+
+        return redirect(url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name))
 
 

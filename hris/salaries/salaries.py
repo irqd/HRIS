@@ -13,10 +13,7 @@ def salaries():
     delete_salary_modal = DeleteSalaryModal()
     edit_salary_modal = EditSalaryModal()
     salaries = Salaries.query.all()
-    print(salaries)
-    for salary in salaries:
-        print(salary.id)
-        print(salary.salary_name)
+
     return render_template('salaries.html', salaries=salaries, 
                                             add_salary_modal=add_salary_modal,
                                             delete_salary_modal=delete_salary_modal,
@@ -32,12 +29,18 @@ def add_salary():
             salaries = Salaries(
                 salary_name = add_salary_modal.salary_name.data,
                 description = add_salary_modal.description.data,
-                amount = add_salary_modal.amount.data,
-                per_hour = add_salary_modal.per_hour.data,
+                daily_rate = add_salary_modal.daily_rate.data,
+                hourly_rate = add_salary_modal.hourly_rate.data,
+                bir_tax = add_salary_modal.bir_tax.data,
+                sss_tax = add_salary_modal.sss_tax.data,
+                phil_health_tax = add_salary_modal.phil_health_tax.data,
+                pag_ibig_tax = add_salary_modal.pag_ibig_tax.data,
+                ot_rate = add_salary_modal.ot_rate.data,
+                allowance = add_salary_modal.allowance.data
             )
             db.session.add(salaries)
             db.session.commit()
-            flash('add success', category='success')
+            flash('Add success', category='success')
         
     return redirect(url_for('salaries_bp.salaries'))
 
@@ -45,8 +48,8 @@ def add_salary():
 @salaries_bp.route('/salaries/<int:salary_id>/edit_salary', methods=['GET', 'POST'])
 @login_required
 def edit_salary(salary_id):
+    edit_salary_modal = EditSalaryModal(request.form)
 
-    edit_salary_modal = AddSalaryModal(request.form)
     if request.method == 'POST':
         if edit_salary_modal.validate_on_submit():
 
@@ -54,13 +57,23 @@ def edit_salary(salary_id):
 
             salaries.salary_name = edit_salary_modal.salary_name.data
             salaries.description = edit_salary_modal.description.data
-            salaries.amount = edit_salary_modal.amount.data
-            salaries.per_hour = edit_salary_modal.per_hour.data
+            salaries.daily_rate = edit_salary_modal.daily_rate.data
+            salaries.hourly_rate = edit_salary_modal.hourly_rate.data
+            salaries.bir_tax = edit_salary_modal.bir_tax.data,
+            salaries.sss_tax = edit_salary_modal.sss_tax.data,
+            salaries.phil_health_tax = edit_salary_modal.phil_health_tax.data,
+            salaries.pag_ibig_tax = edit_salary_modal.pag_ibig_tax.data,
+            salaries.ot_rate = edit_salary_modal.ot_rate.data,
+            salaries.allowance = edit_salary_modal.allowance.data
 
             db.session.commit()
-            flash('edit success', category='success')
+            flash('Edit success', category='success')
+
+        if edit_salary_modal.errors != {}:
+            for err_msg in edit_salary_modal.errors.values():
+                flash(f'There is an error: {edit_salary_modal.errors}', category='danger')
         
-    return redirect(url_for('salaries_bp.salaries'))
+    return redirect(url_for('salaries_bp.salaries', edit_salary_modal=edit_salary_modal))
 
 
 @salaries_bp.route('/salaries/<int:salary_id>/delete_salary', methods=['GET', 'POST'])
@@ -70,6 +83,6 @@ def delete_salary(salary_id):
         salaries = Salaries.query.filter_by(id = salary_id).delete()
         db.session.commit()
         
-        flash('success', category='success')
+        flash('Delete Success', category='danger')
     return redirect(url_for('salaries_bp.salaries'))
    

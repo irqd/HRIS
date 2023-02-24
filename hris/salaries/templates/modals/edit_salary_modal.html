@@ -14,20 +14,61 @@
                <div class="form-outline mb-1 mt-1 col">
                   <strong>{{ edit_salary_modal.salary_name.label() }}</strong>
                   {{ edit_salary_modal.salary_name(class="form-control", value=salary.salary_name) }}
-                </div>
-                <div class="form-outline mb-1 mt-1 col">
+               </div>
+               <div class="form-outline mb-1 mt-1 col">
                   <strong>{{ edit_salary_modal.description.label() }}</strong>
                   {{ edit_salary_modal.description(class="form-control", value=salary.description) }}
-                </div>
-                <div class="form-outline mb-1 mt-1 col">
-                  <strong>{{ edit_salary_modal.amount.label() }}</strong>
-                  {{ edit_salary_modal.amount(class="form-control", value=salary.amount) }}
-                </div>
-                <div class="form-outline mb-1 mt-1 col">
-                  <strong>{{ edit_salary_modal.per_hour.label() }}</strong>
-                  {{ edit_salary_modal.per_hour(class="form-control", value=salary.per_hour) }}
-                </div>
-            
+               </div>
+               
+               <div class="p-3">
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.daily_rate.label() }}</strong>
+                        {{ edit_salary_modal.daily_rate(class="form-control", value="{:.2f}".format(salary.daily_rate)) }}
+                     </div>
+   
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.hourly_rate.label() }}</strong>
+                        {{ edit_salary_modal.hourly_rate(class="form-control", value="{:.2f}".format(salary.hourly_rate)) }}
+                     </div>
+                  </div>
+   
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.bir_tax.label() }}</strong>
+                        {{ edit_salary_modal.bir_tax(class="form-control", value="{:.2f}".format(salary.bir_tax)) }}
+                     </div>
+   
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.sss_tax.label() }}</strong>
+                        {{ edit_salary_modal.sss_tax(class="form-control", value="{:.2f}".format(salary.sss_tax)) }}
+                     </div>
+                  </div>
+   
+                  <div class="form-row">        
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.phil_health_tax.label() }}</strong>
+                        {{ edit_salary_modal.phil_health_tax(class="form-control", value="{:.2f}".format(salary.phil_health_tax)) }}
+                     </div>
+   
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.pag_ibig_tax.label() }}</strong>
+                        {{ edit_salary_modal.pag_ibig_tax(class="form-control", value="{:.2f}".format(salary.pag_ibig_tax)) }}
+                     </div>
+                  </div>
+   
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.ot_rate.label() }}</strong>
+                        {{ edit_salary_modal.ot_rate(class="form-control", value="{:.2f}".format(salary.ot_rate)) }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ edit_salary_modal.allowance.label() }}</strong>
+                        {{ edit_salary_modal.allowance(class="form-control", value="{:.2f}".format(salary.allowance)) }}
+                     </div>
+                  </div> 
+               </div>
+                          
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>

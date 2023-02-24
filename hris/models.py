@@ -1,6 +1,6 @@
 from . import db, bcrypt, login_manager
 from flask_login import UserMixin, current_user
-from sqlalchemy.sql import func, select
+from sqlalchemy.sql import func, select, extract
 from sqlalchemy.orm import column_property
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -190,8 +190,14 @@ class Salaries(db.Model):
 
    salary_name = db.Column(db.String(length=50), nullable=False)
    description = db.Column(db.String(length=500))
-   amount = db.Column(db.Integer(), nullable=False)
-   per_hour = db.Column(db.Integer(), default=1)
+   daily_rate = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   hourly_rate = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   bir_tax = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   sss_tax = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   phil_health_tax = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   pag_ibig_tax = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   ot_rate = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   allowance = db.Column(db.Float(precision=2, asdecimal=True), nullable=False) #non-taxable
 
    #Relationship Salary can have many Employment
    employment_info = db.relationship('EmploymentInfo', backref='salary')
@@ -221,12 +227,89 @@ class Attendance(db.Model):
 
    @hybrid_property
    def total_hours(self):
-      return (datetime.combine(self.date, self.end_shift) - datetime.combine(self.date, self.start_shift)).total_seconds() / 3600
-   
+      if self.checked_out is not None and self.checked_in is not None:
+         checked_out_value = getattr(self, 'checked_out')
+         checked_in_value = getattr(self, 'checked_in')
+         checked_out_time = checked_out_value
+         checked_out_datetime = datetime.combine(datetime.min, checked_out_time)
+         checked_in_time = checked_in_value
+         checked_in_datetime = datetime.combine(datetime.min, checked_in_time)
+         time_diff = checked_out_datetime - checked_in_datetime
+         return round(time_diff.total_seconds() / 3600, 2)
+      else:
+         return None
+
    @hybrid_property
-   def get_progress(self):
+   def total_regular_hours(self):
+      if self.pre_ot is not None or self.post_ot is not None:
+         regular_hours = 0
+         if self.checked_out is not None and self.checked_in is not None:
+               checked_out_value = getattr(self, 'checked_out')
+               checked_in_value = getattr(self, 'checked_in')
+               checked_out_time = checked_out_value
+               checked_out_datetime = datetime.combine(datetime.min, checked_out_time)
+               checked_in_time = checked_in_value
+               checked_in_datetime = datetime.combine(datetime.min, checked_in_time)
+               time_diff = checked_out_datetime - checked_in_datetime
+               total_hours = round(time_diff.total_seconds() / 3600, 2)
+               if self.pre_ot is not None:
+                  pre_ot_hours = (datetime.combine(datetime.min, self.pre_ot) - datetime.combine(datetime.min, self.start_shift)).total_seconds() / 3600.0
+                  if total_hours > pre_ot_hours:
+                     regular_hours += total_hours - pre_ot_hours
+
+               if self.post_ot is not None:
+                  post_ot_hours = (datetime.combine(datetime.min, self.post_ot) - datetime.combine(datetime.min, self.end_shift)).total_seconds() / 3600.0
+                  if total_hours > post_ot_hours:
+                     regular_hours += total_hours - post_ot_hours
+               
+               return regular_hours
+      else:
+         return self.total_hours
+
+
+
       
-      return (datetime.today() - self.start_shift / self.end_shift - self.start_shift)
+   @hybrid_property
+   def total_hours(self):
+      if self.checked_out is not None and self.checked_in is not None:
+         checked_out_value = getattr(self, 'checked_out')
+         checked_in_value = getattr(self, 'checked_in')
+         checked_out_time = checked_out_value
+         checked_out_datetime = datetime.combine(datetime.min, checked_out_time)
+         checked_in_time = checked_in_value
+         checked_in_datetime = datetime.combine(datetime.min, checked_in_time)
+         time_diff = checked_out_datetime - checked_in_datetime
+         return round(time_diff.total_seconds() / 3600, 2)
+      else:
+         return None
+      
+   @hybrid_property
+   def pre_ot_hours(self):
+      if self.pre_ot is not None and self.start_shift is not None:
+         pre_ot_value = getattr(self, 'pre_ot')
+         start_shift_value = getattr(self, 'start_shift')
+         pre_ot_datetime = datetime.combine(datetime.min, pre_ot_value)
+         start_shift_datetime = datetime.combine(datetime.min, start_shift_value)
+         time_diff = pre_ot_datetime - start_shift_datetime
+         return round(time_diff.total_seconds() / 3600, 2)
+      else:
+         return None
+      
+   @hybrid_property
+   def post_ot_hours(self):
+      if self.post_ot is not None and self.end_shift is not None:
+         post_ot_value = getattr(self, 'post_ot')
+         end_shift_value = getattr(self, 'end_shift')
+         post_ot_datetime = datetime.combine(datetime.min, post_ot_value)
+         end_shift_datetime = datetime.combine(datetime.min, end_shift_value)
+         time_diff = post_ot_datetime - end_shift_datetime
+         return round(time_diff.total_seconds() / 3600, 2)
+      else:
+         return None
+   
+
+
+   
 
 
 class Leave(db.Model):
@@ -237,8 +320,8 @@ class Leave(db.Model):
    date_requested= db.Column(db.Date(), default=func.current_date(), nullable=False)
    leave_date= db.Column(db.Date(), nullable=False)
    status = db.Column(db.Enum(STATUS_TYPES),default=STATUS_TYPES.Pending, nullable=False)
-   approved_date =db.Column(db.Date())
-   approved_by = db.Column(db.String(length=50))
+   processed_date = db.Column(db.Date())
+   processed_by = db.Column(db.String(length=50))
 
    #Foreign Keys  
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))

@@ -31,7 +31,7 @@
                           <th>Department</th>
                           <th>Start date</th>
                           <th>Status</th>
-                          <th>Rate</th>
+                          <th>Daily Rate</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -60,7 +60,7 @@
                               {{ employee.status.value }}
                           </td>
                            <td>
-                              {{ employee.amount }}
+                              {{ "{:.2f}".format(employee.daily_rate) }}
                            </td>
                            <td>
                               {% include 'modals/delete_employee_modal.html' %}
