@@ -129,7 +129,7 @@ class EmployeeInfo(db.Model):
    employment_info = db.relationship('EmploymentInfo', backref='employee_info')
    attendance_info = db.relationship('Attendance', backref='employee_info')
    leave_info = db.relationship('Leave', backref='employee_info')
-  
+   payslip_info = db.relationship('Payslips', backref='employee_info')
 
    @hybrid_property
    def fullname(self):
@@ -182,8 +182,6 @@ class EmploymentInfo(db.Model):
        """Return True if the EmploymentInfo is currently active, False otherwise."""
        return self.end_date is None or self.end_date > date.today()
 
-   
-
 class Salaries(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -201,8 +199,27 @@ class Salaries(db.Model):
 
    #Relationship Salary can have many Employment
    employment_info = db.relationship('EmploymentInfo', backref='salary')
+  
+class Payslips(db.Model):
+   #Primary Key
+   id = db.Column(db.Integer(), primary_key=True)
+   name = db.Column(db.String(length=500), nullable=False)
+   start_cut_off = db.Column(db.Date(), nullable=False)
+   end_cut_off = db.Column(db.Date(), nullable=False)
+   days_present = db.Column(db.Integer(), nullable=False)
+   total_regular_hours = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   pre_ot_hours = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   post_ot_hours = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   total_ot_hours = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   gross_pay = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   deductions = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   allowance = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   net_pay = db.Column(db.Float(precision=2, asdecimal=True), nullable=False)
+   status = db.Column(db.Enum(STATUS_TYPES), default=STATUS_TYPES.Pending, nullable=False)
 
-   
+   #Foreign Key
+   employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
+
 class Attendance(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -239,6 +256,7 @@ class Attendance(db.Model):
       else:
          return None
 
+
    @hybrid_property
    def total_regular_hours(self):
       if self.pre_ot is not None or self.post_ot is not None:
@@ -252,6 +270,7 @@ class Attendance(db.Model):
                checked_in_datetime = datetime.combine(datetime.min, checked_in_time)
                time_diff = checked_out_datetime - checked_in_datetime
                total_hours = round(time_diff.total_seconds() / 3600, 2)
+
                if self.pre_ot is not None:
                   pre_ot_hours = (datetime.combine(datetime.min, self.pre_ot) - datetime.combine(datetime.min, self.start_shift)).total_seconds() / 3600.0
                   if total_hours > pre_ot_hours:
@@ -265,32 +284,17 @@ class Attendance(db.Model):
                return regular_hours
       else:
          return self.total_hours
-
-
-
-      
-   @hybrid_property
-   def total_hours(self):
-      if self.checked_out is not None and self.checked_in is not None:
-         checked_out_value = getattr(self, 'checked_out')
-         checked_in_value = getattr(self, 'checked_in')
-         checked_out_time = checked_out_value
-         checked_out_datetime = datetime.combine(datetime.min, checked_out_time)
-         checked_in_time = checked_in_value
-         checked_in_datetime = datetime.combine(datetime.min, checked_in_time)
-         time_diff = checked_out_datetime - checked_in_datetime
-         return round(time_diff.total_seconds() / 3600, 2)
-      else:
-         return None
-      
+          
    @hybrid_property
    def pre_ot_hours(self):
+      
       if self.pre_ot is not None and self.start_shift is not None:
          pre_ot_value = getattr(self, 'pre_ot')
          start_shift_value = getattr(self, 'start_shift')
          pre_ot_datetime = datetime.combine(datetime.min, pre_ot_value)
          start_shift_datetime = datetime.combine(datetime.min, start_shift_value)
-         time_diff = pre_ot_datetime - start_shift_datetime
+         time_diff =  start_shift_datetime - pre_ot_datetime
+         
          return round(time_diff.total_seconds() / 3600, 2)
       else:
          return None
@@ -303,15 +307,11 @@ class Attendance(db.Model):
          post_ot_datetime = datetime.combine(datetime.min, post_ot_value)
          end_shift_datetime = datetime.combine(datetime.min, end_shift_value)
          time_diff = post_ot_datetime - end_shift_datetime
+         
          return round(time_diff.total_seconds() / 3600, 2)
       else:
          return None
    
-
-
-   
-
-
 class Leave(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)
@@ -325,7 +325,6 @@ class Leave(db.Model):
 
    #Foreign Keys  
    employee_id = db.Column(db.Integer(), db.ForeignKey('employee_info.id', ondelete="CASCADE"))
-
 
 class Positions(db.Model):
    #Primary Key

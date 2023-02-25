@@ -13,6 +13,7 @@
    <div class="row mt-3 mb-3">
       <div class="col-12">
          <div class="shadow p-3 rounded">
+            <h3>System Calculations</h3><hr>
             <table id="cut_off" class="table table-striped table-bordered" style="width:100%" >
                <thead>
                   <tr class="shadow"> 
@@ -25,6 +26,7 @@
                      <th>Deductions</th>
                      <th>Allowance</th>
                      <th>Net Pay</th>
+                     <th>Status</th>
                      <th>Actions</th>
                   </tr>
               </thead>
@@ -34,12 +36,17 @@
                      <td hidden>{{ data.employee_id }}</td>
                      <td>{{ data.employee_name }}</td>
                      <td>{{ data.days_present }}</td>
-                     <td>{{ data.total_regular_hours }}</td>
-                     <td>{{ data.total_ot_hours }}</td>
-                     <td>{{ data.gross_pay }}</td>
-                     <td>{{ data.deductions }}</td>
-                     <td>{{ data.allowance }}</td>
-                     <td>{{ data.net_pay }}</td>
+                     <td>{{ "{:.2f}".format(data.total_regular_hours) }}</td>
+                     <td>{{ "{:.2f}".format(data.total_ot_hours) }}</td>
+                     <td>{{ "{:.2f}".format(data.gross_pay) }}</td>
+                     <td>{{ "{:.2f}".format(data.deductions) }}</td>
+                     <td>{{ "{:.2f}".format(data.allowance) }}</td>
+                     <td>{{ "{:.2f}".format(data.net_pay) }}</td>
+                     <td>
+                        <div class="rounded text-center p-1 shadow bg-{{'warning' if data.status == 'Pending' else 'success' if data.status == 'Approved' else 'danger'}}">
+                           {{ data.status }}
+                        </div>
+                     </td>
                      <td>
                         <div class="text-center">
                            <a href="{{ url_for('payroll_bp.individual_payroll', employee_id=data.employee_id, start_cut_off=data.start_cut_off, end_cut_off=data.end_cut_off) }}" class="btn btn-outline-success shadow">

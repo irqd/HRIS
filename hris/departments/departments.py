@@ -127,8 +127,7 @@ def manage_position(department_id, position_id):
         position_status = selected_position.position_status.value,
         description = selected_position.description
     )
-    print(selected_position.position_status)
-
+    
     if request.method == 'POST':
         if manage_position.validate_on_submit:
             selected_position.position_name = manage_position.position_name.data

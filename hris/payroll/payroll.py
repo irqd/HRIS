@@ -1,14 +1,81 @@
 from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_required, current_user
 from sqlalchemy import or_, and_, func
 from datetime import datetime, timedelta, date
+from .forms import *
 import calendar
 
 
 payroll_bp = Blueprint('payroll_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')
 
+
+def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regular_hours=0, total_pre_ot_hours = 0, total_post_ot_hours = 0):
+    employee_attendances = Attendance.query.filter(Attendance.employee_id == selected_employee.id)\
+    .filter(Attendance.date.between(datetime.strptime(start_cut_off, '%Y-%m-%d'), datetime.strptime(end_cut_off, '%Y-%m-%d')))\
+    .filter(or_(Attendance.attendance_type == 'Present', Attendance.attendance_type == 'Late'))\
+    .filter(Attendance.status == STATUS_TYPES.Approved)
+    
+    if total_regular_hours == 0:
+        for res in employee_attendances:
+            if res.total_regular_hours > 5.0:
+                g = res.total_regular_hours - 1.0
+                total_regular_hours += g
+
+    if total_pre_ot_hours == 0:
+        for res in employee_attendances:
+            if res.pre_ot_hours is not None:
+                g = res.pre_ot_hours
+                total_pre_ot_hours += g
+
+    if total_post_ot_hours == 0:
+        for res in employee_attendances:
+            if res.post_ot_hours is not None:
+                g = res.post_ot_hours
+                total_post_ot_hours += g
+     
+    #Calculate days present
+    days_present = employee_attendances.with_entities(func.count(Attendance.id)).scalar()
+
+    #Calculate ot hours
+    total_ot_hours = total_pre_ot_hours + total_post_ot_hours
+
+    #Calculate gross pay
+    gross_pay = (float(total_regular_hours) * float(selected_employee.hourly_rate)) + (float(total_ot_hours) * float(selected_employee.ot_rate))
+
+    #Calculate deductions
+    deductions = float(selected_employee.bir_tax) + float(selected_employee.sss_tax) + float(selected_employee.phil_health_tax) + float(selected_employee.pag_ibig_tax)
+    
+    #Calculate net pay
+    net_pay = (gross_pay - deductions) + float(selected_employee.allowance)
+
+    data = {
+        'employee_id': selected_employee.id,
+        'employee_name': selected_employee.fullname,
+        'image_path': selected_employee.image_path,
+        'company_email': selected_employee.company_email,
+        'mobile': selected_employee.mobile,
+        'bir_tax': float(selected_employee.bir_tax),
+        'sss_tax': float(selected_employee.sss_tax),
+        'phil_health_tax': float(selected_employee.phil_health_tax),
+        'pag_ibig_tax': float(selected_employee.pag_ibig_tax),
+        'hourly_rate': float(selected_employee.hourly_rate),
+        'ot_rate': float(selected_employee.ot_rate),
+        'start_cut_off': start_cut_off,
+        'end_cut_off': end_cut_off,
+        'days_present': int(days_present),
+        'total_regular_hours': total_regular_hours,
+        'pre_ot_hours': total_pre_ot_hours,
+        'post_ot_hours': total_post_ot_hours,
+        'total_ot_hours': total_ot_hours,
+        'gross_pay': gross_pay,
+        'deductions': deductions,
+        'allowance': float(selected_employee.allowance),
+        'net_pay': net_pay
+    }
+
+    return data
 
 @payroll_bp.route('/payroll', methods=['GET'])
 @login_required
@@ -38,68 +105,70 @@ def payroll():
 @login_required
 def cut_off(start_cut_off, end_cut_off):
 
-    employees = db.session.query(EmployeeInfo.id, EmployeeInfo.fullname, 
-                EmploymentInfo.status, Salaries.daily_rate, Salaries.hourly_rate,
+    employees = db.session.query(Users.image_path, Users.company_email, EmployeeInfo.id, EmployeeInfo.fullname, 
+                EmployeeInfo.mobile, EmploymentInfo.status, Salaries.daily_rate, Salaries.hourly_rate,
                 Salaries.bir_tax, Salaries.sss_tax, Salaries.phil_health_tax, Salaries.pag_ibig_tax,
                 Salaries.ot_rate, Salaries.allowance)\
                 .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
+                .join(Users, Users.employee_id == EmployeeInfo.id)\
                 .join(Salaries, Salaries.id == EmploymentInfo.salary_id).all()
     
     employee_data = []
-    for employee in employees: 
+    for employee in employees:
+        employee_payslip = db.session.query(Payslips).filter(Payslips.employee_id == employee.id)\
+        .filter(Payslips.start_cut_off == start_cut_off).filter(Payslips.end_cut_off == end_cut_off).first()
 
-        result = Attendance.query.filter(Attendance.employee_id == employee.id)\
-        .filter(Attendance.date.between(datetime.strptime(start_cut_off, '%Y-%m-%d'), datetime.strptime(end_cut_off, '%Y-%m-%d')))\
-        .filter(or_(Attendance.attendance_type == 'Present', Attendance.attendance_type == 'Late'))\
-        .filter(Attendance.status == STATUS_TYPES.Approved)
-
-        #Calculate days present
-        days_present = result.with_entities(func.count(Attendance.id)).scalar()
-
-        #Calculate total regular and ot hours
-        total_regular_hours = 0
-        total_pre_ot_hours = 0
-        total_post_ot_hours = 0
-        for res in result:
-            if res.total_regular_hours > 5.0:
-                g = res.total_regular_hours - 1.0
-                total_regular_hours += g
-
-            if res.pre_ot_hours is not None:
-                g = res.pre_ot_hours
-                total_pre_ot_hours += g
+        #Calculate Payroll
+        data = calculate_payroll(employee, start_cut_off, end_cut_off, 
+                                 total_regular_hours=float(employee_payslip.total_regular_hours) if employee_payslip is not None else 0,
+                                 total_pre_ot_hours=float(employee_payslip.pre_ot_hours) if employee_payslip is not None else 0,
+                                 total_post_ot_hours=float(employee_payslip.post_ot_hours) if employee_payslip is not None else 0)
+        
+        if employee_payslip == None:
             
-            if res.post_ot_hours is not None:
-                g = res.post_ot_hours
-                total_post_ot_hours += g
+            new_payslip = Payslips(
+                name = employee.fullname,
+                start_cut_off = start_cut_off,
+                end_cut_off = end_cut_off,
+                days_present = data['days_present'],
+                total_regular_hours = data['total_regular_hours'],
+                pre_ot_hours = data['pre_ot_hours'],
+                post_ot_hours = data['post_ot_hours'],
+                total_ot_hours = data['total_ot_hours'],
+                gross_pay = data['gross_pay'],
+                deductions = data['deductions'],
+                allowance = data['allowance'],
+                net_pay = data['net_pay'],
+                status = 'Pending',
+                employee_id = employee.id
+            )
 
-        total_ot_hours = total_pre_ot_hours + total_post_ot_hours
-        
-        #Calculate gross pay
-        gross_pay = (float(total_regular_hours) * float(employee.hourly_rate)) + (float(total_ot_hours) * float(employee.ot_rate))
+            db.session.add(new_payslip)
+            db.session.flush()
 
-        #Calculate deductions
-        deductions = float(employee.bir_tax) + float(employee.sss_tax) + float(employee.phil_health_tax) + float(employee.pag_ibig_tax)
-        
-        #Calculate net pay
-        net_pay = (gross_pay - deductions) + float(employee.allowance)
-    
-        data = {
-            'employee_id': employee.id,
-            'employee_name': employee.fullname,
-            'image_path': 'test',
-            'start_cut_off': start_cut_off,
-            'end_cut_off': end_cut_off,
-            'days_present': days_present,
-            'total_regular_hours': total_regular_hours,
-            'total_ot_hours': total_ot_hours,
-            'gross_pay': gross_pay,
-            'deductions': deductions,
-            'allowance': float(employee.allowance),
-            'net_pay': net_pay
-        }
-        
-        employee_data.append(data)
+            employee_data.append(new_payslip)
+
+            db.session.commit()
+        else:
+
+            #Updates every click when total days is less than 10
+            if data['days_present'] < 10:
+                employee_payslip.days_present = data['days_present'],
+                employee_payslip.total_regular_hours = data['total_regular_hours'],
+                employee_payslip.pre_ot_hours = data['pre_ot_hours'],
+                employee_payslip.post_ot_hours = data['post_ot_hours'],
+                employee_payslip.total_ot_hours = data['total_ot_hours'],
+                employee_payslip.gross_pay = data['gross_pay'],
+                employee_payslip.deductions = data['deductions'],
+                employee_payslip.allowance = data['allowance'],
+                employee_payslip.net_pay = data['net_pay']
+
+                db.session.commit()
+            
+            data['status'] = employee_payslip.status.value
+            employee_data.append(data)
+            print(data)
+            
 
     return render_template('cut_off.html', employee_data=employee_data)
 
@@ -107,74 +176,115 @@ def cut_off(start_cut_off, end_cut_off):
 @payroll_bp.route('/payroll/cut_off/<int:employee_id>/<string:start_cut_off>/<string:end_cut_off>', methods=['GET', 'POST'])
 @login_required
 def individual_payroll(employee_id, start_cut_off, end_cut_off):
+    decline_payslip = DeclinePayslipForm()
+    approve_payslip = ApprovePayslipForm()
+    cancel_payslip = CancelPayslipForm()
+    edit_payslip = EditPayslipForm()
 
-    selected_employee = db.session.query(Users.image_path, Users.company_email, EmployeeInfo.id, EmployeeInfo.fullname, 
-                    EmployeeInfo.mobile, EmploymentInfo.status, Salaries.daily_rate, Salaries.hourly_rate,
-                    Salaries.bir_tax, Salaries.sss_tax, Salaries.phil_health_tax, Salaries.pag_ibig_tax,
-                    Salaries.ot_rate, Salaries.allowance).filter(EmployeeInfo.id == employee_id)\
-                    .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
-                    .join(Users, Users.employee_id == employee_id)\
-                    .join(Salaries, Salaries.id == EmploymentInfo.salary_id).first()
-     
-    employee_attendances = Attendance.query.filter(Attendance.employee_id == employee_id)\
-        .filter(Attendance.date.between(datetime.strptime(start_cut_off, '%Y-%m-%d'), datetime.strptime(end_cut_off, '%Y-%m-%d')))\
-        .filter(or_(Attendance.attendance_type == 'Present', Attendance.attendance_type == 'Late'))\
-        .filter(Attendance.status == STATUS_TYPES.Approved)
+    if session.get('payroll_data') is None:
+        session['payroll_data'] = None
+
+    selected_employee = db.session.query(Users.image_path, Users.company_email, EmployeeInfo.id, 
+        EmployeeInfo.fullname, EmployeeInfo.mobile, EmploymentInfo.status, Salaries.daily_rate, 
+        Salaries.hourly_rate, Salaries.bir_tax, Salaries.sss_tax, Salaries.phil_health_tax, 
+        Salaries.pag_ibig_tax, Salaries.ot_rate, Salaries.allowance).filter(EmployeeInfo.id == employee_id)\
+        .join(EmployeeInfo, EmployeeInfo.id == EmploymentInfo.employee_id)\
+        .join(Users, Users.employee_id == EmployeeInfo.id)\
+        .join(Salaries, Salaries.id == EmploymentInfo.salary_id).first()
     
-    #Calculate days present
-    days_present = employee_attendances.with_entities(func.count(Attendance.id)).scalar()
-
-    #Calculate total hours
-    total_regular_hours = 0
-    total_pre_ot_hours = 0
-    total_post_ot_hours = 0
-
-    for res in employee_attendances:
-        #print(res.total_regular_hours)
-        if res.total_regular_hours > 5.0:
-            g = res.total_regular_hours - 1.0
-            total_regular_hours += g
+    employee_payslip = db.session.query(Payslips).filter(Payslips.employee_id == selected_employee.id)\
+        .filter(Payslips.start_cut_off == start_cut_off).filter(Payslips.end_cut_off == end_cut_off).first()
     
-        if res.pre_ot_hours is not None:
-            g = res.pre_ot_hours
-            total_pre_ot_hours += g
+    data = calculate_payroll(selected_employee, 
+                             start_cut_off, 
+                             end_cut_off,
+                             total_regular_hours=float(employee_payslip.total_regular_hours),
+                             total_pre_ot_hours=float(employee_payslip.pre_ot_hours),
+                             total_post_ot_hours=float(employee_payslip.post_ot_hours))
 
-        if res.post_ot_hours is not None:
-            g = res.post_ot_hours
-            total_post_ot_hours += g
+    #Temp key:value
+    data['status'] = employee_payslip.status.value
     
-    total_ot_hours = total_pre_ot_hours + total_post_ot_hours
+    edit_payslip.total_regular_hours.data = data['total_regular_hours']
+    edit_payslip.pre_ot_hours.data = data['pre_ot_hours']
+    edit_payslip.post_ot_hours.data = data['post_ot_hours']
+    edit_payslip.allowance.data = data['allowance']
 
-    #Calculate gross pay
-    gross_pay = (float(total_regular_hours) * float(selected_employee.hourly_rate)) + (float(total_ot_hours) * float(selected_employee.ot_rate))
 
-    #Calculate deductions
-    deductions = float(selected_employee.bir_tax) + float(selected_employee.sss_tax) + float(selected_employee.phil_health_tax) + float(selected_employee.pag_ibig_tax)
-    
-    #Calculate net pay
-    net_pay = (gross_pay - deductions) + float(selected_employee.allowance)
+    if request.method == 'POST':
+        if request.args.get('req') == 'edit':
+            edit_payslip = EditPayslipForm(request.form)
 
-    data = {
-        'employee_id': selected_employee.id,
-        'employee_name': selected_employee.fullname,
-        'image_path': selected_employee.image_path,
-        'company_email': selected_employee.company_email,
-        'mobile': selected_employee.mobile,
-        'bir_tax': float(selected_employee.bir_tax),
-        'sss_tax': float(selected_employee.sss_tax),
-        'phil_health_tax': float(selected_employee.phil_health_tax),
-        'pag_ibig_tax': float(selected_employee.pag_ibig_tax),
-        'hourly_rate': float(selected_employee.hourly_rate),
-        'ot_rate': float(selected_employee.ot_rate),
-        'start_cut_off': start_cut_off,
-        'end_cut_off': end_cut_off,
-        'days_present': days_present,
-        'total_regular_hours': total_regular_hours,
-        'total_ot_hours': total_ot_hours,
-        'gross_pay': gross_pay,
-        'deductions': deductions,
-        'allowance': float(selected_employee.allowance),
-        'net_pay': net_pay
-    }
+            if edit_payslip.validate_on_submit:
+                
+                employee_payslip.total_regular_hours = edit_payslip.total_regular_hours.data
+                employee_payslip.pre_ot_hours = edit_payslip.pre_ot_hours.data
+                employee_payslip.post_ot_hours = edit_payslip.post_ot_hours.data
 
-    return render_template('individual_payroll.html', data=data)
+                db.session.commit()
+
+                flash('Edit Success', category='warning')
+                
+                return redirect(url_for('payroll_bp.individual_payroll', 
+                                        employee_id=employee_id, 
+                                        start_cut_off=start_cut_off, 
+                                        end_cut_off=end_cut_off))
+
+        if request.args.get('req') == 'approve':
+            approve_payslip = ApprovePayslipForm(request.form)
+            if approve_payslip.validate_on_submit:
+
+                employee_payslip.status = 'Approved'
+
+                data['status'] = employee_payslip.status
+                db.session.commit()
+
+                flash('Payroll Approved!', category='success')
+                return redirect(url_for('payroll_bp.cut_off', 
+                                    employee_id=employee_id, 
+                                    start_cut_off=start_cut_off, 
+                                    end_cut_off=end_cut_off))
+        
+        if request.args.get('req') == 'decline':
+            decline_payslip = DeclinePayslipForm(request.form)
+            if decline_payslip.validate_on_submit:
+
+                employee_payslip.status = 'Declined'
+
+                db.session.flush()
+
+                data['status'] = employee_payslip.status
+                db.session.commit()
+
+                flash('Payroll Declined!', category='danger')
+                return redirect(url_for('payroll_bp.cut_off', 
+                                    employee_id=employee_id, 
+                                    start_cut_off=start_cut_off, 
+                                    end_cut_off=end_cut_off))
+        
+        if request.args.get('req') == 'cancel':
+            cancel_payslip = CancelPayslipForm(request.form)
+            if cancel_payslip.validate_on_submit:
+                
+                employee_payslip.status = 'Pending'
+
+                db.session.flush()
+
+                data['status'] = employee_payslip.status
+                db.session.commit()
+                
+                flash('Payroll Canceled!', category='info')
+                
+                return redirect(url_for('payroll_bp.cut_off', 
+                                    employee_id=employee_id, 
+                                    start_cut_off=start_cut_off, 
+                                    end_cut_off=end_cut_off))
+
+    if request.method == 'GET':
+        
+        return render_template('individual_payroll.html', 
+                               data=data,
+                               decline_payslip=decline_payslip,
+                               approve_payslip=approve_payslip,
+                               edit_payslip=edit_payslip,
+                               cancel_payslip=cancel_payslip)

@@ -16,7 +16,6 @@ home_bp = Blueprint('home_bp', __name__, template_folder='templates',
 def home():
     today = datetime.now().date()
     this_week = today.isocalendar()[1]
-    # print(this_week.)
 
     attendances = Attendance.query.filter(Attendance.date == today) \
     .filter(or_(Attendance.attendance_type == ATTENDANCE_TYPES.Absent, 
@@ -32,8 +31,6 @@ def home():
               attendance_counts[ATTENDANCE_TYPES.Late], 
               attendance_counts[ATTENDANCE_TYPES.On_Leave]]
     
-    print(statistics)
-
     # Get the announcements for this month
     today = datetime.today().date()
     start_of_week = today - timedelta(days=today.weekday())

@@ -8,6 +8,16 @@ body {
    box-sizing: border-box;
 }
 
+/* Flash Message */
+.flash-messages-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  
+}
+
+
 .sidebar {
    position: fixed;
    background: #ffffff;

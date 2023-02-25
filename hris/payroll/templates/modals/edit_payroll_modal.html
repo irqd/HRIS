@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="edit_payroll_{{ data.id }}" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog shadow-lg">
+      <form action="?req=edit" method="post">
+         {{ edit_payslip.hidden_tag() }}
+         <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Edit Payrol</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ edit_payslip.total_regular_hours.label() }}</strong>
+                    {{ edit_payslip.total_regular_hours(class="form-control") }}
+                  </div>
+
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ edit_payslip.allowance.label() }}</strong>
+                     {{ edit_payslip.allowance(class="form-control") }}
+                   </div>
+               </div>
+
+               <div class="form-row">
+                  <div class="form-outline mb-1 mt-1 col">
+                    <strong>{{ edit_payslip.pre_ot_hours.label() }}</strong>
+                    {{ edit_payslip.pre_ot_hours(class="form-control") }}
+                  </div>
+
+                  <div class="form-outline mb-1 mt-1 col">
+                     <strong>{{ edit_payslip.post_ot_hours.label() }}</strong>
+                     {{ edit_payslip.post_ot_hours(class="form-control") }}
+                   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
+            {{ edit_payslip.edit(class="btn btn-outline-warning shadow")}}
+            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
