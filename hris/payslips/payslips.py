@@ -48,6 +48,8 @@ def view_payslip(start_cut_off, end_cut_off):
 @payslips_bp.route('/payslips/download_payslip/<string:start_cut_off>/<string:end_cut_off>', methods=['GET', 'POST'])
 @login_required
 def download_payslip(start_cut_off, end_cut_off):
+
+    config = pdfkit.configuration(wkhtmltopdf='wkhtmltopdf/bin/wkhtmltopdf.exe')
     #generate payslip data
     data = generate_payslip_data(current_user.employee_id, start_cut_off, end_cut_off)
     employee_name = data['employee_name']
@@ -55,7 +57,7 @@ def download_payslip(start_cut_off, end_cut_off):
     html = render_template('download_payslip.html', data=data)
     #convert template to pdf
 
-    pdf = pdfkit.from_string(html, False, options={"enable-local-file-access": ""})
+    pdf = pdfkit.from_string(html, False, options={"enable-local-file-access": ""}, configuration=config)
     #pass pdf as response
 
     response = make_response(pdf)

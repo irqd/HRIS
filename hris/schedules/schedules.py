@@ -33,7 +33,9 @@ def confirm_attendance(employee_id, employee_name):
         schedule_id = request.form.get('schedule_id')   
         attendance = Attendance.query.filter_by(id = schedule_id).first()
 
-        if attendance.attendance_type != 'Present':
+
+        if attendance.attendance_type.value == 'Unavailable' and\
+            attendance.checked_in is not None and attendance.checked_out is not None:
             attendance.attendance_type = 'Present'
 
         attendance.status = 'Approved'
