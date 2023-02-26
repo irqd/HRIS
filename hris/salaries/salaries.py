@@ -25,7 +25,7 @@ def salaries():
 def add_salary():
     add_salary_modal = AddSalaryModal(request.form)
     if request.method == 'POST':
-        print(add_salary_modal.validate_on_submit)
+        
         if add_salary_modal.validate_on_submit():
             salaries = Salaries(
                 salary_name = add_salary_modal.salary_name.data,

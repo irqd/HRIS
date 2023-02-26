@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Payslip
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-3 mt-3 h-100 shadow border">
+        <h4 class="p-3">Payslip</h4>
+    </div>
+
+    <div class="card mb-3 mt-3 shadow border text">
+      <h5 class="card-header">Earnings:</h5>
+      <div class="card-body">
+        <div style="overflow: auto;">
+          <div style="float: left; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">Employee Name</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Cut Off</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">Total Regular Hours</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Hourly Rate</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">Pre OT Hours</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Post OT Hours</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Total OT Hours</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">OT Rate (130%)</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">Total Taxtable Income</h6>
+            <h6 class="card-text" >Non Taxable Allowance</h6><br>
+          </div>
+          <div style="float: right; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.employee_name }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.start_cut_off }} - {{ data.end_cut_off }}</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.total_regular_hours }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.hourly_rate }}</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.pre_ot_hours }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.post_ot_hours }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.total_ot_hours }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.ot_rate }}</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.gross_pay }}</h6>
+            <h6 class="card-text">{{ data.allowance }}</h6><br>
+          </div>
+          <div class="mt-3 border-top border-dark" style="clear: both;">
+          </div>
+
+          <div style="float: left; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">Total Gross Income</h6>
+          </div>
+
+          <div style="float: right; width: 50%;">
+            <h6 class="card-text">{{ data.gross_pay + data.allowance}}</h6>
+          </div>
+        </div>     
+      </div>
+    </div>
+
+    <div class="card mb-3 h-100 shadow border">
+      <h5 class="card-header">Deductions:</h5>
+      <div class="card-body">
+        <div style="overflow: auto;">
+          <div style="float: left; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">Taxable Income</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">BIR</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">SSS</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Phil Health</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">Pag-Ibig</h6><br>
+            <h6 class="card-text">Total Deductions</h6>
+          </div>
+          <div style="float: right; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.gross_pay }}</h6><br>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.bir_tax }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.sss_tax }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.phil_health_tax }}</h6>
+            <h6 class="card-text" style="margin-bottom: 5px;">{{ data.pag_ibig_tax }}</h6><br>
+            <h6 class="card-text">{{ data.deductions }}</h6><br>
+          </div>
+          <div class="mt-3 border-top border-dark" style="clear: both;">
+          </div>
+
+          <div style="float: left; width: 50%;">
+            <h6 class="card-text" style="margin-bottom: 5px;">Total Net Income</h6>
+          </div>
+
+          <div style="float: right; width: 50%;">
+            <h6 class="card-text">{{ data.net_pay }}</h6>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+    <div class="card mb-3 h-100 rounded">
+      <h5 class="card-header">Note: This is a system generated payslip</h5> 
+    </div>
+ </div>
+{% endblock%}

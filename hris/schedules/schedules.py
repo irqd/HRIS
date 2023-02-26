@@ -31,8 +31,6 @@ def get_attendance():
 def confirm_attendance(employee_id, employee_name):
     if request.method == 'POST':
 
-        g = request.form.get('edit_start_shift')
-        print(g)
         schedule_id = request.form.get('schedule_id')   
         attendance = Attendance.query.filter_by(id = schedule_id).first()
 

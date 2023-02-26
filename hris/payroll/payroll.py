@@ -11,7 +11,7 @@ payroll_bp = Blueprint('payroll_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')
 
 
-def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regular_hours=0, total_pre_ot_hours = 0, total_post_ot_hours = 0):
+def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regular_hours=0, total_pre_ot_hours = 0, total_post_ot_hours = 0, allowance=0):
     employee_attendances = Attendance.query.filter(Attendance.employee_id == selected_employee.id)\
     .filter(Attendance.date.between(datetime.strptime(start_cut_off, '%Y-%m-%d'), datetime.strptime(end_cut_off, '%Y-%m-%d')))\
     .filter(or_(Attendance.attendance_type == 'Present', Attendance.attendance_type == 'Late'))\
@@ -71,7 +71,7 @@ def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regul
         'total_ot_hours': total_ot_hours,
         'gross_pay': gross_pay,
         'deductions': deductions,
-        'allowance': float(selected_employee.allowance),
+        'allowance': allowance,
         'net_pay': net_pay
     }
 
@@ -122,7 +122,8 @@ def cut_off(start_cut_off, end_cut_off):
         data = calculate_payroll(employee, start_cut_off, end_cut_off, 
                                  total_regular_hours=float(employee_payslip.total_regular_hours) if employee_payslip is not None else 0,
                                  total_pre_ot_hours=float(employee_payslip.pre_ot_hours) if employee_payslip is not None else 0,
-                                 total_post_ot_hours=float(employee_payslip.post_ot_hours) if employee_payslip is not None else 0)
+                                 total_post_ot_hours=float(employee_payslip.post_ot_hours) if employee_payslip is not None else 0,
+                                 allowance=float(employee_payslip.allowance) if employee_payslip is not None else 0)
         
         if employee_payslip == None:
             
@@ -167,9 +168,7 @@ def cut_off(start_cut_off, end_cut_off):
             
             data['status'] = employee_payslip.status.value
             employee_data.append(data)
-            print(data)
-            
-
+          
     return render_template('cut_off.html', employee_data=employee_data)
 
 
@@ -200,7 +199,8 @@ def individual_payroll(employee_id, start_cut_off, end_cut_off):
                              end_cut_off,
                              total_regular_hours=float(employee_payslip.total_regular_hours),
                              total_pre_ot_hours=float(employee_payslip.pre_ot_hours),
-                             total_post_ot_hours=float(employee_payslip.post_ot_hours))
+                             total_post_ot_hours=float(employee_payslip.post_ot_hours),
+                             allowance=float(employee_payslip.allowance))
 
     #Temp key:value
     data['status'] = employee_payslip.status.value
@@ -220,6 +220,7 @@ def individual_payroll(employee_id, start_cut_off, end_cut_off):
                 employee_payslip.total_regular_hours = edit_payslip.total_regular_hours.data
                 employee_payslip.pre_ot_hours = edit_payslip.pre_ot_hours.data
                 employee_payslip.post_ot_hours = edit_payslip.post_ot_hours.data
+                employee_payslip.allowance = edit_payslip.allowance.data
 
                 db.session.commit()
 
@@ -234,6 +235,8 @@ def individual_payroll(employee_id, start_cut_off, end_cut_off):
             approve_payslip = ApprovePayslipForm(request.form)
             if approve_payslip.validate_on_submit:
 
+                employee_payslip.gross_pay = data['gross_pay']
+                employee_payslip.net_pay = data['net_pay']
                 employee_payslip.status = 'Approved'
 
                 data['status'] = employee_payslip.status

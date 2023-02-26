@@ -4,143 +4,77 @@
 {% block nav_contents %}
 <div class="container">
   <div class="row mt-3 mb-3">
-    <div class="col-12">
-      <h4 class="shadow border p-3 rounded">
-        <a href="#" class="text-dark"
-          >Payslips</a
-        >
-      </h4>
-    </div>
+     <div class="col-12">
+       <h4 class="shadow border p-3 rounded">
+         <a href="#" class="text-dark">Payslips</a>
+       </h4>
+     </div>
   </div>
-
-  <div class="row">
-    <div class="col-12">
-      <div class="card mb-3 shadow border">
-        <div class="row no-gutters">
-          <div class="col-md-4">
-            <img src="..." alt="..." />
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </p>
-              <p class="card-text">
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </p>
-            </div>
-          </div>
+  
+  <div class="row mt-3 mb-3">
+     <div class="col-12">
+        <div class="shadow p-3 rounded">
+           <h3>Employee Name</h3><hr>
+           <table id="paylips" class="table table-striped table-bordered" style="width:100%" >
+              <thead>
+                 <tr class="shadow"> 
+                    <th hidden>ID</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Total Days Present</th>
+                    <th>Total Regular Hours</th>
+                    <th>Total OT Hours</th>
+                    <th>Gross Pay</th>
+                    <th>Deductions</th>
+                    <th>Allowance</th>
+                    <th>Net Pay</th>
+                    <th>Actions</th>
+                 </tr>
+             </thead>
+             <tbody>
+                {% for employee in employee_payslips %}
+                 <tr>
+                    <td hidden>1</td>
+                    <td>{{ employee.start_cut_off }}</td>
+                    <td>{{ employee.end_cut_off }}</td>
+                    <td>{{ employee.days_present }}</td>
+                    <td>{{ "{:.2f}".format(employee.total_regular_hours) }}</td>
+                    <td>{{ "{:.2f}".format(employee.total_ot_hours) }}</td>
+                    <td>{{ "{:.2f}".format(employee.gross_pay) }}</td>
+                    <td>{{ "{:.2f}".format(employee.deductions) }}</td>
+                    <td>{{ "{:.2f}".format(employee.allowance) }}</td>
+                    <td>{{ "{:.2f}".format(employee.net_pay) }}</td>
+                    <td>
+                       <div class="text-center">
+                          <a href="{{ url_for('payslips_bp.view_payslip', start_cut_off=employee.start_cut_off, end_cut_off=employee.end_cut_off) }}" class="btn btn-outline-success shadow">
+                             <i class="fa-solid fa-eye"></i>
+                          </a>
+                       </div>      
+                    </td>
+                 </tr>
+                {% endfor %}
+             </tbody>
+           </table>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <div class="card mb-3 p-3 shadow border">
-        <div class="row no-gutters">
-          <div class="col-3">
-            <h1>
-              <span class="badge badge-secondary"></span>Example heading 1
-            </h1>
-          </div>
-          <div class="col-3">
-            <h1>
-              Example heading 2<span class="badge badge-secondary">New</span>
-            </h1>
-          </div>
-          <div class="col-3">
-            <h1>
-              Example heading 3<span class="badge badge-secondary">New</span>
-            </h1>
-          </div>
-          <div class="col-3">
-            <h1>
-              Example heading 4<span class="badge badge-secondary">New</span>
-            </h1>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-4">
-    <!-- Earnings -->
-    <div class="col-6">
-      <div class="card mb-3 h-100 shadow">
-        <h5 class="card-header">Earnings:</h5>
-        <div class="card-body">
-          <div class="row mb-3">
-            <div class="col-6">
-              <h6 class="card-text">Basic Pay</h6>
-              <h6 class="card-text">Something Pay</h6>
-            </div>
-
-            <div class="col-6 text-right">
-              <h6 class="card-text">2,000,000.</h6>
-              <h6 class="card-text">500,000</h6>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-footer">
-         <div class="row">
-            <div class="col-6">
-               <h6 class="card-text">Total Deductions</h6>
-               <h6 class="card-text">Net Pay</h6>
-             </div>
-   
-             <div class="col-6 text-right">
-               <h6 class="card-text">50,000</h6>
-               <h6 class="card-text">1,500,000</h6>
-             </div>
-         </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Earnings -->
-
-    <!-- Deductions -->
-    <div class="col-6">
-      <div class="card mb-3 h-100 shadow border">
-        <h5 class="card-header">Deductions:</h5>
-        <div class="card-body">
-          <div class="row mb-3">
-            <div class="col-6">
-              <h6 class="card-text">SSS TAX</h6>
-              <h6 class="card-text">BIR TAX</h6>
-              <h6 class="card-text">PAG-IBIG TAX</h6>
-              <h6 class="card-text">Something TAX</h6>
-              <h6 class="card-text">Something TAX</h6>
-            </div>
-
-            <div class="col-6 text-right">
-              <h6 class="card-text">12%</h6>
-              <h6 class="card-text">10%</h6>
-              <h6 class="card-text">5%</h6>
-              <h6 class="card-text">5%</h6>
-              <h6 class="card-text">5%</h6>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-         <div class="row">
-            <div class="col-6">
-               <h6 class="card-text">Total Deductions</h6>
-               <h6 class="card-text">Net Pay</h6>
-             </div>
-   
-             <div class="col-6 text-right">
-               <h6 class="card-text">50,000</h6>
-               <h6 class="card-text">1,500,000</h6>
-             </div>
-         </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Deductions -->
+     </div>
   </div>
 </div>
+{% endblock %}
+{% block javascripts_local %}
+{{ super() }}
+
+<script>
+   $(document).ready(function () {
+      $('#paylips').DataTable({
+
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All'],
+            ],
+        });
+   });
+   
+
+</script>
+
 {% endblock %}
