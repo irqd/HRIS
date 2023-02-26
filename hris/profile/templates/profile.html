@@ -12,9 +12,12 @@
          </div>
       </div>
 
-      <a class="btn btn-outline-primary mt-3 mb-3 shadow" href="{{ url_for('profile_bp.account_settings', employee_id=employee_info.id) }}">
-         <i class="fa-solid fa-gear"></i> <u> Account Settings</u>
-      </a>
+      <div class="d-flex justify-content-end">
+         <a class="btn btn-outline-primary mt-3 mb-3 shadow" href="{{ url_for('profile_bp.account_settings', employee_id=employee_info.id) }}">
+            <i class="fa-solid fa-gear"></i> <u> Account Settings</u>
+         </a>
+      </div>
+      
 
       <div class="row mt-3 mb-3">
          <div class="col-12">
@@ -162,16 +165,19 @@
                      </div>
                   </div>
                </div>
-
-               <div class="pb-5">
-                  <button class="btn btn-outline-success mt-3 shadow" type="submit">
-                     <i class="fa-solid fa-pen-to-square"></i> <u>Edit</u>
-                  </button>
-      
-                  <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('home_bp.home') }}">
-                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                  </a>
+               
+               <div class="d-flex justify-content-end">
+                  <div class="pb-5">
+                     <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                        <i class="fa-solid fa-pen-to-square"></i> <u>Edit</u>
+                     </button>
+         
+                     <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('home_bp.home') }}">
+                        <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                     </a>
+                  </div>
                </div>
+               
             </form>
          </div>
       </div>

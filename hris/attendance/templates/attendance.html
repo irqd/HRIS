@@ -12,10 +12,13 @@
         <a href="{{ url_for('attendance_bp.attendance') }}" class="text-dark">Attendance</a>
       </h4>
       {% include 'modals/request_leave_modal.html' %}
-      <button class="btn btn-outline-success mt-3 mb-3 shadow" data-toggle="modal"
+      <div class="d-flex justify-content-end pr-3">
+        <button class="btn btn-outline-success mt-3 mb-3 shadow" data-toggle="modal"
         data-target="#request_leave_{{ current_user.id }}">
         <i class="fa-solid fa-user-plus"></i><u> Request Leave</u>
-      </button>
+        </button>
+      </div>
+      
     </div>
   </div>
 
