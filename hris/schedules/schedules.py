@@ -35,7 +35,7 @@ def confirm_attendance(employee_id, employee_name):
 
 
         if attendance.attendance_type.value == 'Unavailable' and\
-            attendance.checked_in is not None and attendance.checked_out is not None:
+            attendance.checked_in != None and attendance.checked_out != None:
             attendance.attendance_type = 'Present'
 
         attendance.status = 'Approved'
