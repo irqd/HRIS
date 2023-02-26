@@ -41,19 +41,19 @@
                </div>
             </div>
          </form>
-            <div class="d-flex pb-4 m-3">
+            <div class="d-flex pb-3 m-3">
                <form class="pr-2" method="post" action="{{ url_for('schedules_bp.delete_schedule', employee_id=employee_id, employee_name=employee_name)}}" id="delete_schedule">
                   <input type="hidden" id="delete_schedule_id" name="schedule_id">
                   <button class="btn btn-outline-danger shadow">
-                     Delete Shift
+                     Delete
                   </button>
                </form>
-               {{ edit_schedule_modal.submit(class='btn btn-outline-info shadow', style="margin-right: 90px;")}}
+               {{ edit_schedule_modal.submit(class='btn btn-outline-info shadow', style="margin-right: 140px;")}}
 
                <form method="post" action="{{ url_for('schedules_bp.confirm_attendance', employee_id=employee_id, employee_name=employee_name)}}" id="confirm_attendnace" >
                   <input type="hidden" id="confirm_attendance" name="schedule_id">
                   <button class="btn btn-outline-success shadow">
-                     Confirm Attendance
+                     Confirm
                   </button>
                </form>
             </div>

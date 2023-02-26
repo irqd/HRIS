@@ -23,15 +23,11 @@ def departments():
 def add_department():
     add_department = DepartmentForm()
 
-    # supervisors = db.session.query(EmployeeInfo.fullname, Positions.position_name, 
-    #     Departments.department_name).join(EmployeeInfo, EmployeeInfo.position_id == Positions.id)\
-    #     .join(Departments, Positions.department_id == Departments.id).all()
-    
     if request.method == 'POST':
         if add_department.validate_on_submit():
             new_department = Departments(
                 department_name = add_department.department_name.data,
-                supervisor = add_department.supervisor.data,
+                manager = add_department.manager.data,
                 description = add_department.description.data
             )
 
@@ -47,20 +43,26 @@ def add_department():
 @departments_bp.route('/departments/manage_department/<int:department_id>', methods=['GET', 'POST'])
 @login_required
 def manage_department(department_id):
+    delete_position_modal = DeletePositionModal()
     selected_department = Departments.query.filter_by(id = department_id).first()
     positions = selected_department.getPositions
+    
+    potential_managers = db.session.query(EmployeeInfo.id, EmployeeInfo.fullname, EmployeeInfo.position_id, 
+    Positions.position_name, Positions.department_id, Departments.department_name)\
+    .join(EmployeeInfo, EmployeeInfo.position_id == Positions.id)\
+    .join(Departments, Departments.id == Positions.department_id)\
+    .filter(Departments.id == department_id).all()
 
-    delete_position_modal = DeletePositionModal()
     manage_department = DepartmentForm(
         department_name = selected_department.department_name,
-        supervisor = selected_department.supervisor,
+        manager = selected_department.manager,
         description = selected_department.description
     )
 
     if request.method == 'POST':
         if manage_department.validate_on_submit:
             selected_department.department_name = manage_department.department_name.data
-            selected_department.supervisor = manage_department.supervisor.data if manage_department.supervisor.data else selected_department.supervisor
+            selected_department.manager = manage_department.manager.data if manage_department.manager.data else selected_department.manager
             selected_department.description = manage_department.description.data
 
             db.session.commit()
@@ -70,7 +72,8 @@ def manage_department(department_id):
 
     return render_template('manage_department.html', manage_department=manage_department,
                                                     selected_department=selected_department,
-                                                    positions=positions, delete_position_modal=delete_position_modal)
+                                                    positions=positions, delete_position_modal=delete_position_modal,
+                                                    potential_managers=potential_managers)
  
 
 @departments_bp.route('/departments/delete_department/<int:department_id>', methods=['GET', 'POST'])
@@ -131,7 +134,7 @@ def manage_position(department_id, position_id):
     if request.method == 'POST':
         if manage_position.validate_on_submit:
             selected_position.position_name = manage_position.position_name.data
-            selected_position.position_status = manage_position.position_status.data
+            selected_position.position_status = manage_position.position_status.data.capitalize()
             selected_position.description = manage_position.description.data
 
             db.session.commit()

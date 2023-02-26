@@ -11,9 +11,11 @@
                <a href="{{ url_for('employees_bp.employees') }}" class="text-dark">Employees</a>
             </h4>
 
-            <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('employees_bp.add_employee') }}">
-               <i class="fa-solid fa-user-plus"></i> <u>Add Employee</u>
-            </a>
+            <div class="d-flex pr-3 justify-content-end">
+               <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('employees_bp.add_employee') }}">
+                  <i class="fa-solid fa-user-plus"></i> <u>Add Employee</u>
+               </a>
+            </div>       
          </div>
       </div>
 

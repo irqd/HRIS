@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-{% set active_page = "profile" %}
+{% set active_page = "employees" %}
 
 
 {% block nav_contents %}
@@ -17,7 +17,7 @@
 <div class="shadow rounded p-4">
    <h4 class="mt-2">Employee Account</h4>
    <hr>
-   <form action="{{ url_for('profile_bp.account_settings', employee_id=current_user.id) }}" method="post" enctype="multipart/form-data">
+   <form action="{{ url_for('employees_bp.manage_employee_account', employee_name=employee_name, employee_id=employee_id) }}" method="post" enctype="multipart/form-data">
    {{ account_form.hidden_tag() }}   
    <div class="row">
       <div class="col-4">
@@ -71,6 +71,6 @@
 {% block javascripts_local %}
 {{ super()}}
 
-<script src="{{ url_for('profile_bp.static', filename='js/profile.js')}}"></script>
+<script src="{{ url_for('employees_bp.static', filename='js/employee.js')}}"></script>
 
 {% endblock %}

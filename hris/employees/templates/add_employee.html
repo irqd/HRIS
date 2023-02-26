@@ -196,13 +196,14 @@
             <div class="form-row">
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.salary_rate.label() }}</strong>
+                
                 <select id="salary_rate" name="salary_rate" class="form-control">
                   <option value="">Select Salary</option>
                   {% for salary in salaries %}
                   <option value="{{ salary.id }}">
                     {{ "{:.2f}".format(salary.daily_rate) }}
                   </option>
-                {% endfor %}
+                  {% endfor %}
                 </select>
                
               </div>
@@ -223,16 +224,19 @@
             </div>
           </div>
           <div class="pb-5">
-            <button class="btn btn-outline-success mt-3 shadow" type="submit">
-              <i class="fa-solid fa-check"></i> <u>Submit</u>
-            </button>
-
-            <a
-              class="btn btn-outline-danger mt-3 shadow"
-              href="{{ url_for('employees_bp.employees') }}"
-            >
-              <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-            </a>
+            <div class="d-flex pr-3 justify-content-end">
+              <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                <i class="fa-solid fa-check"></i> <u>Submit</u>
+              </button>
+  
+              <a
+                class="btn btn-outline-danger mt-3 shadow ml-2"
+                href="{{ url_for('employees_bp.employees') }}"
+              >
+                <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+              </a>
+            </div>
+           
           </div>
         </fieldset>
       </form>

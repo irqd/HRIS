@@ -16,6 +16,12 @@
                   <input type="checkbox" id="switch" class="primary">
                   <span class="slider round"></span>
                </label>
+
+               <div class="d-flex pr-3 justify-content-end pt-2">
+                  <a class="btn btn-outline-primary shadow" href="{{ url_for('employees_bp.manage_employee_account', employee_name=employee_name, employee_id=employee_id) }}">
+                     <i class="fa-solid fa-gear"></i> <u> Account Settings</u>
+                  </a>
+               </div>
             </div>
          </div>
       </div>
@@ -25,55 +31,6 @@
             <form action="" method="post" enctype="multipart/form-data">
                <fieldset disabled="disabled">
                   {{ manage_employee.hidden_tag() }}
-                  <div class="shadow rounded p-4">
-                     <h4 class="mt-2">Employee Account</h4>
-                     <hr>
-
-                     <div class="row">
-                        <div class="col-4">
-                           <div align="center" class="pb-4 pt-4">
-                              <img class="" src="{{ url_for('static', filename=user.image_path)}}" alt="Preview Image" id="imagePath" width="120" height="120">
-                           </div>
-                           <div class="custom-file">
-                              {{ manage_employee.image_path(class="custom-file-input", id="imageFile", type="file")}}
-                              <label class="custom-file-label" for="#imageFile">Upload File</label>
-                           </div>
-                        </div>
-                        <div class="col-8">
-                           <div class="form-row">
-                              <div class="form-outline mb-1 mt-1 col">
-                                 <strong>{{ manage_employee.company_email.label() }}</strong>
-                                 {{ manage_employee.company_email(class="form-control") }}
-                              </div>
-                              <div class="form-outline mb-1 mt-1 col">
-                                 <strong>{{ manage_employee.access.label() }}</strong>
-                              
-                                 <select id="access" name="access" class="form-control">
-                                    <option value="Admin" {% if manage_employee.access.data == 'Admin' %} selected {% endif %}>Admin</option>
-                                    <option value="Employee" {% if manage_employee.access.data == 'Employee' %} selected {% endif %}>Employee</option>
-                                 </select>
-                              </div>
-                              
-                           </div>
-                           <div class="form-row">
-                              <div class="form-outline mb-1 mt-1 col">
-                                 <strong>{{ manage_employee.password1.label() }}</strong>
-                                 {{ manage_employee.password1(class="form-control", id="password") }}
-                              </div>
-                              <div class="form-outline mb-1 mt-1 col">
-                                 <strong>{{ manage_employee.password2.label() }}</strong>
-                                 {{ manage_employee.password2(class="form-control", id="confirmpassword") }}
-                              </div>
-                              
-                           </div>
-                           
-                           <div id="password-validation" class="error">
-                              
-                           </div>
-                        </div>
-                     </div>
-                  </div><br>
-
                   <div class="shadow rounded p-4">
                      <h4 class="mt-2">Personal Profile</h4><hr>
                   <div class="form-row">
@@ -185,7 +142,7 @@
                         </div>
                         <div class="form-outline mb-1 mt-1 col">
                            <strong>{{ manage_employee.positions.label() }}</strong>
-                           <select id="position" name="position" class="form-control">
+                           <select id="positions" name="positions" class="form-control">
                               <option value="">Select Position</option>
                               {% for position in positions %}
                                  <option value="{{ position.id }}">{{ position.position_name }}</option>
@@ -233,14 +190,20 @@
                         </div>
                      </div>
                   </div>
-                  <div class="pb-5">
+
+                  <div class="d-flex pr-3 justify-content-end">
+                     <div class="mr-auto pl-3">
+                        
+                     </div>
+
                      <button class="btn btn-outline-success mt-3 shadow" type="submit">
                         <i class="fa-solid fa-pen-to-square"></i> <u>Edit</u>
                      </button>
-         
-                     <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('employees_bp.employees') }}">
+                     <a class="btn btn-outline-danger mt-3 ml-2 shadow" href="{{ url_for('employees_bp.employees') }}">
                         <i class="fa-solid fa-ban"></i> <u>Cancel</u>
                      </a>
+                   </div>
+                  <div class="pb-5">      
                   </div>
                </fieldset>
             </form>
@@ -251,9 +214,6 @@
 
 {% block javascripts_local %}
 {{ super()}}
-
-<script src="{{ url_for('employees_bp.static', filename='js/employee.js')}}"></script>
-
 <script>
    const form = document.querySelector('form');
    const switchButton = document.getElementById('switch');
@@ -269,7 +229,7 @@
 
 <script >
    const departmentSelect = document.querySelector('#department');
-   const positionSelect = document.querySelector('#position');
+   const positionSelect = document.querySelector('#positions');
    console.log(departmentSelect)
    positionSelect.innerHTML = '<option value="">Select Department First</option>';
 

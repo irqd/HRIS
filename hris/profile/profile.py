@@ -1,86 +1,110 @@
 from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
-from flask_login import login_required
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session
+from flask_login import login_required, logout_user
 from hris.employees.forms import *
-from .forms import *
-import os
 from werkzeug.utils import secure_filename
+from password_strength import PasswordPolicy
+import os
 
 profile_bp = Blueprint('profile_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='/profile_bp.static')
 
 
-
 @profile_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    selected_employee = db.session.query(Users, EmployeeInfo, EmploymentInfo, Positions, Departments)\
-        .join(EmploymentInfo).join(Users).join(Positions).join(Departments)\
-        .filter(EmployeeInfo.id == current_user.id).first()
+    if request.method == 'POST':
+        employee_to_update = EmployeeInfo.query.filter_by(id = current_user.id).first()
 
-    salaries = db.session.query(Salaries).all()
+        employee_form = EmployeeForm(request.form)
 
-    user, employee_info, employment_info, position, department = selected_employee
+        if employee_form.validate_on_submit:
+            
+            employee_to_update.last_name = employee_form.last_name.data
+            employee_to_update.first_name = employee_form.first_name.data
+            employee_to_update.middle_name = employee_form.middle_name.data
+            employee_to_update.gender = employee_form.gender.data.capitalize()
+            employee_to_update.birth_date = employee_form.birth_date.data
+            employee_to_update.civil_status = employee_form.civil_status.data.capitalize()
+            employee_to_update.mobile = employee_form.mobile.data
+            employee_to_update.email = employee_form.email.data
+            employee_to_update.address = employee_form.address.data
+            employee_to_update.emergency_name = employee_form.emergency_name.data
+            employee_to_update.emergency_contact = employee_form.emergency_contact.data
+            employee_to_update.emergency_relationship = employee_form.emergency_relationship.data
 
-    employee_form = EmployeeForm(
-        #users
-        image_path = user.image_path,
-        company_email = user.company_email,
-        access = user.access.value,
+            db.session.commit()
+
+            flash(f'Employee Profile Updated!', category='success')
+
+            return redirect(url_for('profile_bp.profile'))
+              
+        if employee_form.errors != {}:
+
+            for err_msg in employee_form.errors.values():
+                flash(f'There is an error with updating the account: {err_msg}', category='danger')
+            return redirect(url_for('profile_bp.profile'))
         
-        #employee info
-        last_name = employee_info.last_name,
-        first_name = employee_info.first_name,
-        middle_name = employee_info.middle_name,
-        gender = employee_info.gender,
-        birth_date = employee_info.birth_date,
-        civil_status = employee_info.civil_status,
-        mobile = employee_info.mobile,
-        email = employee_info.email,
-        address = employee_info.address,
-        tin = employee_info.tin,
-        sss = employee_info.SSS,
-        phil_health = employee_info.phil_health,
-        pag_ibig = employee_info.pag_ibig,
-        emergency_name = employee_info.emergency_name,
-        emergency_contact = employee_info.emergency_contact,
-        emergency_relationship = employee_info.emergency_relationship,
+    if request.method == 'GET':
+        selected_employee = db.session.query(Users, EmployeeInfo, EmploymentInfo, Positions, Departments)\
+            .join(EmploymentInfo).join(Users).join(Positions).join(Departments)\
+            .filter(EmployeeInfo.id == current_user.id).first()
+
+        salaries = db.session.query(Salaries).all()
+
+        user, employee_info, employment_info, position, department = selected_employee
+
+        employee_form = EmployeeForm(
+            #users
+            image_path = user.image_path,
+            company_email = user.company_email,
+            access = user.access.value,
+            
+            #employee info
+            last_name = employee_info.last_name,
+            first_name = employee_info.first_name,
+            middle_name = employee_info.middle_name,
+            gender = employee_info.gender,
+            birth_date = employee_info.birth_date,
+            civil_status = employee_info.civil_status,
+            mobile = employee_info.mobile,
+            email = employee_info.email,
+            address = employee_info.address,
+            tin = employee_info.tin,
+            sss = employee_info.SSS,
+            phil_health = employee_info.phil_health,
+            pag_ibig = employee_info.pag_ibig,
+            emergency_name = employee_info.emergency_name,
+            emergency_contact = employee_info.emergency_contact,
+            emergency_relationship = employee_info.emergency_relationship,
+
+            #Employment Profile
+            description = employment_info.description,
+            salary_rate = employment_info.salary_id,
+            start_date = employment_info.start_date,
+            end_date = employment_info.end_date,
+            status = employment_info.status.value,
+            position = employee_info.position_id
+        )
+
+        return render_template('profile.html', user=user,
+                            employee_info=employee_info,
+                            employment_info=employment_info,
+                            position=position,
+                            department=department,
+                            employee_form=employee_form,
+                            salaries=salaries)
 
 
-        #Employment Profile
-        description = employment_info.description,
-        salary_rate = employment_info.salary_id,
-        start_date = employment_info.start_date,
-        end_date = employment_info.end_date,
-        status = employment_info.status.value,
-        position = employee_info.position_id
-    )
-
-    return render_template('profile.html', user=user,
-                        employee_info=employee_info,
-                        employment_info=employment_info,
-                        position=position,
-                        department=department,
-                        employee_form=employee_form,
-                        salaries=salaries)
-
-@profile_bp.route('/profile/<int:employee_id>/change_account/', methods=['GET', 'POST'])
+@profile_bp.route('/profile/<int:employee_id>/update_account', methods=['GET', 'POST'])
 @login_required
 def account_settings(employee_id):
-    selected_employee = Users.query.filter_by(id = current_user.id).first()
-    account_form = AccountForm()
-    return render_template('account_settings.html', selected_employee=selected_employee, account_form=account_form)
-
-
-@profile_bp.route('/profile/<int:employee_id>/change_account/save_account', methods=['POST'])
-@login_required
-def save_account_settings(employee_id):
-    
     if request.method == 'POST':
         account_form = AccountForm(request.form)
         attempted_password = account_form.password1.data
 
         user_account = Users.query.filter_by(id = employee_id).first()
+
         if account_form.validate_on_submit():
             #Upload
             file = request.files['image_path']
@@ -93,14 +117,47 @@ def save_account_settings(employee_id):
                
                 rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
                 user_account.image_path = rel_path
-
-            if attempted_password and user_account.verify_password(attempted_password):
-                flash("New password can't be the same as the old password.", category='danger')
-                return redirect(url_for('profile_bp.profile'))
-            else:
-                user_account.password = attempted_password
                 db.session.commit()
-                
-            flash(f'Updated Account', category='success')
-        return redirect(url_for('profile_bp.profile'))
+
+                flash(f'Updated Account Profile Picture!', category='success')
+
+            if account_form.password1.data != '' and account_form.password2.data != '':
+                policy = PasswordPolicy.from_names(
+                    length=8,  # min length: 8
+                    uppercase=1,  # need min. 1 uppercase letters
+                    numbers=1,  # need min. 1 digits
+                    special=1,  # need min. 1 special characters
+                    nonletters=1,  # need min. 1 non-letter characters (digits, specials, anything)
+                )
+
+                if attempted_password and user_account.verify_password(attempted_password):
+                    flash("New password can't be the same as the old password.", category='danger')
+
+                else:
+                    if len(policy.test(attempted_password)) == 0:
+                        user_account.password = attempted_password
+                        db.session.commit()
+
+                        session.clear()
+                        logout_user()
+                        flash(f'Updated Account Password! Please Login Again.', category='success')
+                        return redirect(url_for('auth_bp.login'))
+                    else:
+                        for e in policy.test(attempted_password):
+                            flash(f'Password needs atleast: {e}', category='danger')
+            
+            return redirect(url_for('profile_bp.account_settings', employee_id=employee_id))
+        
+        if account_form.errors != {}:
+            for err_msg in account_form.errors.values():
+                if err_msg == ['Field must be equal to password1.']:
+                    flash(f"There is an error updating the account: ['Password didn't match.']", category='danger')
+                else:
+                    flash(f'There is an error with updating the account: {err_msg}', category='danger')
+            
+            return redirect(url_for('profile_bp.account_settings', employee_id=employee_id))
+    if request.method == 'GET':  
+        account_form = AccountForm()
+        selected_employee = Users.query.filter_by(employee_id = current_user.id).first()      
+        return render_template('account_settings.html', selected_employee=selected_employee, account_form=account_form)
     

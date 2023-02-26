@@ -26,4 +26,4 @@ class EditScheduleModal(FlaskForm):
    checked_in = StringField(label='Checked In', validators=[DataRequired()])
    checked_out = StringField(label='Checked Out', validators=[DataRequired()])
 
-   submit = SubmitField(label='Edit Shift')
+   submit = SubmitField(label='Edit')

@@ -38,7 +38,7 @@
 
                         <div class="form-outline mb-1 mt-1 col-6">
                            <strong>{{ manage_position.position_status.label() }}</strong>
-                           <select name="status" id="status" class="form-control">
+                           <select name="position_status" id="status" class="form-control">
                               <option value="">Select Position</option>
                               {% for status in manage_position.position_status.choices %}
                                  <option value="{{ status[0]}}" {% if status[1] == manage_position.position_status.data %} selected {% endif %}>{{status[1]}}</option>
@@ -53,16 +53,19 @@
                         </div>
                      </div>
                   </div><br>
-
-                  <div class="pb-5">
-                     <button class="btn btn-outline-success mt-3" type="submit">
-                        <i class="fa-solid fa-check"></i> <u>Edit</u>
-                     </button>
-         
-                     <a class="btn btn-outline-danger mt-3" href="{{ url_for('departments_bp.departments') }}">
-                        <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                     </a>
+                  
+                  <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
+                     <div>
+                        <button class="btn btn-outline-success mt-3" type="submit">
+                           <i class="fa-solid fa-check"></i> <u>Edit</u>
+                        </button>
+            
+                        <a class="btn btn-outline-danger mt-3" href="{{ url_for('departments_bp.departments') }}">
+                           <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                        </a>
+                     </div>
                   </div>
+                  
                </fieldset>
             </form>
          </div>

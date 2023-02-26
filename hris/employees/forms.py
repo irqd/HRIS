@@ -4,17 +4,28 @@ from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectF
                      EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
 from wtforms.validators import (DataRequired, Email, EqualTo,
                               Length, ValidationError, InputRequired, Regexp, Optional)
+from hris.models import *
+
 
 class DeleteEmployeeModal(FlaskForm):
    delete = SubmitField(label='Delete')
 
+class AccountForm(FlaskForm):
+   image_path = FileField(label='Employee Picture', render_kw={'accept': 'image/*'}, validators=[Optional(), validators.regexp(u'([^\\s]+(\\.(?i)(jpe?g|png))$)')])
+   password1 = PasswordField(label='Password', validators=[Length(min=8), Optional()])
+   password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1'), Optional()])
 
 class EmployeeForm(FlaskForm):
+   def validate_email_address(self, email_address_to_check):
+      email_address = Users.query.filter_by(company_email=email_address_to_check.data).first()
+      if email_address:
+         return True
+        
    #Employee Account
    image_path = FileField(label='Employee Picture', render_kw={'accept': 'image/*'},validators=[Optional(), validators.regexp(u'([^\\s]+(\\.(?i)(jpe?g|png))$)')])
    company_email = EmailField(label='Company Email', validators=[DataRequired()])
-   password1 = PasswordField(label='Password', validators=[Length(min=8)])
-   password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1')])
+   password1 = PasswordField(label='Password', validators=[Length(min=8), DataRequired()])
+   password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1'), DataRequired()])
    access = SelectField(label='Access', choices=[('admin', 'Admin'), ('employee', 'Employee')], 
    validators=[DataRequired()])
 
@@ -28,7 +39,7 @@ class EmployeeForm(FlaskForm):
    civil_status = SelectField(label='Civil Status', choices=[('single', 'Single'), ('married', 'Married'), 
    ('divorced', 'Divorced'), ('separated', 'Separated'), ('widowed', 'Widowed')], validators=[DataRequired()])
    mobile = StringField(label='Mobile Number', validators=[DataRequired()])
-   email = EmailField(label='Email', validators=[DataRequired()])
+   email = EmailField(label='Email', validators=[Email(), DataRequired()])
    address = StringField(label='Address', validators=[DataRequired()])
    emergency_name = StringField(label='Contact Name', validators=[DataRequired()])
    emergency_contact = StringField(label='Contact Number', validators=[DataRequired()])
@@ -44,4 +55,4 @@ class EmployeeForm(FlaskForm):
    salary_rate = SelectField(label='Salary Rate', coerce=int, validators=[DataRequired()])
    start_date = StringField(label='Start Date', validators=[DataRequired()])
    end_date = StringField(label='End Date', render_kw={'disabled':True}, validators=[DataRequired()])
-   status = SelectField(label='Status', choices=[('hired', 'Hired'), ('retired', 'Retired'), ('terminated', 'Terminated')])
+   status = SelectField(label='Status', choices=[('hired', 'Hired'), ('retired', 'Retired'), ('terminated', 'Terminated')], validators=[DataRequired()])

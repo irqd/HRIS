@@ -353,7 +353,7 @@ class Departments(db.Model):
    id = db.Column(db.Integer(), primary_key=True)
 
    department_name = db.Column(db.String(length=50), nullable=False)
-   supervisor = db.Column(db.String(length=50))
+   manager = db.Column(db.String(length=50))
    description = db.Column(db.String(length=500))
    date_created= db.Column(db.Date(), default=func.current_date(), nullable=False)
 

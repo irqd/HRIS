@@ -30,7 +30,6 @@ def get_attendance():
 @login_required
 def confirm_attendance(employee_id, employee_name):
     if request.method == 'POST':
-
         schedule_id = request.form.get('schedule_id')   
         attendance = Attendance.query.filter_by(id = schedule_id).first()
 
@@ -102,21 +101,24 @@ def edit_schedule(employee_id, employee_name):
     edit_schedule_modal = EditScheduleModal(request.form)
 
     if request.method == 'POST':
-    
         if edit_schedule_modal.validate_on_submit():
             updated_schedule = Attendance.query.filter_by(id = edit_schedule_modal.schedule_id.data).first()
             
             start_shift = datetime.strptime(edit_schedule_modal.start_shift.data, "%H:%M")
             end_shift = datetime.strptime(edit_schedule_modal.end_shift.data, "%H:%M")
+            checked_in = datetime.strptime(edit_schedule_modal.checked_in.data, "%H:%M")
+            checked_out = datetime.strptime(edit_schedule_modal.checked_out.data, "%H:%M")
 
             if start_shift > end_shift:
                 flash('Starting shift must not exceed the ending shift!', category='danger')
             else:
                 updated_schedule.start_shift = start_shift
                 updated_schedule.end_shift = end_shift
-                
+                updated_schedule.checked_in = checked_in
+                updated_schedule.checked_out = checked_out
+
                 db.session.commit()     
-                flash(f'Schedule for {updated_schedule.date} edited!', category='success')
+                flash(f'Schedule/Attendance for {updated_schedule.date} edited!', category='success')
 
 
         return redirect(url_for('schedules_bp.manage_schedule', employee_id=employee_id, employee_name=employee_name))
