@@ -52,64 +52,77 @@ def add_employee():
             if(add_employee.validate_email_address(add_employee.company_email)):
                flash('Company email already exist! Please chooce a different company email', category='danger')
             else:
-               new_employee_info = EmployeeInfo(
-                  last_name = add_employee.last_name.data,
-                  first_name = add_employee.first_name.data,
-                  middle_name = add_employee.middle_name.data,
-                  gender = add_employee.gender.data.capitalize(),
-                  birth_date = datetime.strptime(add_employee.birth_date.data, '%Y-%m-%d').date(),
-                  civil_status = add_employee.civil_status.data.capitalize(),
-                  mobile = add_employee.mobile.data,
-                  email = add_employee.email.data,
-                  address = add_employee.address.data,
-                  emergency_name = add_employee.emergency_name.data,
-                  emergency_contact = add_employee.emergency_contact.data,
-                  emergency_relationship = add_employee.emergency_relationship.data,
-                  tin = add_employee.tin.data,
-                  SSS = add_employee.sss.data,
-                  phil_health = add_employee.phil_health.data,
-                  pag_ibig = add_employee.pag_ibig.data,
-                  position_id = add_employee.positions.data
-               )
 
-               db.session.add(new_employee_info)
-               db.session.flush()
+               policy = PasswordPolicy.from_names(
+                    length=8,  # min length: 8
+                    uppercase=1,  # need min. 1 uppercase letters
+                    numbers=1,  # need min. 1 digits
+                    special=1,  # need min. 1 special characters
+                    nonletters=1,  # need min. 1 non-letter characters (digits, specials, anything)
+                )
+               
+               if len(policy.test(add_employee.password1.data)) == 0:
+                  new_employee_info = EmployeeInfo(
+                     last_name = add_employee.last_name.data,
+                     first_name = add_employee.first_name.data,
+                     middle_name = add_employee.middle_name.data,
+                     gender = add_employee.gender.data.capitalize(),
+                     birth_date = datetime.strptime(add_employee.birth_date.data, '%Y-%m-%d').date(),
+                     civil_status = add_employee.civil_status.data.capitalize(),
+                     mobile = add_employee.mobile.data,
+                     email = add_employee.email.data,
+                     address = add_employee.address.data,
+                     emergency_name = add_employee.emergency_name.data,
+                     emergency_contact = add_employee.emergency_contact.data,
+                     emergency_relationship = add_employee.emergency_relationship.data,
+                     tin = add_employee.tin.data,
+                     SSS = add_employee.sss.data,
+                     phil_health = add_employee.phil_health.data,
+                     pag_ibig = add_employee.pag_ibig.data,
+                     position_id = add_employee.positions.data
+                  )
 
-               new_employment_info = EmploymentInfo(
-                  description = add_employee.description.data,
-                  start_date = datetime.strptime(add_employee.start_date.data, '%Y-%m-%d').date(),
-                  status = add_employee.status.data,
-                  employee_id = new_employee_info.id,
-                  salary_id = add_employee.salary_rate.data
-               )
+                  db.session.add(new_employee_info)
+                  db.session.flush()
 
-               db.session.add(new_employment_info)
-               db.session.flush()
+                  new_employment_info = EmploymentInfo(
+                     description = add_employee.description.data,
+                     start_date = datetime.strptime(add_employee.start_date.data, '%Y-%m-%d').date(),
+                     status = add_employee.status.data,
+                     employee_id = new_employee_info.id,
+                     salary_id = add_employee.salary_rate.data
+                  )
 
-               new_employee_account = Users(
-                  name = new_employee_info.fullname,
-                  company_email = add_employee.company_email.data,
-                  password = add_employee.password1.data,
-                  employee_id = new_employee_info.id
-               )
+                  db.session.add(new_employment_info)
+                  db.session.flush()
 
-               file = request.files['image_path']
+                  new_employee_account = Users(
+                     name = new_employee_info.fullname,
+                     company_email = add_employee.company_email.data,
+                     password = add_employee.password1.data,
+                     employee_id = new_employee_info.id
+                  )
 
-               if file:
-                  filename = secure_filename(file.filename)
-                  filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                  file = request.files['image_path']
+
+                  if file:
+                     filename = secure_filename(file.filename)
+                     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                     
+                     file.save(filepath)
                   
-                  file.save(filepath)
-               
-                  rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
-                  new_employee_account.image_path = rel_path
-               
-               db.session.add(new_employee_account)
-               db.session.commit()
+                     rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
+                     new_employee_account.image_path = rel_path
+                  
+                  db.session.add(new_employee_account)
+                  db.session.commit()
 
-               flash('Employee record submitted!', category='success')
-               return redirect(url_for('employees_bp.employees'))
-       
+                  flash('Employee record submitted!', category='success')
+                  return redirect(url_for('employees_bp.employees'))
+               else:
+                  for e in policy.test(add_employee.password1.data):
+                     flash(f'Password needs atleast: {e}', category='danger')
+               
       if add_employee.errors != {}:
             for err_msg in add_employee.errors.values():
                 flash(f'There is an error with adding new employee: {err_msg}', category='danger')

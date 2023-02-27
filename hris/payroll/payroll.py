@@ -123,7 +123,7 @@ def cut_off(start_cut_off, end_cut_off):
                                  total_regular_hours=float(employee_payslip.total_regular_hours) if employee_payslip is not None else 0,
                                  total_pre_ot_hours=float(employee_payslip.pre_ot_hours) if employee_payslip is not None else 0,
                                  total_post_ot_hours=float(employee_payslip.post_ot_hours) if employee_payslip is not None else 0,
-                                 allowance=float(employee_payslip.allowance) if employee_payslip is not None else 0)
+                                 allowance=float(employee_payslip.allowance) if employee_payslip is not None else employee.allowance)
         
         if employee_payslip == None:
             
@@ -147,7 +147,14 @@ def cut_off(start_cut_off, end_cut_off):
             db.session.add(new_payslip)
             db.session.flush()
 
-            employee_data.append(new_payslip)
+            data = calculate_payroll(employee, start_cut_off, end_cut_off, 
+                                 total_regular_hours=float(new_payslip.total_regular_hours) if new_payslip is not None else 0,
+                                 total_pre_ot_hours=float(new_payslip.pre_ot_hours) if new_payslip is not None else 0,
+                                 total_post_ot_hours=float(new_payslip.post_ot_hours) if new_payslip is not None else 0,
+                                 allowance=float(new_payslip.allowance) if new_payslip.allowance is not None else employee.allowance)
+            
+            data['status'] = new_payslip.status
+            employee_data.append(data)
 
             db.session.commit()
         else:
@@ -168,7 +175,7 @@ def cut_off(start_cut_off, end_cut_off):
             
             data['status'] = employee_payslip.status.value
             employee_data.append(data)
-          
+
     return render_template('cut_off.html', employee_data=employee_data)
 
 
@@ -209,8 +216,7 @@ def individual_payroll(employee_id, start_cut_off, end_cut_off):
     edit_payslip.pre_ot_hours.data = data['pre_ot_hours']
     edit_payslip.post_ot_hours.data = data['post_ot_hours']
     edit_payslip.allowance.data = data['allowance']
-
-
+   
     if request.method == 'POST':
         if request.args.get('req') == 'edit':
             edit_payslip = EditPayslipForm(request.form)
@@ -221,7 +227,7 @@ def individual_payroll(employee_id, start_cut_off, end_cut_off):
                 employee_payslip.pre_ot_hours = edit_payslip.pre_ot_hours.data
                 employee_payslip.post_ot_hours = edit_payslip.post_ot_hours.data
                 employee_payslip.allowance = edit_payslip.allowance.data
-
+ 
                 db.session.commit()
 
                 flash('Edit Success', category='warning')

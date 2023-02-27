@@ -197,7 +197,7 @@
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.salary_rate.label() }}</strong>
                 
-                <select id="salary_rate" name="salary_rate" class="form-control">
+                <select id="salary_rate" name="salary_rate" class="form-control" required>
                   <option value="">Select Salary</option>
                   {% for salary in salaries %}
                   <option value="{{ salary.id }}">

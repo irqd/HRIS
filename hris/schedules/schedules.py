@@ -108,8 +108,16 @@ def edit_schedule(employee_id, employee_name):
             
             start_shift = datetime.strptime(edit_schedule_modal.start_shift.data, "%H:%M")
             end_shift = datetime.strptime(edit_schedule_modal.end_shift.data, "%H:%M")
-            checked_in = datetime.strptime(edit_schedule_modal.checked_in.data, "%H:%M")
-            checked_out = datetime.strptime(edit_schedule_modal.checked_out.data, "%H:%M")
+
+            try:
+                checked_in = datetime.strptime(edit_schedule_modal.checked_in.data, "%H:%M")
+            except:
+                checked_in = None
+
+            try:
+                checked_out = datetime.strptime(edit_schedule_modal.checked_out.data, "%H:%M")
+            except:
+                checked_out = None
 
             if start_shift > end_shift:
                 flash('Starting shift must not exceed the ending shift!', category='danger')

@@ -48,12 +48,12 @@ def profile():
     if request.method == 'GET':
         selected_employee = db.session.query(Users, EmployeeInfo, EmploymentInfo, Positions, Departments)\
             .join(EmploymentInfo).join(Users).join(Positions).join(Departments)\
-            .filter(EmployeeInfo.id == current_user.id).first()
+            .filter(EmployeeInfo.id == current_user.employee_id).first()
 
         salaries = db.session.query(Salaries).all()
 
         user, employee_info, employment_info, position, department = selected_employee
-
+        
         employee_form = EmployeeForm(
             #users
             image_path = user.image_path,
@@ -158,6 +158,6 @@ def account_settings(employee_id):
             return redirect(url_for('profile_bp.account_settings', employee_id=employee_id))
     if request.method == 'GET':  
         account_form = AccountForm()
-        selected_employee = Users.query.filter_by(employee_id = current_user.id).first()      
+        selected_employee = Users.query.filter_by(employee_id = current_user.employee_id).first()      
         return render_template('account_settings.html', selected_employee=selected_employee, account_form=account_form)
     

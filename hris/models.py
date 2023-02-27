@@ -284,6 +284,7 @@ class Attendance(db.Model):
                return regular_hours
       else:
          return self.total_hours
+      
           
    @hybrid_property
    def pre_ot_hours(self):
@@ -311,7 +312,7 @@ class Attendance(db.Model):
          return round(time_diff.total_seconds() / 3600, 2)
       else:
          return None
-   
+      
 class Leave(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)

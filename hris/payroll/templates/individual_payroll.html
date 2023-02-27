@@ -1,10 +1,10 @@
 {% extends 'main.html' %} 
 {% set active_page = "payroll" %} 
 {% block nav_contents %}
-<div class="container">
-  <div class="row mt-3 mb-3">
-    <div class="col-12">
-      <h4 class="shadow border p-3 rounded">
+<div class="container-fluid">
+  <div class="row mt-3 mb-3 ">
+    <div class="col-12 text-wrap">
+      <h4 class="shadow border p-3 rounded mx-auto">
         <a href="{{ url_for('payroll_bp.payroll') }}" class="text-dark"
           >Payroll</a> >
           <a href="{{ url_for('payroll_bp.cut_off', start_cut_off=data.start_cut_off, end_cut_off=data.end_cut_off) }}" class="text-dark"
@@ -13,6 +13,14 @@
       </h4>
     </div>
   </div>
+
+  <!--nav aria-label="breadcrumb">
+    <ol class="breadcrumb shadow border p-3 rounded mx-auto">
+      <li class="breadcrumb-item"><a href="{{ url_for('payroll_bp.payroll') }}" class="text-dark font-weight-bold">Payroll</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('payroll_bp.cut_off', start_cut_off=data.start_cut_off, end_cut_off=data.end_cut_off) }}" class="text-dark font-weight-bold">Cut Off</a></li>
+      <li class="breadcrumb-item text-dark font-weight-bold active" aria-current="page">{{ data.employee_name }}</li>
+    </ol>
+  </nav-->
 
   <div class="row">
     <div class="col-12">

@@ -21,4 +21,5 @@ class EditPayslipForm(FlaskForm):
    pre_ot_hours = FloatField(label='Pre OT Hours', validators=[DataRequired()])
    post_ot_hours = FloatField(label='Post OT Hours', validators=[DataRequired()])
    allowance = FloatField(label='Allowance', validators=[DataRequired()])
+
    edit = SubmitField(label='Edit')

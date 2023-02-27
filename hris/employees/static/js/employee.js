@@ -1,3 +1,22 @@
+$("#datepicker").datepicker({
+  uiLibrary: "bootstrap4",
+  format: "yyyy-mm-dd",
+});
+
+
+$("#datepicker2").datepicker({
+  uiLibrary: "bootstrap4",
+  format: "yyyy-mm-dd",
+});
+
+$("#datepicker3").datepicker({
+  uiLibrary: "bootstrap4",
+  format: "yyyy-mm-dd",
+});
+
+// ------------------------------------------------------------------------------------//
+
+
 const password = document.querySelector("#password");
 const confirmPassword = document.querySelector("#confirmpassword");
 const passwordValidation = document.querySelector("#password-validation");
@@ -24,23 +43,6 @@ confirmPassword.addEventListener("input", function () {
 });
 
 // ------------------------------------------------------------------------------------//
-
-$("#datepicker").datepicker({
-   uiLibrary: "bootstrap4",
-   format: "yyyy-mm-dd",
- });
-
- $("#datepicker2").datepicker({
-   uiLibrary: "bootstrap4",
-   format: "yyyy-mm-dd",
- });
-
- $("#datepicker3").datepicker({
-   uiLibrary: "bootstrap4",
-   format: "yyyy-mm-dd",
- });
-
- // ------------------------------------------------------------------------------------//
 
 const customFileInput = document.querySelector("#imageFile");
 const customFileLabel = document.querySelector(".custom-file-label");

@@ -248,3 +248,18 @@ html {
   background-color: #f5f5f5;
   border-radius: 1em;
 }
+
+
+/* Custom style for changing separator  */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  color: black;
+}
+
+.breadcrumb {
+  background-color: white;
+  font-weight: bold;
+}
+
+
+

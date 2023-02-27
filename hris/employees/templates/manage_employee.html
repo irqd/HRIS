@@ -76,7 +76,7 @@
                   <div class="form-row">
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.mobile.label() }}</strong>
-                        {{ manage_employee.mobile(class="form-control", id="datepicker") }}
+                        {{ manage_employee.mobile(class="form-control") }}
                      </div>
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.email.label() }}</strong>
@@ -94,7 +94,7 @@
                   <div class="form-row">
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.tin.label() }}</strong>
-                        {{ manage_employee.tin(class="form-control", id="datepicker") }}
+                        {{ manage_employee.tin(class="form-control") }}
                      </div>
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.sss.label() }}</strong>
@@ -114,7 +114,7 @@
                   <div class="form-row"> 
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.emergency_name.label() }}</strong>
-                        {{ manage_employee.emergency_name(class="form-control", id="datepicker") }}
+                        {{ manage_employee.emergency_name(class="form-control") }}
                      </div>
                      <div class="form-outline mb-1 mt-1 col">
                         <strong>{{ manage_employee.emergency_contact.label() }}</strong>
@@ -214,6 +214,9 @@
 
 {% block javascripts_local %}
 {{ super()}}
+
+<script src="{{ url_for('employees_bp.static', filename='js/employee.js')}}"></script>
+
 <script>
    const form = document.querySelector('form');
    const switchButton = document.getElementById('switch');
@@ -230,7 +233,7 @@
 <script >
    const departmentSelect = document.querySelector('#department');
    const positionSelect = document.querySelector('#positions');
-   console.log(departmentSelect)
+   //console.log(departmentSelect)
    positionSelect.innerHTML = '<option value="">Select Department First</option>';
 
    window.addEventListener('load', function() {
