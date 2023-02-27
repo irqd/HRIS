@@ -11,8 +11,8 @@
                <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a>
             </h4>
             
-            <div class="d-flex align-items-end flex-column bd-highlight mt-3 pr-3">
-               <a class="btn btn-outline-success shadow" href="{{ url_for('departments_bp.add_department') }}">
+            <div class="d-flex align-items-end flex-column bd-highlight pr-3">
+               <a class="btn btn-outline-success shadow mt-3 " href="{{ url_for('departments_bp.add_department') }}">
                   <i class="fa-solid fa-user-plus"></i> <u>Add Department</u>
                </a>
             </div>
@@ -51,11 +51,11 @@
                            </td>
                            <td>
                               {% include 'modals/delete_department_modal.html' %}
-                              <div align="center">
+                              <div align="center ">
                                  <a href="{{ url_for('departments_bp.manage_department', department_id=department.id) }}" class="btn btn-outline-success shadow">
                                     <i class="fa-solid fa-eye"></i>
                                  </a>
-                                 <button class="btn mt-1 btn-outline-danger shadow" data-toggle="modal" data-target="#delete_department_{{ department.id }}">
+                                 <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_department_{{ department.id }}">
                                     <i class="fa-solid fa-trash"></i>
                                  </button>
                                  

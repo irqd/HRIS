@@ -49,15 +49,21 @@ def home():
     this_month_announcements = [announcement for announcement in announcements if announcement.date_created >= start_of_month and announcement.date_created <= today]
 
     test = holidays.CountryHoliday("PH", years=[datetime.now().year])
-    current_month = datetime.now().month
-    events = [(date.isoformat(), name) for date, name in test.items() if date.month == current_month]
     
-   
+    current_month = datetime.now().month
+    
+    # Events this month
+    events_this_month = [(date.isoformat(), name) for date, name in test.items() if date.month == current_month]
+    
+    # Events next month
+    events_next_month = [(date.isoformat(), name) for date, name in test.items() if date.month == current_month+1]
+
     return render_template('home.html', statistics=statistics,
                                         today_announcements=today_announcements, 
                                         this_week_announcements=this_week_announcements,
                                         this_month_announcements=this_month_announcements,
-                                        events=events)
+                                        events_this_month=events_this_month,
+                                        events_next_month=events_next_month)
 
 
 

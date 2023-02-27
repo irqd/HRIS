@@ -313,6 +313,7 @@ class Attendance(db.Model):
       else:
          return None
       
+
 class Leave(db.Model):
    #Primary Key
    id = db.Column(db.Integer(), primary_key=True)

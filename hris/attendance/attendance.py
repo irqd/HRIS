@@ -24,7 +24,7 @@ def get_attendance():
             if not schedule.checked_in and not schedule.checked_out:
                 # mark attendance_type as Absent
                 schedule.attendance_type = 'Absent'
-            
+                
     db.session.commit()
 
     schedules = [{'id': schedule.id,

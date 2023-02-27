@@ -120,7 +120,10 @@
       <div class="col-4">
          <div class="p-3 shadow rounded" style="height: 100vh;">
             <h3 class="shadow p-3 rounded text-center">Upcoming Holidays</h3>
-            {% for event in events %}
+            <h6 class="pt-3 text-center">This Month</h6><hr>
+
+            {% if events_this_month  %}
+            {% for event in events_this_month %}
                <div class="border p-2 rounded mt-3">
                   <h6>
                      {{ event[0] }}:
@@ -130,6 +133,28 @@
                   </strong>
                </div>
             {% endfor %}
+            {% else %}
+            <h6 class="pt-3 text-center">Next Month</h6><hr>
+            <h6 class="text-center">No Holidays This Month</h6>
+            {% endif %}
+            <br>
+
+            {% if events_next_month %}
+            <h6 class="pt-3 text-center">Next Month</h6><hr>
+            {% for event in events_next_month %}
+               <div class="border p-2 rounded mt-3">
+                  <h6>
+                     {{ event[0] }}:
+                  </h6>
+                  <strong class="pl-3">
+                     -{{ event[1] }}
+                  </strong>
+               </div>
+            {% endfor %}
+            {% else %}
+            <h6 class="pt-3 text-center">Next Month</h6><hr>
+            <h6 class="text-center">No Holidays Next Month</h6>
+            {% endif %}
          </div>
       </div>
    </div>

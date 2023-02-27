@@ -12,7 +12,7 @@
             </h4>
 
             <div class="d-flex pr-3 justify-content-end">
-               <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('employees_bp.add_employee') }}">
+               <a class="btn btn-outline-success mt-3 shadow" href="{{ url_for('employees_bp.add_employee') }}">
                   <i class="fa-solid fa-user-plus"></i> <u>Add Employee</u>
                </a>
             </div>       
@@ -64,13 +64,13 @@
                            <td>
                               {{ "{:.2f}".format(employee.daily_rate) }}
                            </td>
-                           <td>
+                           <td style="width: 13%">
                               {% include 'modals/delete_employee_modal.html' %}
                               <div align="center">
                                  <a href="{{ url_for('employees_bp.manage_employee', employee_name=employee.last_name ,employee_id=employee.id) }}" class="btn btn-outline-success shadow">
                                     <i class="fa-solid fa-eye"></i>
                                  </a>
-                                 <button class="btn mt-1 btn-outline-danger shadow" data-toggle="modal" data-target="#delete_employee_{{ employee.id }}">
+                                 <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_employee_{{ employee.id }}">
                                     <i class="fa-solid fa-trash"></i>
                                  </button>
                                  

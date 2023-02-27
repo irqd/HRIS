@@ -165,25 +165,34 @@ def accept_leave_request(employee_id, employee_name):
             attendance = Attendance.query.filter_by(date=leave.leave_date, 
                                                     employee_id=employee_id).first()
             
-            if attendance.attendance_type.value is not 'Unavailable':
-                attendance.checked_out = datetime.now().strftime('%H:%M:%S')
-                attendance.status = 'Approved'
+            if attendance:
+                if attendance.attendance_type.value is not 'Unavailable':
+                    attendance.checked_out = datetime.now().strftime('%H:%M:%S')
+                    attendance.status = 'Approved'
 
-                leave.status = 'Approved'
-                leave.processed_date = datetime.now().strftime('%Y-%m-%d')
-                leave.processed_by = current_user.name
+                    leave.status = 'Approved'
+                    leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                    leave.processed_by = current_user.name
 
-                db.session.commit()
+                    db.session.commit()
 
-                flash(f'Leave request during work hours accepted for {leave.leave_date}', category='success')
-                
+                    flash(f'Leave request during work hours accepted for {leave.leave_date}', category='success')
+                else:
+                    attendance.checked_out = None
+                    attendance.checked_out = None
+                    attendance.attendance_type = 'On_Leave'
+                    attendance.status = 'Approved'
+
+                    leave.status = 'Approved'
+                    leave.processed_date = datetime.now().strftime('%Y-%m-%d')
+                    leave.processed_by = current_user.name
+
+                    db.session.commit()
+                    flash(f'Leave request during non-working hours accepted for {leave.leave_date}', category='success')
             else:   
                 leave.status = 'Approved'
                 leave.processed_date = datetime.now().strftime('%Y-%m-%d')
                 leave.processed_by = current_user.name
-
-                attendance.attendance_type = 'On_Leave'
-                attendance.status = 'Approved'
 
                 db.session.commit()
 

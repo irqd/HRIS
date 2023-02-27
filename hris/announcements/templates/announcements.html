@@ -18,10 +18,14 @@
                <a href="{{ url_for('announcement_bp.announcements') }}" class="text-dark">Announcements</a>
             </h4>
             {% include 'modals/add_announcement_modal.html' %}
-            <button class="btn btn-outline-success mt-3 mb-3 shadow" data-toggle="modal"
+            
+            <div class="d-flex align-items-end flex-column bd-highlight pr-3">
+               <button class="btn btn-outline-success mt-3 shadow" data-toggle="modal"
                data-target="#add_announcement_{{ current_user.id }}">
                <i class="fa-solid fa-user-plus"></i> <u> Add Announcement</u>
             </button>
+            </div>
+            
          </div>
       </div>
 
