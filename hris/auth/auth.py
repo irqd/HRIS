@@ -1,8 +1,8 @@
-from hris.models import *
-from hris.auth.forms import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import login_required, current_user, login_user, logout_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 
+from hris.auth.forms import *
+from hris.models import *
 
 auth_bp = Blueprint('auth_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')

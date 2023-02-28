@@ -7,7 +7,7 @@ Login Page
    <div class="row">
       <div class="col-6">
          <img src="{{ url_for('static',filename='images/logo.png') }}" class="img-fluid" alt="Company logo"
-         style="width:200px; margin-left: 60px;">
+            style="width:200px; margin-left: 60px;">
          <h1>[Company Name]</h1>
          <h1>HRIS</h1>
          <div align="left">
@@ -41,21 +41,19 @@ Login Page
             <!-- Submit button -->
             <div align="center">
                <button type="submit" class="btn btn-outline-primary mb-4" >Sign in</button>
-            </div>  
-         </form>      
+            </div>
+         </form>
       </div>
-      
    </div>
 </div>
 </div>
 {% endblock %}
-
 {% block javascripts_local %}
-  {{ super() }} {# to load the parent assets #}
-  <script>
-    function password_show() {
-        var passInput = document.getElementById("passwordInputForm");
-        passInput.type = passInput.type === "password" ? "text" : "password";
-      }
-  </script>
+{{ super() }} {# to load the parent assets #}
+<script>
+   function password_show() {
+       var passInput = document.getElementById("passwordInputForm");
+       passInput.type = passInput.type === "password" ? "text" : "password";
+     }
+</script>
 {% endblock %}

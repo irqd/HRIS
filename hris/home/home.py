@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import login_required, current_user
-from hris.models import *
-from sqlalchemy import or_
 from collections import Counter
 from datetime import datetime, timedelta
+
 import holidays
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
+from sqlalchemy import or_
+
+from hris.models import *
 
 home_bp = Blueprint('home_bp', __name__, template_folder='templates',
     static_folder='static', static_url_path='/home/static')

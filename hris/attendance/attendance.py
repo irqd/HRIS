@@ -1,9 +1,12 @@
-from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
-from flask_login import login_required, current_user
-from .forms import *
 from datetime import datetime, timedelta
 
+from flask import (Blueprint, flash, jsonify, redirect, render_template,
+                   request, url_for)
+from flask_login import current_user, login_required
+
+from hris.models import *
+
+from .forms import *
 
 attendance_bp = Blueprint('attendance_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='attendance/static')

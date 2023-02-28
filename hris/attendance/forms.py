@@ -1,9 +1,11 @@
-from flask_wtf import FlaskForm
 import re
-from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
-                     EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
-from wtforms.validators import (DataRequired, Email, EqualTo,
-                              Length, ValidationError, InputRequired, Regexp)
+
+from flask_wtf import FlaskForm
+from wtforms import (DateField, EmailField, FileField, FormField, HiddenField,
+                     PasswordField, SelectField, StringField, SubmitField,
+                     TextAreaField, TimeField, validators)
+from wtforms.validators import (DataRequired, Email, EqualTo, InputRequired,
+                                Length, Regexp, ValidationError)
 
 
 class CheckInForm(FlaskForm):

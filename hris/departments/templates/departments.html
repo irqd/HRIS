@@ -1,80 +1,74 @@
 {% extends 'main.html' %}
 {% set active_page = "departments" %}
-
-
 {% block nav_contents %}   
-   <div class="container">
-      <!-- add department button and other infos-->
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <h4 class="shadow border p-3 rounded">
-               <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a>
-            </h4>
-            
-            <div class="d-flex align-items-end flex-column bd-highlight pr-3">
-               <a class="btn btn-outline-success shadow mt-3 " href="{{ url_for('departments_bp.add_department') }}">
-                  <i class="fa-solid fa-house-chimney-medical"></i> <u> Add Department</u>
-               </a>
-            </div>
-         </div>
-      </div>
-
-      <div class="row">
-         <!-- data table here -->
-         <div class="col-12">
-            <div class="shadow p-4 rounded">
-               <table id="departments" class="table table-striped table-bordered" style="width:100%" >
-                  <thead>
-                     <tr class="shadow"> 
-                        <th>Department Name</th>
-                        <th>Manager</th>
-                        <th>Description</th>
-                        <th>Date Created</th>
-                        <th>Actions</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {% if departments %}
-                     {% for department in departments %}
-                     <tr>
-                           <td>
-                              {{ department.department_name }}
-                           </td>
-                           <td>
-                              {{ department.manager }}
-                           </td>
-                           <td>
-                              {{ department.description }}
-                           </td>
-                           <td>
-                              {{ department.date_created }}
-                           </td>
-                           <td style="width: 13%">
-                              {% include 'modals/delete_department_modal.html' %}
-                              <div align="center ">
-                                 <a href="{{ url_for('departments_bp.manage_department', department_id=department.id) }}" class="btn btn-outline-success shadow">
-                                    <i class="fa-solid fa-eye"></i>
-                                 </a>
-                                 <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_department_{{ department.id }}">
-                                    <i class="fa-solid fa-trash"></i>
-                                 </button>
-                                 
-                              </div>
-                           </td>
-                     </tr>
-                     {% endfor %}
-                     {% endif %}
-                  </tbody>
-               </table>
-            </div>
+<div class="container">
+   <!-- add department button and other infos-->
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a>
+         </h4>
+         <div class="d-flex align-items-end flex-column bd-highlight pr-3">
+            <a class="btn btn-outline-success shadow mt-3 " href="{{ url_for('departments_bp.add_department') }}">
+            <i class="fa-solid fa-house-chimney-medical"></i> <u> Add Department</u>
+            </a>
          </div>
       </div>
    </div>
-   {% endblock %}
-
-   {% block javascripts_local %}
-   {{ super() }}
-   <script>
+   <div class="row">
+      <!-- data table here -->
+      <div class="col-12">
+         <div class="shadow p-4 rounded">
+            <table id="departments" class="table table-striped table-bordered" style="width:100%" >
+               <thead>
+                  <tr class="shadow">
+                     <th>Department Name</th>
+                     <th>Manager</th>
+                     <th>Description</th>
+                     <th>Date Created</th>
+                     <th>Actions</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% if departments %}
+                  {% for department in departments %}
+                  <tr>
+                     <td>
+                        {{ department.department_name }}
+                     </td>
+                     <td>
+                        {{ department.manager }}
+                     </td>
+                     <td>
+                        {{ department.description }}
+                     </td>
+                     <td>
+                        {{ department.date_created }}
+                     </td>
+                     <td style="width: 13%">
+                        {% include 'modals/delete_department_modal.html' %}
+                        <div align="center ">
+                           <a href="{{ url_for('departments_bp.manage_department', department_id=department.id) }}" class="btn btn-outline-success shadow">
+                           <i class="fa-solid fa-eye"></i>
+                           </a>
+                           <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_department_{{ department.id }}">
+                           <i class="fa-solid fa-trash"></i>
+                           </button>
+                        </div>
+                     </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block javascripts_local %}
+{{ super() }}
+<script>
    $(document).ready(function () {
       $('#departments').DataTable(
          {
@@ -86,5 +80,5 @@
       );
    });
       
-   </script>
+</script>
 {% endblock %}

@@ -3,10 +3,10 @@
    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
          <div class="modal-header">
-         <h5 class="modal-title">Time Check</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title">Time Check</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-         </button>
+            </button>
          </div>
          <div class="modal-body">
             <h3 id="date_to_check_time" align="center" class="text-center shadow p-3 rounded"></h3>
@@ -19,7 +19,6 @@
                      {{ check_in.submit(class="btn btn-outline-success shadow", onclick="setCheckInTime()")}}
                   </form>
                </div>
-
                <div class="form-outline mb-1 mt-1 col pt-2">
                   {{ check_out.hidden_tag() }}
                   <form action="{{ url_for('attendance_bp.check_out', employee_id=current_user.id) }}" method="post" id="check_out_form">
@@ -29,13 +28,11 @@
                   </form>
                </div>
             </div>
-               
             <input type="hidden" name="employee_id" value="{{ current_user.id }}">
          </div>
          <div class="modal-footer">
-         <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
-         
-         <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+            <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
+            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
          </div>
       </div>
    </div>

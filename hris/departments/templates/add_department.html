@@ -1,60 +1,55 @@
 {% extends 'main.html' %}
 {% set active_page = "departments" %}
-
 {% block nav_contents %}
-   <div class="container">
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <h4 class="shadow border p-3 rounded">
-               <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
-               <a href="#" class="text-dark">Add Department</a>
-            </h4>
-         </div>
-      </div>
-
-      <div class="row mt-3 mb3">
-         <div class="col-12">
-            <form action="" method="post" autocomplete="off">
-               <fieldset>
-                  {{ add_department.hidden_tag() }}
-                  <div class="shadow rounded p-4">
-                     <h4 class="mt-2">Department Profile</h4><hr>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ add_department.department_name.label() }}</strong>
-                           {{ add_department.department_name(class="form-control") }}
-                        </div>
-
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ add_department.manager.label() }}</strong>
-                           {{ add_department.manager(class="form-control", disabled="disabled") }}
-                        </div>
-                     </div>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col">
-                           <strong>{{ add_department.description.label() }}</strong>
-                           {{ add_department.description(class="form-control") }}
-                        </div>
-                     </div>
-                  </div><br>
-
-                  <div class="pb-5">
-                     <button class="btn btn-outline-success mt-3 shadow" type="submit">
-                        <i class="fa-solid fa-check"></i> <u>Submit</u>
-                     </button>
-         
-                     <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('departments_bp.departments') }}">
-                        <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                     </a>
-                  </div>
-               </fieldset>
-            </form>
-         </div>
+<div class="container">
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
+            <a href="#" class="text-dark">Add Department</a>
+         </h4>
       </div>
    </div>
+   <div class="row mt-3 mb3">
+      <div class="col-12">
+         <form action="" method="post" autocomplete="off">
+            <fieldset>
+               {{ add_department.hidden_tag() }}
+               <div class="shadow rounded p-4">
+                  <h4 class="mt-2">Department Profile</h4>
+                  <hr>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ add_department.department_name.label() }}</strong>
+                        {{ add_department.department_name(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ add_department.manager.label() }}</strong>
+                        {{ add_department.manager(class="form-control", disabled="disabled") }}
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ add_department.description.label() }}</strong>
+                        {{ add_department.description(class="form-control") }}
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="pb-5">
+                  <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                  <i class="fa-solid fa-check"></i> <u>Submit</u>
+                  </button>
+                  <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('departments_bp.departments') }}">
+                  <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                  </a>
+               </div>
+            </fieldset>
+         </form>
+      </div>
+   </div>
+</div>
 {% endblock %}
-
 {% block javascripts_local %}
 {{ super() }}
-
 {% endblock %}

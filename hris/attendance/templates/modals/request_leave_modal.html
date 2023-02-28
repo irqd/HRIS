@@ -5,10 +5,10 @@
          <div class="modal-content">
             {{ request_leave.hidden_tag() }}
             <div class="modal-header">
-            <h5 class="modal-title">Leave Request</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <h5 class="modal-title">Leave Request</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
-            </button>
+               </button>
             </div>
             <div class="modal-body">
                <div class="form-row">
@@ -17,13 +17,11 @@
                      {{ request_leave.type(class="form-control") }}
                   </div>
                </div>
-               
                <div class="form-row">
                   <div class="form-outline mb-1 mt-1 col">
                      {{ request_leave.start_date.label() }}
                      {{ request_leave.start_date(class="form-control", id="start_date_leave") }}
                   </div>
-
                   <div class="form-outline mb-1 mt-1 col">
                      {{ request_leave.end_date.label() }}
                      {{ request_leave.end_date(class="form-control", id="end_date_leave") }}
@@ -31,9 +29,9 @@
                </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
-            {{ request_leave.submit(class="btn btn-outline-info shadow") }}
-            <!--a href="#" class="btn btn-outline-danger">Delete</a-->
+               <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
+               {{ request_leave.submit(class="btn btn-outline-info shadow") }}
+               <!--a href="#" class="btn btn-outline-danger">Delete</a-->
             </div>
          </div>
       </form>

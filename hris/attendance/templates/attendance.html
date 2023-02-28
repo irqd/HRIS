@@ -3,163 +3,156 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ url_for('attendance_bp.static',filename='css/index.css') }}" />
 {% endblock %}
-
 {% block nav_contents %}
 <div class="container">
-  <div class="row mt-3 mb-3">
-    <div class="col-12">
-      <h4 class="shadow border p-3 rounded">
-        <a href="{{ url_for('attendance_bp.attendance') }}" class="text-dark">Attendance</a>
-      </h4>
-      {% include 'modals/request_leave_modal.html' %}
-      <div class="d-flex justify-content-end pr-3">
-        <button class="btn btn-outline-success mt-3 shadow" data-toggle="modal"
-        data-target="#request_leave_{{ current_user.id }}">
-        <i class="fa-solid fa-person-walking-arrow-right"></i> <u> Request Leave</u>
-        </button>
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('attendance_bp.attendance') }}" class="text-dark">Attendance</a>
+         </h4>
+         {% include 'modals/request_leave_modal.html' %}
+         <div class="d-flex justify-content-end pr-3">
+            <button class="btn btn-outline-success mt-3 shadow" data-toggle="modal"
+               data-target="#request_leave_{{ current_user.id }}">
+            <i class="fa-solid fa-person-walking-arrow-right"></i> <u> Request Leave</u>
+            </button>
+         </div>
       </div>
-      
-    </div>
-  </div>
-
-  <div class="row mt-3 mb-3">
-    <div class="col-12">
-      {% include 'modals/update_attendance_modal.html' %}
-      <div class="shadow rounded p-4">
-        <div id="attendance" class=""></div>
+   </div>
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         {% include 'modals/update_attendance_modal.html' %}
+         <div class="shadow rounded p-4">
+            <div id="attendance" class=""></div>
+         </div>
       </div>
-    </div>
-  </div>
+   </div>
 </div>
 {% endblock %}
-
 {% block javascripts_local %}
 {{ super() }}
-
 <script src="{{ url_for('attendance_bp.static', filename='js/attendance.js')}}"></script>
 <script>
-
-  $("#start_date_leave").datepicker({
-    uiLibrary: "bootstrap4",
-    format: "yyyy-mm-dd",
-    minDate: moment(),
-    defaultDate: moment(),
-    disableDates:  function (date) {
-      const currentDate = new Date().setHours(0,0,0,0);
-      return date.setHours(0,0,0,0) >= currentDate ? true : false;
-    }
-  });
-  
-  $("#end_date_leave").datepicker({
-    uiLibrary: "bootstrap4",
-    format: "yyyy-mm-dd",
-    disableDates:  function (date) {
-      const currentDate = new Date().setHours(0,0,0,0);
-      return date.setHours(0,0,0,0) >= currentDate ? true : false;
-    }
-  });
- 
-  $('#request_leave_{{ current_user.id }}').on('hidden.bs.modal', function () {
-    $(this).find('form').trigger('reset');
-    });
-
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const calendarEl = document.getElementById("attendance");
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      themeSystem: "bootstrap",
-      initialView: "dayGridMonth",
-      selectable: true,
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-      },
-      defaultDate: moment(),
-      navLinks: true, // can click day/week names to navigate views
-      selectable: true,
-      selectHelper: true,
-      eventLimit: true,
-      businessHours: true, // display business hours
-      eventSources: [
-        {
-          url: '/attendance/get_attendance?employee_id={{ current_user.id }}',
-          type: 'GET',
-          success: function (data) {
-            const events = data.map(item => ({
-              id: item.id,
-              title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")} ${item.attendance_type}-${item.status}`,
-              start: moment(item.date, "YY/MM/DD").toDate(),
-              end: moment(item.date, "YY/MM/DD").toDate(),
-              start_shift: moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
-              end_shift: moment(item.end_shift, "HH:mm:ss").format("H:mm"),
-              type: item.attendance_type,
-              allDay: true,
-              color: item.attendance_type === 'Present' ? '#28a745' : //success
-                item.attendance_type === 'Absent' ? '#dc3545' : //danger
-                  item.attendance_type === 'Unavailable' ? '#d9e2ef' : //secondary
-                    item.attendance_type === 'Late' ? '#ffc107' : //warning
-                      item.attendance_type === 'On_Leave' ? '#17a2b8' : '#000000' //info
-            }));
-            return events;
-          }
-        },
-        {
-          url: '/attendance/get_leave_requests?employee_id={{ current_user.id }}',
-          type: 'GET',
-         
-          success: function (data) {
-            const events = data.map(item => ({
-              id: item.id,
-              title: `${item.type}-${item.status}`,
-              start: moment(item.leave_date, "YYYY-MM-DD").toDate(),
-              end: moment(item.leave_date, "YYYY-MM-DD").toDate(),
-              allDay: true,
-              color: item.status === 'Approved' ? '#28a745' : //success
-                item.status === 'Pending' ? '#ffc107' : //warning
-                item.status === 'Declined' ? '#dc3545' : '#000000' //danger
-            }));
-            return events;
-          }
-        }
-      ],
-
-      eventClick: function (arg) {
-        if (arg.event.source.url === "/attendance/get_attendance?employee_id={{ current_user.id }}") {
-          var today = moment().startOf('day');
-          var eventStartDate = moment(arg.event.start).startOf('day');
-          if (eventStartDate.isSame(today)) {
-            
-            if (arg.event.extendedProps.type != 'On_Leave'){
-              document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr;
-              document.getElementById('check_in_id').value = arg.event.id;
-              document.getElementById('check_out_id').value = arg.event.id;
-              $('#update_attendance_{{ current_user.id }}').modal('show');
-            }
-          } else {
-            return false;
-          }
-        }
-
-        if (arg.event.source.url === "/attendance/get_leave_requests?employee_id={{ current_user.id }}") {
-          console.log('Test')
-        }
-      },
-      selectAllow: function (selectInfo) {
-        return moment().isSame(selectInfo.start, 'd')
-      },
-      selectConstraint: {
-        start: '00:00',
-        end: '24:00',
-      },
-      eventConstraint: {
-        start: '00:00',
-        end: '24:00',
-      },
-
-    });
-    calendar.render();
-  });
+   $("#start_date_leave").datepicker({
+     uiLibrary: "bootstrap4",
+     format: "yyyy-mm-dd",
+     minDate: moment(),
+     defaultDate: moment(),
+     disableDates:  function (date) {
+       const currentDate = new Date().setHours(0,0,0,0);
+       return date.setHours(0,0,0,0) >= currentDate ? true : false;
+     }
+   });
+   
+   $("#end_date_leave").datepicker({
+     uiLibrary: "bootstrap4",
+     format: "yyyy-mm-dd",
+     disableDates:  function (date) {
+       const currentDate = new Date().setHours(0,0,0,0);
+       return date.setHours(0,0,0,0) >= currentDate ? true : false;
+     }
+   });
+   
+   $('#request_leave_{{ current_user.id }}').on('hidden.bs.modal', function () {
+     $(this).find('form').trigger('reset');
+     });
+   
+   
+   document.addEventListener("DOMContentLoaded", function () {
+     const calendarEl = document.getElementById("attendance");
+     const calendar = new FullCalendar.Calendar(calendarEl, {
+       themeSystem: "bootstrap",
+       initialView: "dayGridMonth",
+       selectable: true,
+       headerToolbar: {
+         left: "prev,next today",
+         center: "title",
+         right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+       },
+       defaultDate: moment(),
+       navLinks: true, // can click day/week names to navigate views
+       selectable: true,
+       selectHelper: true,
+       eventLimit: true,
+       businessHours: true, // display business hours
+       eventSources: [
+         {
+           url: '/attendance/get_attendance?employee_id={{ current_user.id }}',
+           type: 'GET',
+           success: function (data) {
+             const events = data.map(item => ({
+               id: item.id,
+               title: `${moment(item.start_shift, "HH:mm:ss a").format("HH:mm")}-${moment(item.end_shift, "HH:mm:ss").format("H:mm")} ${item.attendance_type}-${item.status}`,
+               start: moment(item.date, "YY/MM/DD").toDate(),
+               end: moment(item.date, "YY/MM/DD").toDate(),
+               start_shift: moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
+               end_shift: moment(item.end_shift, "HH:mm:ss").format("H:mm"),
+               type: item.attendance_type,
+               allDay: true,
+               color: item.attendance_type === 'Present' ? '#28a745' : //success
+                 item.attendance_type === 'Absent' ? '#dc3545' : //danger
+                   item.attendance_type === 'Unavailable' ? '#d9e2ef' : //secondary
+                     item.attendance_type === 'Late' ? '#ffc107' : //warning
+                       item.attendance_type === 'On_Leave' ? '#17a2b8' : '#000000' //info
+             }));
+             return events;
+           }
+         },
+         {
+           url: '/attendance/get_leave_requests?employee_id={{ current_user.id }}',
+           type: 'GET',
+          
+           success: function (data) {
+             const events = data.map(item => ({
+               id: item.id,
+               title: `${item.type}-${item.status}`,
+               start: moment(item.leave_date, "YYYY-MM-DD").toDate(),
+               end: moment(item.leave_date, "YYYY-MM-DD").toDate(),
+               allDay: true,
+               color: item.status === 'Approved' ? '#28a745' : //success
+                 item.status === 'Pending' ? '#ffc107' : //warning
+                 item.status === 'Declined' ? '#dc3545' : '#000000' //danger
+             }));
+             return events;
+           }
+         }
+       ],
+   
+       eventClick: function (arg) {
+         if (arg.event.source.url === "/attendance/get_attendance?employee_id={{ current_user.id }}") {
+           var today = moment().startOf('day');
+           var eventStartDate = moment(arg.event.start).startOf('day');
+           if (eventStartDate.isSame(today)) {
+             
+             if (arg.event.extendedProps.type != 'On_Leave'){
+               document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr;
+               document.getElementById('check_in_id').value = arg.event.id;
+               document.getElementById('check_out_id').value = arg.event.id;
+               $('#update_attendance_{{ current_user.id }}').modal('show');
+             }
+           } else {
+             return false;
+           }
+         }
+   
+         if (arg.event.source.url === "/attendance/get_leave_requests?employee_id={{ current_user.id }}") {
+           console.log('Test')
+         }
+       },
+       selectAllow: function (selectInfo) {
+         return moment().isSame(selectInfo.start, 'd')
+       },
+       selectConstraint: {
+         start: '00:00',
+         end: '24:00',
+       },
+       eventConstraint: {
+         start: '00:00',
+         end: '24:00',
+       },
+   
+     });
+     calendar.render();
+   });
 </script>
-
 {% endblock %}

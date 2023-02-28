@@ -1,85 +1,76 @@
 {% extends 'main.html' %}
 {% set active_page = "departments" %}
-
-
 {% block nav_contents %}
-   <div class="container">
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <h4 class="shadow border p-3 rounded">
-               <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
-               <a href="{{ url_for('departments_bp.manage_department', department_id=selected_department.id) }}" class="text-dark">{{ selected_department.department_name }}</a> >
-               <a href="#" class="text-dark">{{ manage_position.position_name.data }}</a> >
-               <a href="#" class="text-dark">Manage Position</a>
-            </h4>
-
-            <div>
-               <label class="switch mt-2 ml-2">
-                  <input type="checkbox" id="switch" class="primary">
-                  <span class="slider round"></span>
-               </label>
-            </div>
-         </div>
-
-      </div>
-
-      <div class="row mt-3">
-         <div class="col-12">
-            <form action="" method="post" autocomplete="off">
-               <fieldset disabled="disabled">
-                  {{ manage_position.hidden_tag() }}
-                  <div class="shadow rounded p-4">
-                     <h4 class="mt-2">Position Profile</h4><hr>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ manage_position.position_name.label() }}</strong>
-                           {{ manage_position.position_name(class="form-control") }}
-                        </div>
-
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ manage_position.position_status.label() }}</strong>
-                           <select name="position_status" id="status" class="form-control">
-                              <option value="">Select Position</option>
-                              {% for status in manage_position.position_status.choices %}
-                                 <option value="{{ status[0]}}" {% if status[1] == manage_position.position_status.data %} selected {% endif %}>{{status[1]}}</option>
-                              {% endfor %}
-                           </select>
-                        </div>
-                     </div>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col">
-                           <strong>{{ manage_position.description.label() }}</strong>
-                           {{ manage_position.description(class="form-control") }}
-                        </div>
-                     </div>
-                  </div><br>
-                  
-                  <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
-                     <div>
-                        <button class="btn btn-outline-success mt-3 shadow" type="submit">
-                           <i class="fa-solid fa-check"></i> <u>Edit</u>
-                        </button>
-            
-                        <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('departments_bp.departments') }}">
-                           <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                        </a>
-                     </div>
-                  </div>
-                  
-               </fieldset>
-            </form>
+<div class="container">
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
+            <a href="{{ url_for('departments_bp.manage_department', department_id=selected_department.id) }}" class="text-dark">{{ selected_department.department_name }}</a> >
+            <a href="#" class="text-dark">{{ manage_position.position_name.data }}</a> >
+            <a href="#" class="text-dark">Manage Position</a>
+         </h4>
+         <div>
+            <label class="switch mt-2 ml-2">
+            <input type="checkbox" id="switch" class="primary">
+            <span class="slider round"></span>
+            </label>
          </div>
       </div>
    </div>
+   <div class="row mt-3">
+      <div class="col-12">
+         <form action="" method="post" autocomplete="off">
+            <fieldset disabled="disabled">
+               {{ manage_position.hidden_tag() }}
+               <div class="shadow rounded p-4">
+                  <h4 class="mt-2">Position Profile</h4>
+                  <hr>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ manage_position.position_name.label() }}</strong>
+                        {{ manage_position.position_name(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ manage_position.position_status.label() }}</strong>
+                        <select name="position_status" id="status" class="form-control">
+                           <option value="">Select Position</option>
+                           {% for status in manage_position.position_status.choices %}
+                           <option value="{{ status[0]}}" {% if status[1] == manage_position.position_status.data %} selected {% endif %}>{{status[1]}}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_position.description.label() }}</strong>
+                        {{ manage_position.description(class="form-control") }}
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
+                  <div>
+                     <button class="btn btn-outline-success mt-3 shadow" type="submit">
+                     <i class="fa-solid fa-check"></i> <u>Edit</u>
+                     </button>
+                     <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('departments_bp.departments') }}">
+                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                     </a>
+                  </div>
+               </div>
+            </fieldset>
+         </form>
+      </div>
+   </div>
+</div>
 {% endblock %}
-
 {% block javascripts_local %}
 {{ super() }}
-
 <script>
    const form = document.querySelector('form');
    const switchButton = document.getElementById('switch');
-
+   
    switchButton.addEventListener('change', function(event) {
       if (switchButton.checked) {
          form.firstElementChild.removeAttribute('disabled');
@@ -88,5 +79,4 @@
       }
    });
 </script>
-
 {% endblock %}

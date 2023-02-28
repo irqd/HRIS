@@ -1,11 +1,14 @@
-from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from flask_login import login_required, current_user
-from sqlalchemy import or_, and_, func
-from datetime import datetime, timedelta, date
-from .forms import *
 import calendar
+from datetime import date, datetime, timedelta
 
+from flask import (Blueprint, flash, redirect, render_template, request,
+                   session, url_for)
+from flask_login import current_user, login_required
+from sqlalchemy import and_, func, or_
+
+from hris.models import *
+
+from .forms import *
 
 payroll_bp = Blueprint('payroll_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')

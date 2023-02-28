@@ -1,9 +1,11 @@
-from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
-from flask_login import login_required, current_user
-from sqlalchemy import or_, and_
-from hris.payroll import payroll
 import pdfkit
+from flask import (Blueprint, flash, make_response, redirect, render_template,
+                   request, url_for)
+from flask_login import current_user, login_required
+from sqlalchemy import and_, or_
+
+from hris.models import *
+from hris.payroll import payroll
 
 payslips_bp = Blueprint('payslips_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='payslips/static')
@@ -62,10 +64,12 @@ def download_payslip(start_cut_off, end_cut_off):
 
     response = make_response(pdf)
     
+    flash('Payslip downloaded successfully', category='success')
+    
     #set response headers
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename={employee_name}_{start_cut_off}_{end_cut_off}.pdf'
-
+        
     return response
 
 

@@ -1,143 +1,130 @@
 {% extends 'main.html' %}
 {% set active_page = "departments" %}
-
-
 {% block nav_contents %}
-   <div class="container">
-      <div class="row mt-3 mb-3">
-         <div class="col-12">
-            <h4 class="shadow border p-3 rounded">
-               <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
-               <a href="#" class="text-dark">{{ selected_department.department_name }}</a> >
-               <a href="#" class="text-dark">Manage Department</a>
-            </h4>
-
-            <div>
-               <label class="switch mt-2 ml-2">
-                  <input type="checkbox" id="switch" class="primary">
-                  <span class="slider round"></span>
-               </label>
-            </div>
-         </div>
-
-      </div>
-
-      <div class="row mt-3">
-         <div class="col-12">
-            <form action="" method="post" autocomplete="off">
-               <fieldset disabled="disabled">
-                  {{ manage_department.hidden_tag() }}
-                  <div class="shadow rounded p-4">
-                     <h4 class="mt-2">Department Profile</h4><hr>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ manage_department.department_name.label() }}</strong>
-                           {{ manage_department.department_name(class="form-control") }}
-                        </div>
-
-                        <div class="form-outline mb-1 mt-1 col-6">
-                           <strong>{{ manage_department.manager.label() }} (Please manually update employee's profile)</strong>
-                           <select name="manager" id="manager" class="form-control">
-                              <option value="">Select Manager</option>
-                              {% for manager in potential_managers %}
-                                 <option value="{{ manager.fullname }}">{{ manager.fullname }}</option>
-                              {% endfor %}     
-                           </select>
-                           
-                        </div>
-                     </div>
-                     <div class="form-row">
-                        <div class="form-outline mb-1 mt-1 col">
-                           <strong>{{ manage_department.description.label() }}</strong>
-                           {{ manage_department.description(class="form-control") }}
-                        </div>
-                     </div>
-                  </div><br>
-
-                  <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
-                     <div>
-                        <button class="btn btn-outline-success shadow" type="submit">
-                           <i class="fa-solid fa-check"></i> <u>Edit</u>
-                        </button>
-            
-                        <a class="btn btn-outline-danger shadow" href="{{ url_for('departments_bp.departments') }}">
-                           <i class="fa-solid fa-ban"></i> <u>Cancel</u>
-                        </a>
-                     </div>
-                  </div>
-                  
-               </fieldset>
-            </form>
-         </div>
-      </div>
-
-      <div class="row mb-3">
-         <div class="col-12">
-            <div class="shadow rounded p-4">
-               <h4 class="mt-2">Department Positions</h4><hr>
-               
-               <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
-                  <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('departments_bp.add_position', department_id=selected_department.id)}}">
-                     <i class="fa-solid fa-user-plus"></i> <u>Add Position</u>
-                  </a>
-               </div>
-            
-               <table id="positions" class="table table-striped table-bordered" style="width:100%" >
-                  <thead>
-                     <tr class="shadow"> 
-                        <th>Position Name</th>
-                        <th>Status</th>
-                        <th>Description</th>
-                        <th>Date Created</th>
-                        <th>Actions</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {% if positions %}
-                     {% for position in positions %}
-                     <tr>
-                           <td>
-                              {{ position.position_name }}
-                           </td>
-                           <td>
-                              {{ position.position_status.value }}
-                           </td>
-                           <td>
-                              {{ position.description }}
-                           </td>
-                           <td>
-                              {{ position.date_created }}
-                           </td>
-                           <td>
-                              {% include 'modals/delete_position_modal.html' %}
-                              <div align="center">
-                                 <a href="{{ url_for('departments_bp.manage_position', department_id=selected_department.id, position_id=position.id)}}" class="btn btn-outline-success shadow">
-                                    <i class="fa-solid fa-eye"></i>
-                                 </a>
-                                 <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_position_{{ position.id }}">
-                                    <i class="fa-solid fa-trash"></i>
-                                 </button>
-                                 
-                              </div>
-                           </td>
-                     </tr>
-                     {% endfor %}
-                     {% endif %}
-                  </tbody>
-               </table>
-            </div>
+<div class="container">
+   <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="{{ url_for('departments_bp.departments') }}" class="text-dark">Departments</a> >
+            <a href="#" class="text-dark">{{ selected_department.department_name }}</a> >
+            <a href="#" class="text-dark">Manage Department</a>
+         </h4>
+         <div>
+            <label class="switch mt-2 ml-2">
+            <input type="checkbox" id="switch" class="primary">
+            <span class="slider round"></span>
+            </label>
          </div>
       </div>
    </div>
+   <div class="row mt-3">
+      <div class="col-12">
+         <form action="" method="post" autocomplete="off">
+            <fieldset disabled="disabled">
+               {{ manage_department.hidden_tag() }}
+               <div class="shadow rounded p-4">
+                  <h4 class="mt-2">Department Profile</h4>
+                  <hr>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ manage_department.department_name.label() }}</strong>
+                        {{ manage_department.department_name(class="form-control") }}
+                     </div>
+                     <div class="form-outline mb-1 mt-1 col-6">
+                        <strong>{{ manage_department.manager.label() }} (Please manually update employee's profile)</strong>
+                        <select name="manager" id="manager" class="form-control">
+                           <option value="">Select Manager</option>
+                           {% for manager in potential_managers %}
+                           <option value="{{ manager.fullname }}">{{ manager.fullname }}</option>
+                           {% endfor %}     
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-outline mb-1 mt-1 col">
+                        <strong>{{ manage_department.description.label() }}</strong>
+                        {{ manage_department.description(class="form-control") }}
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
+                  <div>
+                     <button class="btn btn-outline-success shadow" type="submit">
+                     <i class="fa-solid fa-check"></i> <u>Edit</u>
+                     </button>
+                     <a class="btn btn-outline-danger shadow" href="{{ url_for('departments_bp.departments') }}">
+                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                     </a>
+                  </div>
+               </div>
+            </fieldset>
+         </form>
+      </div>
+   </div>
+   <div class="row mb-3">
+      <div class="col-12">
+         <div class="shadow rounded p-4">
+            <h4 class="mt-2">Department Positions</h4>
+            <hr>
+            <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
+               <a class="btn btn-outline-success mt-3 mb-3 shadow" href="{{ url_for('departments_bp.add_position', department_id=selected_department.id)}}">
+               <i class="fa-solid fa-user-plus"></i> <u>Add Position</u>
+               </a>
+            </div>
+            <table id="positions" class="table table-striped table-bordered" style="width:100%" >
+               <thead>
+                  <tr class="shadow">
+                     <th>Position Name</th>
+                     <th>Status</th>
+                     <th>Description</th>
+                     <th>Date Created</th>
+                     <th>Actions</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% if positions %}
+                  {% for position in positions %}
+                  <tr>
+                     <td>
+                        {{ position.position_name }}
+                     </td>
+                     <td>
+                        {{ position.position_status.value }}
+                     </td>
+                     <td>
+                        {{ position.description }}
+                     </td>
+                     <td>
+                        {{ position.date_created }}
+                     </td>
+                     <td>
+                        {% include 'modals/delete_position_modal.html' %}
+                        <div align="center">
+                           <a href="{{ url_for('departments_bp.manage_position', department_id=selected_department.id, position_id=position.id)}}" class="btn btn-outline-success shadow">
+                           <i class="fa-solid fa-eye"></i>
+                           </a>
+                           <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_position_{{ position.id }}">
+                           <i class="fa-solid fa-trash"></i>
+                           </button>
+                        </div>
+                     </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
 {% endblock %}
-
 {% block javascripts_local %}
 {{ super() }}
-
 <script>
    const form = document.querySelector('form');
    const switchButton = document.getElementById('switch');
-
+   
    switchButton.addEventListener('change', function(event) {
       if (switchButton.checked) {
          form.firstElementChild.removeAttribute('disabled');
@@ -146,7 +133,6 @@
       }
    });
 </script>
-
 <script>
    $(document).ready(function () {
       $('#positions').DataTable(

@@ -1,10 +1,11 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
-from os import path
-from flask_migrate import Migrate
 import os
+from os import path
+
+from flask import Flask
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -39,9 +40,9 @@ def create_app():
    from .payroll.payroll import payroll_bp
    from .payslips.payslips import payslips_bp
    from .profile.profile import profile_bp
-   from .schedules.schedules import schedules_bp
    from .salaries.salaries import salaries_bp
-   
+   from .schedules.schedules import schedules_bp
+
    #register Blueprints
    app.register_blueprint(home_bp, url_prefix='/')
    app.register_blueprint(auth_bp, url_prefix='/')

@@ -1,9 +1,12 @@
-from flask_wtf import FlaskForm
 import re
-from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
-                     EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField)
-from wtforms.validators import (DataRequired, Email, EqualTo,
-                              Length, ValidationError, InputRequired, Regexp, Optional)
+
+from flask_wtf import FlaskForm
+from wtforms import (DateField, EmailField, FileField, FormField, HiddenField,
+                     PasswordField, SelectField, StringField, SubmitField,
+                     TextAreaField, TimeField, validators)
+from wtforms.validators import (DataRequired, Email, EqualTo, InputRequired,
+                                Length, Optional, Regexp, ValidationError)
+
 from hris.models import *
 
 
@@ -12,7 +15,7 @@ class DeleteEmployeeModal(FlaskForm):
 
 class AccountForm(FlaskForm):
    image_path = FileField(label='Employee Picture', render_kw={'accept': 'image/*'}, validators=[Optional(), validators.regexp(u'([^\\s]+(\\.(?i)(jpe?g|png))$)')])
-   password1 = PasswordField(label='Password', validators=[Length(min=8), Optional()])
+   password1 = PasswordField(label='New Password', validators=[Length(min=8), Optional()])
    password2 = PasswordField(label='Confirm Password', validators=[EqualTo('password1'), Optional()])
 
 class EmployeeForm(FlaskForm):

@@ -8,7 +8,7 @@
    <div class="row mt-3 mb-3">
       <div class="col-12">
          <h4 class="shadow border p-3 rounded">
-            <a href="{{ url_for('profile_bp.profile')}}" class="text-dark"> {{ selected_employee.name }}</a> > 
+            <a href="{{ url_for('employees_bp.manage_employee', employee_name=employee_name, employee_id=employee_id) }}" class="text-dark"> {{ selected_employee.name }}</a> > 
             <a href="#" class="text-dark">Change Account Settings</a>
          </h4>
       </div>

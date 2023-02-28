@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, EmailField
+from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
+
 
 class LoginForm(FlaskForm):
    company_email = EmailField(label='Company Email: ', validators=[DataRequired()])

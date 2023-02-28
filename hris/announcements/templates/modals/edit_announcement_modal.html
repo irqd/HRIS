@@ -5,33 +5,30 @@
          {{ add_announcement.hidden_tag() }}
          <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Edit Announcement</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <h5 class="modal-title">Edit Announcement</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
-            </button>
+               </button>
             </div>
             <div class="modal-body">
                <div class="form-row">
                   <div class="form-outline mb-1 mt-1 col">
                      <strong>{{ add_announcement.title.label() }}</strong>
                      {{ add_announcement.title(class="form-control", value=announcement.title) }}
-                   </div>
-                   
+                  </div>
                   {{ add_announcement.announced_by(class="form-control", value=current_user.name, type='hidden') }}
                </div>
-
                <div class="form-row">
                   <div class="form-outline mb-1 mt-1 col">
                      <strong>{{ add_announcement.message.label() }}</strong>
                      <textarea class="form-control" id="message" name="message">{{ announcement.message }}</textarea>
-                   </div>
+                  </div>
                </div>
-
                <input type="hidden" name="announcement_id" value="{{ announcement.id }}">
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
-            {{ add_announcement.submit(class="btn btn-outline-success shadow") }}      
+               <button type="button" class="btn btn-outline-secondary shadow" data-dismiss="modal">Close</button>
+               {{ add_announcement.submit(class="btn btn-outline-success shadow") }}      
             </div>
          </div>
       </form>

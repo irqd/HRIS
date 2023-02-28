@@ -1,9 +1,12 @@
-from flask_wtf import FlaskForm
 import re
-from wtforms import (FileField, PasswordField, StringField, SubmitField, SelectField, 
-                     EmailField, DateField, validators, FormField, TimeField, TextAreaField, HiddenField, IntegerField, FloatField)
-from wtforms.validators import (DataRequired, Email, EqualTo,
-                              Length, ValidationError, InputRequired, Regexp, Optional)
+
+from flask_wtf import FlaskForm
+from wtforms import (DateField, EmailField, FileField, FloatField, FormField,
+                     HiddenField, IntegerField, PasswordField, SelectField,
+                     StringField, SubmitField, TextAreaField, TimeField,
+                     validators)
+from wtforms.validators import (DataRequired, Email, EqualTo, InputRequired,
+                                Length, Optional, Regexp, ValidationError)
 
 
 class DeclinePayslipForm(FlaskForm):

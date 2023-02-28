@@ -1,6 +1,8 @@
-from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required
+
+from hris.models import *
+
 from .forms import *
 
 salaries_bp = Blueprint('salaries_bp', __name__,  template_folder='templates',

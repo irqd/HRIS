@@ -1,11 +1,17 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, current_app
-from flask_login import current_user, login_required
-from hris.models import *
-from .forms import *
-from werkzeug.utils import secure_filename
-import os 
-from password_strength import PasswordPolicy
+import os
 import pathlib
+import random
+import string
+
+from flask import (Blueprint, current_app, flash, jsonify, redirect,
+                   render_template, request, url_for)
+from flask_login import current_user, login_required
+from password_strength import PasswordPolicy
+from werkzeug.utils import secure_filename
+
+from hris.models import *
+
+from .forms import *
 
 employees_bp = Blueprint('employees_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='employee/static')
@@ -107,9 +113,13 @@ def add_employee():
                   file = request.files['image_path']
 
                   if file:
-                     filename = secure_filename(file.filename)
-                     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                      
+                     filename = secure_filename(file.filename)
+                     
+                     random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+                     filename = (random_string + pathlib.Path(filename).suffix)
+
+                     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                      file.save(filepath)
                   
                      rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
@@ -239,25 +249,24 @@ def manage_employee_account(employee_name, employee_id):
             
             if file:
                filename = secure_filename(file.filename)
-              # filenamex, file_extension = os.path.splitext(filename)
+               
                if (user_account.image_path):
-                     print(pathlib.Path(user_account.image_path).name)
-                     try:
-                        #os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name).replace('\\', '/'))
-                        os.remove(pathlib.PurePath(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name))
-                        print(f'The file {pathlib.Path(user_account.image_path).name} is successfully deleted')
-                     except FileNotFoundError as e:
-                        print(f"{pathlib.Path(user_account.image_path).name} not found!")
+                  try:
+                     #os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name).replace('\\', '/'))
+                     os.remove(pathlib.PurePath(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name))
+                     print(f'The file {pathlib.Path(user_account.image_path).name} is successfully deleted')
+                  except FileNotFoundError as e:
+                     print(f"{pathlib.Path(user_account.image_path).name} not found!")
                
             
-              # filename = (str(user_account.id) + file_extension)
-               filename = (str(user_account.id) + pathlib.Path(filename).suffix)
+               # filename = (str(user_account.id) + file_extension)
+               random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+               filename = (random_string + pathlib.Path(filename).suffix)
                filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                file.save(filepath)
                
                rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
                user_account.image_path = rel_path
-               print(rel_path)
                db.session.commit()
 
                flash(f'Updated Account Profile Picture!', category='success')

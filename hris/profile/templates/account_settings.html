@@ -44,6 +44,11 @@
          </div>
          <div class="form-row">
             <div class="form-outline mb-1 mt-1 col">
+               <strong><label for="old_passord">Old Password</label></strong>
+               <input type="password" name="old_password" class="form-control">
+            </div>
+
+            <div class="form-outline mb-1 mt-1 col">
                <strong>{{ account_form.password1.label() }}</strong>
                {{ account_form.password1(class="form-control", id="password") }}
                

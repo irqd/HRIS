@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from hris.models import *
-from .forms import *
-from flask_login import login_required
 import sqlalchemy.exc as exc
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required
+
+from hris.models import *
+
+from .forms import *
 
 departments_bp = Blueprint('departments_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='static')

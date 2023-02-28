@@ -1,11 +1,16 @@
-from hris.models import *
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session
-from flask_login import login_required, logout_user
-from hris.employees.forms import *
-from werkzeug.utils import secure_filename
-from password_strength import PasswordPolicy
 import os
 import pathlib
+import random
+import string
+
+from flask import (Blueprint, current_app, flash, redirect, render_template,
+                   request, session, url_for)
+from flask_login import login_required, logout_user
+from password_strength import PasswordPolicy
+from werkzeug.utils import secure_filename
+
+from hris.employees.forms import *
+from hris.models import *
 
 profile_bp = Blueprint('profile_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='/profile_bp.static')
@@ -103,6 +108,7 @@ def account_settings(employee_id):
     if request.method == 'POST':
         account_form = AccountForm(request.form)
         attempted_password = account_form.password1.data
+        old_password = request.form.get('old_password')
 
         user_account = Users.query.filter_by(id = employee_id).first()
 
@@ -120,7 +126,9 @@ def account_settings(employee_id):
                      except FileNotFoundError as e:
                         print(f"{pathlib.Path(user_account.image_path).name} not found!")
 
-                filename = (str(user_account.id) + pathlib.Path(filename).suffix)
+                #filename = (str(user_account.id) + pathlib.Path(filename).suffix)
+                random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+                filename = (random_string + pathlib.Path(filename).suffix)
                 filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                 
                 file.save(filepath)
@@ -131,31 +139,34 @@ def account_settings(employee_id):
 
                 flash(f'Updated Account Profile Picture!', category='success')
 
-            if account_form.password1.data != '' and account_form.password2.data != '':
-                policy = PasswordPolicy.from_names(
-                    length=8,  # min length: 8
-                    uppercase=1,  # need min. 1 uppercase letters
-                    numbers=1,  # need min. 1 digits
-                    special=1,  # need min. 1 special characters
-                    nonletters=1,  # need min. 1 non-letter characters (digits, specials, anything)
-                )
+            if old_password != user_account.verify_password(attempted_password):
+                if account_form.password1.data != '' and account_form.password2.data != '':
+                    policy = PasswordPolicy.from_names(
+                        length=8,  # min length: 8
+                        uppercase=1,  # need min. 1 uppercase letters
+                        numbers=1,  # need min. 1 digits
+                        special=1,  # need min. 1 special characters
+                        nonletters=1,  # need min. 1 non-letter characters (digits, specials, anything)
+                    )
 
-                if attempted_password and user_account.verify_password(attempted_password):
-                    flash("New password can't be the same as the old password.", category='danger')
+                    if attempted_password and user_account.verify_password(attempted_password):
+                        flash("New password can't be the same as the old password.", category='danger')
 
-                else:
-                    if len(policy.test(attempted_password)) == 0:
-                        user_account.password = attempted_password
-                        db.session.commit()
-
-                        session.clear()
-                        logout_user()
-                        flash(f'Updated Account Password! Please Login Again.', category='success')
-                        return redirect(url_for('auth_bp.login'))
                     else:
-                        for e in policy.test(attempted_password):
-                            flash(f'Password needs atleast: {e}', category='danger')
-            
+                        if len(policy.test(attempted_password)) == 0:
+                            user_account.password = attempted_password
+                            db.session.commit()
+
+                            session.clear()
+                            logout_user()
+                            flash(f'Updated Account Password! Please Login Again.', category='success')
+                            return redirect(url_for('auth_bp.login'))
+                        else:
+                            for e in policy.test(attempted_password):
+                                flash(f'Password needs atleast: {e}', category='danger')
+            else:
+                flash(f"Password can't be the same as old password", category='danger')
+                
             return redirect(url_for('profile_bp.account_settings', employee_id=employee_id))
         
         if account_form.errors != {}:

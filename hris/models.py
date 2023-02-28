@@ -1,13 +1,14 @@
-from . import db, bcrypt, login_manager
-from flask_login import UserMixin, current_user
-from sqlalchemy.sql import func, select, extract
-from sqlalchemy.orm import column_property
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.associationproxy import AssociationProxy
-
 import enum
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
+
+from flask_login import UserMixin, current_user
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import column_property
+from sqlalchemy.sql import extract, func, select
+
+from . import bcrypt, db, login_manager
+
 
 class USER_TYPES(enum.Enum):
    Employee = "Employee"

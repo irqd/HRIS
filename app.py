@@ -1,5 +1,6 @@
-from hris import create_app
 from flask import render_template
+
+from hris import create_app
 
 app = create_app()
 

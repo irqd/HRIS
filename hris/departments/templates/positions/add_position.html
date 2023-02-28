@@ -1,9 +1,6 @@
 {% extends 'main.html' %}
 {% set active_page = "departments" %}
-
-
 {% block nav_contents %}
-
 <div class="container">
    <div class="row mt-3 mb-3">
       <div class="col-12">
@@ -14,26 +11,25 @@
          </h4>
       </div>
    </div>
-
    <div class="row mt-3">
       <div class="col-12">
          <form action="" method="post" autocomplete="off">
             <fieldset>
                {{ add_position.hidden_tag() }}
                <div class="shadow rounded p-4">
-                  <h4 class="mt-2">Position Profile</h4><hr>
+                  <h4 class="mt-2">Position Profile</h4>
+                  <hr>
                   <div class="form-row">
                      <div class="form-outline mb-1 mt-1 col-6">
                         <strong>{{ add_position.position_name.label() }}</strong>
                         {{ add_position.position_name(class="form-control") }}
                      </div>
-
                      <div class="form-outline mb-1 mt-1 col-6">
                         <strong>{{ add_position.position_status.label() }}</strong>
                         <select name="status" id="status" class="form-control">
                            <option value="">Select Status</option>
                            {% for status in add_position.position_status.choices %}
-                              <option value="{{ status[0]}}">{{ status[1] }}</option>
+                           <option value="{{ status[0]}}">{{ status[1] }}</option>
                            {% endfor %}
                         </select>
                      </div>
@@ -44,16 +40,15 @@
                         {{ add_position.description(class="form-control") }}
                      </div>
                   </div>
-               </div><br>
-
+               </div>
+               <br>
                <div class="d-flex align-items-end flex-column bd-highlight mt-1 pr-3 pb-3">
                   <div>
                      <button class="btn btn-outline-success mt-3 shadow" type="submit">
-                        <i class="fa-solid fa-check"></i> <u>Edit</u>
+                     <i class="fa-solid fa-check"></i> <u>Edit</u>
                      </button>
-         
                      <a class="btn btn-outline-danger mt-3 shadow" href="{{ url_for('departments_bp.manage_department', department_id=selected_department.id) }}">
-                        <i class="fa-solid fa-ban"></i> <u>Cancel</u>
+                     <i class="fa-solid fa-ban"></i> <u>Cancel</u>
                      </a>
                   </div>
                </div>
@@ -62,6 +57,4 @@
       </div>
    </div>
 </div>
-
-
 {% endblock %}
