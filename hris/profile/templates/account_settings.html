@@ -44,15 +44,15 @@
          </div>
          <div class="form-row">
             <div class="form-outline mb-1 mt-1 col">
-               <strong><label for="old_passord">Old Password</label></strong>
-               <input type="password" name="old_password" class="form-control">
+               <strong>{{ account_form.old_password.label() }}</strong>
+               {{ account_form.old_password(class="form-control", id="old_password") }} 
             </div>
 
             <div class="form-outline mb-1 mt-1 col">
                <strong>{{ account_form.password1.label() }}</strong>
-               {{ account_form.password1(class="form-control", id="password") }}
-               
+               {{ account_form.password1(class="form-control", id="password") }}     
             </div>
+
             <div class="form-outline mb-1 mt-1 col">
                <strong>{{ account_form.password2.label() }}</strong>
                {{ account_form.password2(class="form-control", id="confirmpassword") }}
