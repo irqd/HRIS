@@ -5,6 +5,7 @@ from .forms import *
 from werkzeug.utils import secure_filename
 import os 
 from password_strength import PasswordPolicy
+import pathlib
 
 employees_bp = Blueprint('employees_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='employee/static')
@@ -133,7 +134,7 @@ def add_employee():
                                              salaries=salaries)
 
 
-@employees_bp.route('/employees/<int:employee_id>-<string:employee_name>', methods=['GET', 'POST'])
+@employees_bp.route('/employees/<int:employee_id>/<string:employee_name>', methods=['GET', 'POST'])
 @login_required
 def manage_employee(employee_name, employee_id):
    selected_employee = db.session.query(Users, EmployeeInfo, EmploymentInfo, Positions, Departments)\
@@ -221,7 +222,7 @@ def manage_employee(employee_name, employee_id):
                                                    employee_id=employee_id)
 
 
-@employees_bp.route('/employees/<int:employee_id>-<string:employee_name>/account_settings', methods=['GET', 'POST'])
+@employees_bp.route('/employees/<int:employee_id>/<string:employee_name>/account_settings', methods=['GET', 'POST'])
 @login_required
 def manage_employee_account(employee_name, employee_id):
    account_form = AccountForm()
@@ -237,16 +238,29 @@ def manage_employee_account(employee_name, employee_id):
             file = request.files['image_path']
             
             if file:
-                filename = secure_filename(file.filename)
-                filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                
-                file.save(filepath)
+               filename = secure_filename(file.filename)
+              # filenamex, file_extension = os.path.splitext(filename)
+               if (user_account.image_path):
+                     print(pathlib.Path(user_account.image_path).name)
+                     try:
+                        #os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name).replace('\\', '/'))
+                        os.remove(pathlib.PurePath(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name))
+                        print(f'The file {pathlib.Path(user_account.image_path).name} is successfully deleted')
+                     except FileNotFoundError as e:
+                        print(f"{pathlib.Path(user_account.image_path).name} not found!")
                
-                rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
-                user_account.image_path = rel_path
-                db.session.commit()
+            
+              # filename = (str(user_account.id) + file_extension)
+               filename = (str(user_account.id) + pathlib.Path(filename).suffix)
+               filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+               file.save(filepath)
+               
+               rel_path = os.path.join('images', 'uploads', filename).replace('\\', '/')
+               user_account.image_path = rel_path
+               print(rel_path)
+               db.session.commit()
 
-                flash(f'Updated Account Profile Picture!', category='success')
+               flash(f'Updated Account Profile Picture!', category='success')
 
             if account_form.password1.data != '' and account_form.password2.data != '':
                 policy = PasswordPolicy.from_names(

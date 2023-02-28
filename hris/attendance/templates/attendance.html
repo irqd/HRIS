@@ -15,7 +15,7 @@
       <div class="d-flex justify-content-end pr-3">
         <button class="btn btn-outline-success mt-3 shadow" data-toggle="modal"
         data-target="#request_leave_{{ current_user.id }}">
-        <i class="fa-solid fa-user-plus"></i><u> Request Leave</u>
+        <i class="fa-solid fa-person-walking-arrow-right"></i> <u> Request Leave</u>
         </button>
       </div>
       
@@ -93,6 +93,7 @@
               end: moment(item.date, "YY/MM/DD").toDate(),
               start_shift: moment(item.start_shift, "HH:mm:ss a").format("HH:mm"),
               end_shift: moment(item.end_shift, "HH:mm:ss").format("H:mm"),
+              type: item.attendance_type,
               allDay: true,
               color: item.attendance_type === 'Present' ? '#28a745' : //success
                 item.attendance_type === 'Absent' ? '#dc3545' : //danger
@@ -128,10 +129,13 @@
           var today = moment().startOf('day');
           var eventStartDate = moment(arg.event.start).startOf('day');
           if (eventStartDate.isSame(today)) {
-            document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr;
-            document.getElementById('check_in_id').value = arg.event.id;
-            document.getElementById('check_out_id').value = arg.event.id;
-            $('#update_attendance_{{ current_user.id }}').modal('show');
+            
+            if (arg.event.extendedProps.type != 'On_Leave'){
+              document.querySelector('#date_to_check_time').innerHTML = arg.event.startStr;
+              document.getElementById('check_in_id').value = arg.event.id;
+              document.getElementById('check_out_id').value = arg.event.id;
+              $('#update_attendance_{{ current_user.id }}').modal('show');
+            }
           } else {
             return false;
           }

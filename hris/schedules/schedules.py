@@ -124,6 +124,25 @@ def edit_schedule(employee_id, employee_name):
             else:
                 updated_schedule.start_shift = start_shift
                 updated_schedule.end_shift = end_shift
+
+                time_diff = checked_in - start_shift 
+
+                if checked_in:
+                    if time_diff > timedelta(minutes=15):
+                        updated_schedule.attendance_type = 'Late'
+                    else:
+                        updated_schedule.attendance_type = 'Present'
+
+                if checked_in < start_shift:
+                    updated_schedule.pre_ot = checked_in
+                else:
+                    updated_schedule.pre_ot = None
+
+                if checked_out > end_shift:
+                    updated_schedule.post_ot = checked_out
+                else:
+                    updated_schedule.post_ot = None
+                    
                 updated_schedule.checked_in = checked_in
                 updated_schedule.checked_out = checked_out
 

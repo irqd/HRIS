@@ -10,12 +10,12 @@
          <h4 class="shadow border p-3 rounded">
             <a href="{{ url_for('salaries_bp.salaries') }}" class="text-dark">Salaries</a>
          </h4>
-
+         
       
          {% include 'modals/add_salary_modal.html' %}
          <div class="d-flex align-items-end flex-column bd-highlight pr-3">
             <a class="btn btn-outline-success mt-3 shadow" data-toggle="modal" data-target="#add_salary">
-               <i class="fa-solid fa-user-plus"></i> <u>Add Salary</u>
+               <i class="fa-solid fa-money-bill-wave"></i> <u> Add Salary</u>
             </a>
          </div>
       </div>
@@ -80,11 +80,11 @@
                         <td>
                            {{ "{:.2f}".format(salary.allowance) }}
                         </td>
-                        <td>
+                        <td style="width: 13%">
                            {% include 'modals/edit_salary_modal.html' %}
                            {% include 'modals/delete_salary_modal.html' %}
                            <div align="center">
-                              <button class="btn btn-outline-warning shadow mb-2" data-toggle="modal" data-target="#edit_salary_{{ salary.id }}">
+                              <button class="btn btn-outline-warning shadow" data-toggle="modal" data-target="#edit_salary_{{ salary.id }}">
                                  <i class="fa-solid fa-edit"></i>
                               </button>
                               <button class="btn btn-outline-danger shadow" data-toggle="modal" data-target="#delete_salary_{{ salary.id }}">

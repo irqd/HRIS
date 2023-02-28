@@ -19,7 +19,8 @@ def get_attendance():
         start_shift_datetime = datetime.combine(schedule.date, schedule.start_shift)
         end_shift_datetime = datetime.combine(schedule.date, schedule.end_shift)
 
-        if datetime.now() > end_shift_datetime:
+        # check if the current time is greater than the end shift time and the attendance type is not On Leave        
+        if (datetime.now() > end_shift_datetime) and (schedule.attendance_type.value != 'On_Leave'):
             # check if the schedule has no check-in or check-out record
             if not schedule.checked_in and not schedule.checked_out:
                 # mark attendance_type as Absent

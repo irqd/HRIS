@@ -1,8 +1,29 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <div class="p-5">
+      <div class="text-center">
         <h1>{% block title %} 404 Not Found. {% endblock %}</h1>
-        <p>OOPS! We couldn't find your page; looks like it doesn't exist.</p>
-        <p>If you entered the URL manually, please check your spelling and try again.</p>
-        <a class="btn btn-primary" href="{{url_for('home_bp.home')}}">GO HOME</button>
+        <h6>OOPS! We couldn't find your page; looks like it doesn't exist.</h6>
+        <h6>
+          If you entered the URL manually, please check your spelling and try
+          again.
+        </h6>
+      </div>
+
+      <div class="text-center mt-5">
+        <img src="{{ url_for('static', filename='images/404-error.svg') }}" alt="Error-404" width="300">
+      </div>
+
+      <div class="text-center mt-5">
+        <button
+          class="btn btn-outline-primary shadow"
+          onclick="history.back(-1)"
+        >
+          GO BACK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

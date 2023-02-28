@@ -16,6 +16,9 @@ class ApprovePayslipForm(FlaskForm):
 class CancelPayslipForm(FlaskForm):
    cancel = SubmitField(label='Cancel')
 
+class RefreshPayrollForm(FlaskForm):
+   refresh = SubmitField(label='Refresh')
+
 class EditPayslipForm(FlaskForm):
    total_regular_hours = FloatField(label='Total Regular Hours', validators=[DataRequired()])
    pre_ot_hours = FloatField(label='Pre OT Hours', validators=[DataRequired()])

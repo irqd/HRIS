@@ -19,7 +19,8 @@ def create_app():
 
    app.config['SECRET_KEY'] = 'fa282f581ec1d84bc02c6f34d4da17a2'
    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'images', 'uploads')
-   
+   app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 16MB in bytes
+
    #for sqlite
    #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
 
@@ -75,6 +76,4 @@ def create_app():
    return app
 
 app = create_app()
-
-# Custom error pages
 

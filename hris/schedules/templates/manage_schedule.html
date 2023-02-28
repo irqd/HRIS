@@ -24,11 +24,11 @@
             {% include 'modals/edit_schedule_modal.html' %}
             <div align="right" class="pr-3">
                <button class="btn btn-outline-success mt-3 shadow" data-toggle="modal" data-target="#add_schedule_{{ employee_id }}">
-                  <i class="fa-solid fa-user-plus"></i> <u> Add Schedule</u>
+                  <i class="fa-solid fa-calendar-plus"></i> <u> Add Schedule</u>
                </button>
    
                <a class="btn btn-outline-primary mt-3 shadow" href="{{ url_for('schedules_bp.get_leave_requests', employee_id=employee_id, employee_name=employee_name) }}">
-                  <u>Leave Requests</u>
+                  <i class="fa-solid fa-person-walking-arrow-right"></i> <u>Leave Requests</u>
                </a>
             </div>
             

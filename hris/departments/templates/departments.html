@@ -13,7 +13,7 @@
             
             <div class="d-flex align-items-end flex-column bd-highlight pr-3">
                <a class="btn btn-outline-success shadow mt-3 " href="{{ url_for('departments_bp.add_department') }}">
-                  <i class="fa-solid fa-user-plus"></i> <u>Add Department</u>
+                  <i class="fa-solid fa-house-chimney-medical"></i> <u> Add Department</u>
                </a>
             </div>
          </div>
@@ -49,7 +49,7 @@
                            <td>
                               {{ department.date_created }}
                            </td>
-                           <td>
+                           <td style="width: 13%">
                               {% include 'modals/delete_department_modal.html' %}
                               <div align="center ">
                                  <a href="{{ url_for('departments_bp.manage_department', department_id=department.id) }}" class="btn btn-outline-success shadow">

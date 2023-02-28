@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <h1>{% block title %}413 Request Entity Too Large{% endblock %}.</h1>
+        <p>Sorry, the file you are trying to upload exceeds the maximum size allowed by the server.</p>
+        <p>Please try again with a smaller file or contact the website administrator for assistance.</p>
+        <a class="btn btn-primary" onclick="history.back(-1)">GO BACK</button>
+{% endblock %}

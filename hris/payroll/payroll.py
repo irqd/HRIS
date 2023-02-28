@@ -22,6 +22,9 @@ def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regul
             if res.total_regular_hours > 5.0:
                 g = res.total_regular_hours - 1.0
                 total_regular_hours += g
+            else:
+                g = res.total_regular_hours
+                total_regular_hours += g
 
     if total_pre_ot_hours == 0:
         for res in employee_attendances:
@@ -77,34 +80,8 @@ def calculate_payroll(selected_employee, start_cut_off, end_cut_off, total_regul
 
     return data
 
-@payroll_bp.route('/payroll', methods=['GET'])
-@login_required
-def payroll():
-    today = datetime.now()
-    this_month = today.month
 
-    first_day_of_month = datetime(today.year, this_month, 1).date()
-    last_day_of_month = datetime(today.year, this_month, calendar.monthrange(today.year, this_month)[1]).date()
-
-    first_cut_off = [str(first_day_of_month), None]
-    second_cut_off = [None, str(last_day_of_month)]
-
-    num_days_in_month = calendar.monthrange(today.year, this_month)[1]
-
-    for day in range(1, num_days_in_month + 1):
-        if day == 15:
-            first_cut_off[1] = str(datetime(today.year, this_month, day).date())
-        elif day == 16:
-            second_cut_off[0] = str(datetime(today.year, this_month, day).date())
-
-
-    return render_template('payroll.html', first_cut_off=first_cut_off, second_cut_off=second_cut_off)
-
-
-@payroll_bp.route('/payroll/cut_off/<string:start_cut_off>/<string:end_cut_off>', methods=['GET'])
-@login_required
-def cut_off(start_cut_off, end_cut_off):
-
+def get_payroll(start_cut_off, end_cut_off):
     employees = db.session.query(Users.image_path, Users.company_email, EmployeeInfo.id, EmployeeInfo.fullname, 
                 EmployeeInfo.mobile, EmploymentInfo.status, Salaries.daily_rate, Salaries.hourly_rate,
                 Salaries.bir_tax, Salaries.sss_tax, Salaries.phil_health_tax, Salaries.pag_ibig_tax,
@@ -153,12 +130,13 @@ def cut_off(start_cut_off, end_cut_off):
                                  total_post_ot_hours=float(new_payslip.post_ot_hours) if new_payslip is not None else 0,
                                  allowance=float(new_payslip.allowance) if new_payslip.allowance is not None else employee.allowance)
             
+            
             data['status'] = new_payslip.status
-            employee_data.append(data)
+            employee_data.append(data)  
 
             db.session.commit()
+         
         else:
-
             #Updates every click when total days is less than 10
             if data['days_present'] < 10:
                 employee_payslip.days_present = data['days_present'],
@@ -175,8 +153,55 @@ def cut_off(start_cut_off, end_cut_off):
             
             data['status'] = employee_payslip.status.value
             employee_data.append(data)
+    
+ 
+    return employee_data
 
-    return render_template('cut_off.html', employee_data=employee_data)
+
+@payroll_bp.route('/payroll', methods=['GET'])
+@login_required
+def payroll():
+    today = datetime.now()
+    this_month = today.month
+
+    first_day_of_month = datetime(today.year, this_month, 1).date()
+    last_day_of_month = datetime(today.year, this_month, calendar.monthrange(today.year, this_month)[1]).date()
+
+    first_cut_off = [str(first_day_of_month), None]
+    second_cut_off = [None, str(last_day_of_month)]
+
+    num_days_in_month = calendar.monthrange(today.year, this_month)[1]
+
+    for day in range(1, num_days_in_month + 1):
+        if day == 15:
+            first_cut_off[1] = str(datetime(today.year, this_month, day).date())
+        elif day == 16:
+            second_cut_off[0] = str(datetime(today.year, this_month, day).date())
+
+
+    return render_template('payroll.html', first_cut_off=first_cut_off, second_cut_off=second_cut_off)
+
+
+@payroll_bp.route('/payroll/cut_off/<string:start_cut_off>/<string:end_cut_off>', methods=['GET', 'POST'])
+@login_required
+def cut_off(start_cut_off, end_cut_off):
+    refresh_form = RefreshPayrollForm()
+    employee_data = get_payroll(start_cut_off, end_cut_off)
+
+    if request.method == 'POST':
+        if request.args.get('req') == 'refresh':
+            db.session.query(Payslips).filter(Payslips.start_cut_off == start_cut_off)\
+                .filter(Payslips.end_cut_off == end_cut_off).delete()
+            
+            db.session.commit()
+            flash('Payroll has been refreshed', category='success')
+            return redirect(url_for('payroll_bp.cut_off', start_cut_off=start_cut_off, end_cut_off=end_cut_off))
+        
+    return render_template('cut_off.html', 
+                           employee_data=employee_data,
+                           start_cut_off=start_cut_off,
+                           end_cut_off=end_cut_off,
+                           refresh_form=refresh_form)
 
 
 @payroll_bp.route('/payroll/cut_off/<int:employee_id>/<string:start_cut_off>/<string:end_cut_off>', methods=['GET', 'POST'])

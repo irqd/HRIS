@@ -34,16 +34,21 @@
             <div class="shadow p-3 rounded">
                <table id="announcements" class="align-middle mb-0 bg-white" style="width:100%" >
                   <thead>
-                      <tr>
-                        
+                      <tr>  
+                        <th>
+                           <h6 hidden>ID</h6>
+                        </th>
                         <th>
                            <h6>Announcement List</h6>
                         </th>
                       </tr>
                   </thead>
                   <tbody>
-                     {% for announcement in announcements%}
+                     {% for announcement in announcements%}    
                      <tr>
+                        <td hidden>
+                           {{ announcement.id }}
+                        </td>
                         
                         <td>
                            <div class="shadow p-3 rounded mb-4">

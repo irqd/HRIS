@@ -5,6 +5,7 @@ from hris.employees.forms import *
 from werkzeug.utils import secure_filename
 from password_strength import PasswordPolicy
 import os
+import pathlib
 
 profile_bp = Blueprint('profile_bp', __name__,  template_folder='templates',
     static_folder='static', static_url_path='/profile_bp.static')
@@ -111,6 +112,15 @@ def account_settings(employee_id):
             
             if file:
                 filename = secure_filename(file.filename)
+                if (user_account.image_path):
+                     print(pathlib.Path(user_account.image_path).name)
+                     try:
+                        os.remove(pathlib.PurePath(current_app.config['UPLOAD_FOLDER'], pathlib.Path(user_account.image_path).name))
+                        print(f'The file on {pathlib.Path(user_account.image_path)} is successfully deleted')
+                     except FileNotFoundError as e:
+                        print(f"{pathlib.Path(user_account.image_path).name} not found!")
+
+                filename = (str(user_account.id) + pathlib.Path(filename).suffix)
                 filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                 
                 file.save(filepath)

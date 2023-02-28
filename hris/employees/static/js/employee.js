@@ -46,16 +46,38 @@ confirmPassword.addEventListener("input", function () {
 
 const customFileInput = document.querySelector("#imageFile");
 const customFileLabel = document.querySelector(".custom-file-label");
+const imageValidation = document.querySelector("#file_size_error");
+
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 16MB in bytes
 
 customFileInput.addEventListener("change", function () {
-  customFileLabel.innerHTML = this.files[0].name;
+  const file = this.files[0];
+  if (file && file.size > MAX_FILE_SIZE) {
+    
+    this.value = null; // reset the file input
+    customFileLabel.innerHTML = "Upload File"; // reset the label
+    imageValidation.innerHTML = `
+    <small class="text-danger mt-1" style="position: absolute;">
+       File size is too large. Pleases select a file less than 1MB.
+    </small>`;
+
+    setTimeout(() => {
+      imageValidation.innerHTML = "";
+    }, 3000);
+    
+  } else {
+    customFileLabel.innerHTML = file.name;
+  }
 });
+
+
 
 imageFile.onchange = (evt) => {
   const [file] = imageFile.files;
-  if (file) {
+  if (file && file.size <= MAX_FILE_SIZE) {
     imagePath.src = URL.createObjectURL(file);
   }
 };
+
 
  // ------------------------------------------------------------------------------------//
