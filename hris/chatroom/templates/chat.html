@@ -1,0 +1,137 @@
+{% extends 'main.html' %}
+{% set active_page = "chatroom" %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('chatroom_bp.static',filename='css/chat.css') }}" />
+
+
+{% endblock %}
+{% block nav_contents %}
+
+
+  
+  <div class="container">
+    <div class="row mt-3 mb-3">
+      <div class="col-12">
+         <h4 class="shadow border p-3 rounded">
+            <a href="" class="text-dark">Chat Room</a>
+         </h4>
+      </div>
+
+    <div class="row p-3">
+      <div class="col-md-12">
+
+        <div class="card shadow" id="chat3" style="border-radius: 15px;">
+          <div class="card-body">
+
+            <div class="row">
+              <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
+
+                <div class="p-3">
+
+                  <div class="input-group rounded mb-3">
+                    <input type="search" class="form-control rounded border-dark" placeholder="Search"
+                      aria-label="Search" aria-describedby="search-addon" />
+                    <span class="input-group-text border-0" id="search-addon">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+
+                  <div class="overflow-auto" style="position: relative; height: 400px">
+                    <ul class="list-unstyled mb-0">
+                      <!-- this is join group-->
+                      <li class="p-2 border-bottom">
+                        <a href="#!" class="d-flex justify-content-between">
+                          <div class="d-flex flex-row flex-fill">
+                            <div>
+                              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                                alt="avatar" class="d-flex align-self-center me-3" width="60">
+                            </div>
+                            <div class="pt-1">
+                              <p class="fw-bold mb-0">Managers</p>
+                              <p class="small text-muted">latest chat or something</p>
+                            </div>
+                          </div>
+                          <div class="pt-1">
+                            <p class="small text-muted mb-1">Just now</p>
+                            <span class="badge bg-danger rounded-pill float-end">090</span>
+                          </div>
+                        </a>
+                      </li>
+                      <!-- this is join group-->
+                     
+                    </ul>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-md-6 col-lg-7 col-xl-8">
+
+                <div class="pt-3 pe-3 overflow-auto" id="messages" style="position: relative; height: 400px">
+
+                  <!-- other person message -->
+                  <div class="d-flex flex-row justify-content-start">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                      alt="avatar 1" style="width: 45px; height: 100%;">
+                    <div>
+                      <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Neque porro
+                        quisquam
+                        est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non
+                        numquam
+                        eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                      <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
+                    </div>
+                  </div>
+                  <!-- -->
+                  <!-- ME -->
+                  <div class="d-flex flex-row justify-content-end">
+                    <div>
+                      <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Ut enim ad minima veniam,
+                        quis
+                        nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                        commodi
+                        consequatur?</p>
+                      <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
+                    </div>
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                      alt="avatar 1" style="width: 45px; height: 100%;">
+                  </div>
+                  <!-- ME -->
+
+                </div>
+                <!-- Submit message  -->
+                <div class="input-group text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                    alt="avatar 3" style="width: 40px; height: 100%;">
+                  <input type="text" class="form-control form-control-lg border-dark" id="message"
+                    placeholder="Type message">
+                  <div class="input-group-append">
+                    <button id="send-btn" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+                  </div>
+                </div>
+                <!-- -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}
+{% block javascripts_local %}
+{{ super() }}
+
+<script src="{{ url_for('chatroom_bp.static', filename='js/chat.js')}}"></script>
+{% endblock %}
+
+{% for msg in messages %}
+<script type="text/javascript">
+  createMessage("{{msg.name}}", "{{msg.message}}");
+</script>
+{% endfor %} 
