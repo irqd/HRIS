@@ -4,13 +4,13 @@ $("#datepicker").datepicker({
 });
 
 
-const customFileInput = document.querySelector("#imageFile");
+const customFileInput = document.querySelector("#imageFile") ?? undefined;
 const customFileLabel = document.querySelector(".custom-file-label");
 const imageValidation = document.querySelector("#file_size_error");
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 16MB in bytes
 
-customFileInput.addEventListener("change", function () {
+customFileInput?.addEventListener("change", function () {
   const file = this.files[0];
   if (file && file.size > MAX_FILE_SIZE) {
     
@@ -30,14 +30,13 @@ customFileInput.addEventListener("change", function () {
   }
 });
 
-
-
-imageFile.onchange = (evt) => {
+imageFile?.addEventListener('change', (evt) => {
   const [file] = imageFile.files;
   if (file && file.size <= MAX_FILE_SIZE) {
     imagePath.src = URL.createObjectURL(file);
   }
-};
+});
+
 
 const password = document.querySelector("#password");
 const confirmPassword = document.querySelector("#confirmpassword");
