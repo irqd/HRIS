@@ -5,10 +5,8 @@
   <div class="row mt-3 mb-3">
     <div class="col-12">
       <h4 class="shadow border p-3 rounded">
-        <a href="{{ url_for('employees_bp.employees') }}" class="text-dark"
-          >Employees</a
-        >
-        >
+        <a href="{{ url_for('employees_bp.employees') }}"
+        class="text-dark">Employees</a> >
         <a href="#" class="text-dark">Add Employee</a>
       </h4>
     </div>
@@ -110,7 +108,7 @@
             <div class="form-row">
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.mobile.label() }}</strong>
-                {{ add_employee.mobile(class="form-control", id="datepicker") }}
+                {{ add_employee.mobile(class="form-control") }}
               </div>
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.email.label() }}</strong>
@@ -128,7 +126,7 @@
             <div class="form-row">
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.tin.label() }}</strong>
-                {{ add_employee.tin(class="form-control", id="datepicker") }}
+                {{ add_employee.tin(class="form-control") }}
               </div>
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.sss.label() }}</strong>
@@ -148,8 +146,7 @@
             <div class="form-row">
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.emergency_name.label() }}</strong>
-                {{ add_employee.emergency_name(class="form-control",
-                id="datepicker") }}
+                {{ add_employee.emergency_name(class="form-control") }}
               </div>
               <div class="form-outline mb-1 mt-1 col">
                 <strong>{{ add_employee.emergency_contact.label() }}</strong>
@@ -202,7 +199,7 @@
                   <option value="">Select Salary</option>
                   {% for salary in salaries %}
                   <option value="{{ salary.id }}">
-                    {{ "{:.2f}".format(salary.daily_rate) }}
+                    {{salary.salary_name}} - {{ "{:.2f}".format(salary.daily_rate) }}
                   </option>
                   {% endfor %}
                 </select>
