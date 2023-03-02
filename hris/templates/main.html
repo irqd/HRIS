@@ -36,6 +36,12 @@
                <i class="fa-solid fa-money-bill"></i> Payslips
             </a>
          </li>
+         <li class="nav-item {{'shadow rounded' if active_page == 'chatroom' else ''}}">
+            <a class="nav-link" href="{{ url_for('chatroom_bp.chat') }}"
+            style="{{'margin-left:20px;' if active_page == 'chatroom' else ''}}">
+               <i class="fa-solid fa-message"></i> Chat Room
+            </a>
+         </li>
 
          {% if current_user.access.value == 'Admin' %}
          <h6 align="center" class="pt-4"><u>Admin Panel</u></h6>

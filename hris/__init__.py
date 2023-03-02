@@ -6,11 +6,13 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 migrate = Migrate()
+socketio = SocketIO()
 DB_NAME = "hris"
 UPLOAD_FOLDER = 'static/upload'
 
@@ -34,6 +36,7 @@ def create_app():
    from .announcements.announcement import announcement_bp
    from .attendance.attendance import attendance_bp
    from .auth.auth import auth_bp
+   from .chatroom.chatroom import chatroom_bp
    from .departments.departments import departments_bp
    from .employees.employees import employees_bp
    from .home.home import home_bp
@@ -46,6 +49,7 @@ def create_app():
    #register Blueprints
    app.register_blueprint(home_bp, url_prefix='/')
    app.register_blueprint(auth_bp, url_prefix='/')
+   app.register_blueprint(chatroom_bp, url_prefix='/')
    app.register_blueprint(departments_bp, url_prefix='/')
    app.register_blueprint(employees_bp, url_prefix='/')
    app.register_blueprint(announcement_bp, url_prefix='/')
@@ -56,7 +60,7 @@ def create_app():
    app.register_blueprint(profile_bp, url_prefix='/')
    app.register_blueprint(schedules_bp, url_prefix='/')
 
-
+   
    # from .models import Users, EmployeeInfo, Attendance, Leave, EmploymentInfo, Positions, Departments
 
    # for sqlite
@@ -67,7 +71,7 @@ def create_app():
    # uncomment when creating new db.
    # with app.app_context():
    #    db.create_all()
- 
+   socketio.init_app(app)
    bcrypt.init_app(app)
    migrate.init_app(app, db)
    login_manager.login_view = 'auth_bp.login'
