@@ -1,4 +1,6 @@
-{% extends 'main.html' %} {% set active_page = "payroll" %} {% block nav_contents %}
+{% extends 'main.html' %} 
+{% set active_page = "payroll" %} 
+{% block nav_contents %}
 <div class="container">
   <div class="row mt-3 mb-3">
     <div class="col-12">
@@ -12,46 +14,57 @@
 
   <div class="row mt-3 mb-3">
     <div class="col-12">
-      <div class="shadow border p-3 rounded">
-        <h4>For the Month of: <span id="current-month"></span></h4><hr>
+      {% for cut_off in yearly_cutoff|reverse %}
+      <div class="shadow border p-3 rounded mb-3">
+        <h4>For the Month of: <span>{{ cut_off.month }}</span></h4>
+        <hr />
 
         <div class="row">
           <div class="col-6">
             <div class="shadow p-3 border rounded mb-3">
-              <h4>First Cut Off</h4><hr>
-              <h6>From: {{ first_cut_off[0] }} - To:{{ first_cut_off[1] }}</h6><br>
+              <h4>First Cut Off</h4>
+              <hr />
+              <h6>
+                From:{{ cut_off.first_cut_off[0] }} - To:{{
+                cut_off.first_cut_off[1] }}
+              </h6>
+              <br />
               <span>
-                <a href="{{ url_for('payroll_bp.cut_off', start_cut_off=first_cut_off[0], end_cut_off=first_cut_off[1]) }}" class="btn btn-outline-primary shadow">View</a>
+                <a
+                  href="{{ url_for('payroll_bp.cut_off', start_cut_off=cut_off.first_cut_off[0], end_cut_off=cut_off.first_cut_off[1]) }}"
+                  class="btn btn-outline-primary shadow"
+                  >View</a
+                >
               </span>
             </div>
           </div>
 
           <div class="col-6">
             <div class="shadow p-3 border rounded">
-              <h4>Second Cut Off</h4><hr>
-              <h6>From: {{ second_cut_off[0] }} - To:{{ second_cut_off[1] }}</h6><br>
+              <h4>Second Cut Off</h4>
+              <hr />
+              <h6>
+                From:{{ cut_off.second_cut_off[0] }} - To:{{
+                cut_off.second_cut_off[1] }}
+              </h6>
+              <br />
               <span>
-                <a href="{{ url_for('payroll_bp.cut_off', start_cut_off=second_cut_off[0], end_cut_off=second_cut_off[1]) }}" class="btn btn-outline-primary shadow">View</a>
+                <a
+                  href="{{ url_for('payroll_bp.cut_off', start_cut_off=cut_off.second_cut_off[0], end_cut_off=cut_off.second_cut_off[1]) }}"
+                  class="btn btn-outline-primary shadow"
+                  >View</a
+                >
               </span>
             </div>
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block javascripts_local %}
+{% endblock %} 
+{% block javascripts_local %} 
 {{ super() }}
-<script>
-  // Get current month as a string
-  var monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
-  var d = new Date();
-  var monthName = monthNames[d.getMonth()];
 
-  // Insert the current month into the HTML page
-  document.getElementById("current-month").innerHTML = monthName;
-</script>
 {% endblock %}

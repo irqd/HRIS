@@ -161,11 +161,13 @@ def get_payroll(start_cut_off, end_cut_off):
     return employee_data
 
 
-@payroll_bp.route('/payroll', methods=['GET'])
-@login_required
-def payroll():
+def get_cut_off(selected_month = None):
     today = datetime.now()
-    this_month = today.month
+    
+    if selected_month is None:
+        this_month = today.month
+    else:
+        this_month = selected_month
 
     first_day_of_month = datetime(today.year, this_month, 1).date()
     last_day_of_month = datetime(today.year, this_month, calendar.monthrange(today.year, this_month)[1]).date()
@@ -181,8 +183,22 @@ def payroll():
         elif day == 16:
             second_cut_off[0] = str(datetime(today.year, this_month, day).date())
 
+    return {
+        'month': calendar.month_name[selected_month],
+        'first_cut_off': first_cut_off,
+        'second_cut_off': second_cut_off
+    }
 
-    return render_template('payroll.html', first_cut_off=first_cut_off, second_cut_off=second_cut_off)
+@payroll_bp.route('/payroll', methods=['GET'])
+@login_required
+def payroll():
+    current_month = datetime.now().month
+    
+    yearly_cutoff = []
+    for month in range(1, current_month+1):
+        yearly_cutoff.append(get_cut_off(month))
+  
+    return render_template('payroll.html', yearly_cutoff=yearly_cutoff)
 
 
 @payroll_bp.route('/payroll/cut_off/<string:start_cut_off>/<string:end_cut_off>', methods=['GET', 'POST'])

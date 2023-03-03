@@ -142,7 +142,7 @@
       <div class="d-flex pb-3 pr-3 justify-content-end">
         {% if data.status != 'Declined' %}
         <div class="mr-auto pl-3">
-          <button class="text-right btn btn-outline-danger shadow mr-2" data-toggle="modal" data-target="#decline_payroll_{{ data.id }}"> 
+          <button class="text-right btn btn-outline-danger shadow mr-2" data-toggle="modal" data-target="#decline_payroll_{{ data.id }}" {% if data.status == 'Approved' or data.status == 'Declined' %} disabled {% endif %}> 
             <i class="fa-solid fa-xmark"></i> <u>Decline</u></button>
         </div>
         {% else %}
