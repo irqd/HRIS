@@ -168,9 +168,11 @@ def account_settings(employee_id):
                                     flash(f'Password needs atleast: {e}', category='danger')
                 else:
                     flash(f"Password can't be the same as old password", category='danger')
-            else:
+            elif old_password == '' and attempted_password != '':
                 flash(f"Old password can't be empty", category='danger')
-                
+            else:
+                flash('No changes for password', category='info')
+            
             return redirect(url_for('profile_bp.account_settings', employee_id=employee_id))
         
         if account_form.errors != {}:
