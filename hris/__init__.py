@@ -63,7 +63,8 @@ def create_app():
    # if not path.exists('hris/instance' + DB_NAME):
    #    with app.app_context():
    #       db.create_all()
- 
+   
+   # for mysql
    # uncomment when creating new db.
    # with app.app_context():
    #    db.create_all()
