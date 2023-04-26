@@ -68,8 +68,8 @@ app.register_blueprint(schedules_bp, url_prefix='/')
 
 # for mysql
 # uncomment when creating new db.
-with app.app_context():
-   db.create_all()
+# with app.app_context():
+#    db.create_all()
 
 bcrypt.init_app(app)
 migrate.init_app(app, db)
