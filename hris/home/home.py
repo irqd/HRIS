@@ -8,6 +8,8 @@ from sqlalchemy import or_
 
 from hris.models import *
 
+from hris import defaults
+
 home_bp = Blueprint('home_bp', __name__, template_folder='templates',
     static_folder='static', static_url_path='/home/static')
 
@@ -16,8 +18,13 @@ home_bp = Blueprint('home_bp', __name__, template_folder='templates',
 @home_bp.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
+    # Run once
+    defaults.create_default_data()
+
     today = datetime.now().date()
     this_week = today.isocalendar()[1]
+
+
 
     attendances = Attendance.query.filter(Attendance.date == today) \
     .filter(or_(Attendance.attendance_type == ATTENDANCE_TYPES.Absent, 
