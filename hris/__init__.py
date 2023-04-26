@@ -16,7 +16,7 @@ UPLOAD_FOLDER = 'static/upload'
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = 'fa282f581ec1d84bc02c6f34d4da17a2'
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'images', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 16MB in bytes
 
@@ -24,11 +24,11 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 16MB in bytes
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}.db"
 
 #for postgres
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://sgvfendbdncwqh:607684ab44215243dd4a6dcd9e41fe17b6bc042736c232ed00c431ab50e0b313@ec2-3-217-146-37.compute-1.amazonaws.com:5432/dc7t8n0sm0dtec"
 
 #for mysql
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db.init_app(app)
 
@@ -68,8 +68,8 @@ app.register_blueprint(schedules_bp, url_prefix='/')
 
 # for mysql
 # uncomment when creating new db.
-# with app.app_context():
-#    db.create_all()
+with app.app_context():
+   db.create_all()
 
 bcrypt.init_app(app)
 migrate.init_app(app, db)
