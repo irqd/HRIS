@@ -29,6 +29,7 @@ body {
    z-index: 1;
    border-right-style: ridge;
    border-right-width: 1px;
+   overflow-x: scroll;
 }
 
 .sidebar h2 {
@@ -77,9 +78,8 @@ html {
 
 /* log out position */
 .logout {
-   position: absolute;
-   width: 90%;
-   bottom: 0px;
+   display: flex;
+   align-items: end;
    margin-bottom: 20px;
    border-bottom-style: ridge;
    border-bottom-width: 1px;

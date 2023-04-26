@@ -95,7 +95,7 @@ def add_employee():
                   new_employment_info = EmploymentInfo(
                      description = add_employee.description.data,
                      start_date = datetime.strptime(add_employee.start_date.data, '%Y-%m-%d').date(),
-                     status = add_employee.status.data,
+                     status = add_employee.status.data.capitalize(),
                      employee_id = new_employee_info.id,
                      salary_id = add_employee.salary_rate.data
                   )
