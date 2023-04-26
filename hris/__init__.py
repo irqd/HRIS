@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}.db"
 
 #for mysql
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db.init_app(app)
 
@@ -59,9 +59,9 @@ app.register_blueprint(schedules_bp, url_prefix='/')
 # from .models import Users, EmployeeInfo, Attendance, Leave, EmploymentInfo, Positions, Departments
 
 # for sqlite
-if not path.exists('hris/instance' + DB_NAME):
-   with app.app_context():
-      db.create_all()
+# if not path.exists('hris/instance' + DB_NAME):
+#    with app.app_context():
+#       db.create_all()
 
 # for mysql
 # uncomment when creating new db.
