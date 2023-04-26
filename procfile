@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn --worker-class=gevent --keep-alive=5 --workers=4 --log-level debug app:app
