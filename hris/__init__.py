@@ -16,16 +16,19 @@ UPLOAD_FOLDER = 'static/upload'
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'fa282f581ec1d84bc02c6f34d4da17a2'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'images', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 16MB in bytes
 
 #for sqlite
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}.db"
+#app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}.db"
+
+#for postgres
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 #for mysql
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
