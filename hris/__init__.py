@@ -24,7 +24,7 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 # 16MB in bytes
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}.db"
 
 #for postgres
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://sgvfendbdncwqh:607684ab44215243dd4a6dcd9e41fe17b6bc042736c232ed00c431ab50e0b313@ec2-3-217-146-37.compute-1.amazonaws.com:5432/dc7t8n0sm0dtec"
 
 #for mysql
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
