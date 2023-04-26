@@ -28,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://sgvfendbdncwqh:607684ab44215
 
 #for mysql
 #app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://root:@localhost:3306/{DB_NAME}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db.init_app(app)
 
