@@ -34,7 +34,7 @@ password-strength==0.0.3.post2
 pathlib==1.0.1
 pathspec==0.11.0
 pdfkit==1.0.0
-Pillow==10.2.0
+Pillow==10.3.0
 platformdirs==3.0.0
 psycopg2==2.9.6
 pycparser==2.21
