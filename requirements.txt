@@ -51,6 +51,6 @@ tinycss2==1.2.1
 tomli==2.0.1
 typing_extensions==4.4.0
 webencodings==0.5.1
-Werkzeug==2.3.8
+Werkzeug==3.0.3
 WTForms==3.0.1
 zopfli==0.2.2
