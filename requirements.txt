@@ -40,7 +40,7 @@ psycopg2==2.9.6
 pycparser==2.21
 pydyf==0.5.0
 PyMeeus==0.5.12
-PyMySQL==1.0.2
+PyMySQL==1.1.1
 pyphen==0.13.2
 pyscopg2==66.0.2
 python-dateutil==2.8.2
